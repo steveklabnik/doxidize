@@ -2,5 +2,7 @@
 name = "doxidize"
 version = "0.1.0"
 authors = ["steveklabnik <steve@steveklabnik.com>"]
+license = "MIT/Apache-2.0"
+description = "none for now"
 
 [dependencies]
