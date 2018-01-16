@@ -8,6 +8,7 @@ description = "none for now"
 [dependencies]
 failure = "0.1.1"
 failure_derive = "0.1.1"
+comrak = "0.2.5"
 
 [dev-dependencies]
 tempdir = "0.3"

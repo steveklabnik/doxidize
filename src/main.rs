@@ -1,12 +1,16 @@
 extern crate doxidize;
 
-use doxidize::create_skeleton;
-
 use std::env;
 
 fn main() {
-    // for now, the only thing we can do is generate the skeleton, so let's do it!
     let current_dir = env::current_dir().expect("failed to get the current directory");
 
-    create_skeleton(&current_dir).expect("could not create skeleton");
+    // skip the program name
+    let args: Vec<String> = env::args().skip(1).collect();
+
+    if args.len() == 0 {
+        doxidize::create_skeleton(&current_dir).expect("could not create skeleton");
+    } else if args[0] == "generate" {
+        doxidize::generate(&current_dir).expect("could not generate docs");
+    }
 }
