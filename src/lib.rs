@@ -23,6 +23,10 @@ pub fn create_skeleton(dir: &Path) -> Result<()> {
     let readme = docs_dir.join("README.md");
     OpenOptions::new().create(true).append(true).open(readme)?;
 
+    // create a Menu.toml
+    let readme = docs_dir.join("Menu.toml");
+    OpenOptions::new().create(true).append(true).open(readme)?;
+
     Ok(())
 }
 

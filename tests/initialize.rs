@@ -38,3 +38,17 @@ fn double_initialize() {
 
     doxidize::create_skeleton(&dir_path).expect("create_skeleton failed when run a second time");
 }
+
+#[test]
+fn creates_menu_toml() {
+    let dir = TempDir::new("create_menu_toml").expect("could not generate temp dir");
+
+    let dir_path = dir.path();
+
+    doxidize::create_skeleton(&dir_path).expect("create_skeleton failed");
+
+    let docs_dir = dir_path.join("docs");
+    let readme_path = docs_dir.join("Menu.toml");
+
+    assert!(readme_path.is_file());
+}
