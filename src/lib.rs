@@ -48,5 +48,43 @@ pub fn generate(dir: &Path) -> Result<()> {
 
     index.write_all(rendered.as_bytes())?;
 
+    // render all other *.md files as *.html
+    for entry in fs::read_dir(docs_dir)? {
+        let entry = entry?;
+        let path = entry.path();
+
+        // we want only files
+        if !path.is_file() { continue; }
+
+        if let Some(extension) = path.extension() {
+            // we only want .md files
+            if extension != "md" {
+                continue;
+            }
+        } else {
+            // we don't want files with no extension
+            continue;
+        }
+
+        // we certainly have a file name, since we're looping over real files
+        let file_name = path.file_name().unwrap();
+
+        // we don't want READMEs
+        if file_name == "README.md" {
+            continue;
+        }
+
+        let mut file = File::open(&path)?;
+        let mut contents = String::new();
+        file.read_to_string(&mut contents)?;
+
+        let rendered = comrak::markdown_to_html(&contents, &ComrakOptions::default());
+
+        let rendered_path = target_dir.join(file_name).with_extension("html");
+        let mut file = File::create(rendered_path)?;
+
+        file.write_all(rendered.as_bytes())?;
+    }
+
     Ok(())
 }
