@@ -6,3 +6,8 @@ license = "MIT/Apache-2.0"
 description = "none for now"
 
 [dependencies]
+failure = "0.1.1"
+failure_derive = "0.1.1"
+
+[dev-dependencies]
+tempdir = "0.3"
