@@ -27,3 +27,14 @@ fn creates_root_readme() {
 
     assert!(readme_path.is_file());
 }
+
+#[test]
+fn double_initialize() {
+    let dir = TempDir::new("create_root_readme").expect("could not generate temp dir");
+
+    let dir_path = dir.path();
+
+    doxidize::create_skeleton(&dir_path).expect("create_skeleton failed");
+
+    doxidize::create_skeleton(&dir_path).expect("create_skeleton failed when run a second time");
+}
