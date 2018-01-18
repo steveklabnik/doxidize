@@ -31,3 +31,12 @@ $ doxidize generate
 Your generated docs will appear in `target/docs`. `README.md` will be
 transformed into `index.html`, so that on GitHub, you can see it rendered,
 but when you put your docs on the web, you can also see them rendered.
+
+To publish your docs to GitHub Pages:
+
+```shell
+$ doxidize publish
+```
+
+This will create your rendered docs in a local `gh-pages` branch, and then
+push that branch to `origin`.
