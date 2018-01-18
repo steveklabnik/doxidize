@@ -4,9 +4,16 @@ extern crate failure_derive;
 
 extern crate comrak;
 
+extern crate handlebars;
+
+#[macro_use]
+extern crate serde_json;
+
 use comrak::ComrakOptions;
 
 use failure::Error;
+
+use handlebars::Handlebars;
 
 use std::fs::{self, File, OpenOptions};
 use std::io::prelude::*;
@@ -38,6 +45,11 @@ pub fn generate(dir: &Path) -> Result<()> {
     let target_dir = dir.join("target").join("docs");
     fs::create_dir_all(&target_dir)?;
 
+    let mut handlebars = Handlebars::new();
+
+    handlebars.register_template_file("page", "templates/page.hbs")?;
+
+
     // make the README.md render as an index.html
     let readme_path = docs_dir.join("README.md");
 
@@ -50,7 +62,7 @@ pub fn generate(dir: &Path) -> Result<()> {
     let index_path = target_dir.join("index.html");
     let mut index = File::create(index_path)?;
 
-    index.write_all(rendered.as_bytes())?;
+    index.write_all(handlebars.render("page", &json!({"contents": rendered}))?.as_bytes())?;
 
     // render all other *.md files as *.html
     for entry in fs::read_dir(docs_dir)? {
@@ -82,12 +94,12 @@ pub fn generate(dir: &Path) -> Result<()> {
         let mut contents = String::new();
         file.read_to_string(&mut contents)?;
 
-        let rendered = comrak::markdown_to_html(&contents, &ComrakOptions::default());
+        let rendered_contents = comrak::markdown_to_html(&contents, &ComrakOptions::default());
 
         let rendered_path = target_dir.join(file_name).with_extension("html");
         let mut file = File::create(rendered_path)?;
 
-        file.write_all(rendered.as_bytes())?;
+        file.write_all(handlebars.render("page", &json!({"contents": rendered_contents}))?.as_bytes())?;
     }
 
     Ok(())
