@@ -1,0 +1,18 @@
+<h1>Doxidize</h1>
+<p>Excellent documentation for Rust.</p>
+<h2>Installation</h2>
+<p>To get Doxidize:</p>
+<pre><code class="language-shell">$ cargo install doxidize
+</code></pre>
+<h2>Workflow</h2>
+<p>First, initialize Doxidize for your project:</p>
+<pre><code class="language-shell">$ doxidize
+</code></pre>
+<p>This will create a top-level <code>docs</code> dir and a <code>README.md</code> file inside of it.</p>
+<p>Edit the <code>README.md</code> to your heart's content.</p>
+<p>To generate HTML documentation:</p>
+<pre><code class="language-shell">$ doxidize generate
+</code></pre>
+<p>Your generated docs will appear in <code>target/docs</code>. <code>README.md</code> will be
+transformed into <code>index.html</code>, so that on GitHub, you can see it rendered,
+but when you put your docs on the web, you can also see them rendered.</p>
