@@ -1,8 +1,58 @@
-<h1>Publishing your documentation</h1>
+<!doctype html>
+<html lang=en>
+
+<head>
+    <meta charset=utf-8>
+    <title>Doxidize</title>
+    <style>
+        /* Shout-out to http://bettermotherfuckingwebsite.com/ for this CSS */
+        body {
+            margin: 40px auto;
+            max-width: 650px;
+            line-height: 1.6;
+            font-size: 18px;
+            color: #444;
+            padding: 0 10px;
+        }
+
+        h1, h2, h3 {
+            line-height:1.2
+        }
+
+        .anchorjs-link {
+            color: #444;
+        }
+
+        blockquote {
+            background: #f9f9f9;
+            border-left: 10px solid #ccc;
+            margin: 1.5em 10px;
+            padding: 0.5em 10px;
+        }
+
+        blockquote:before {
+            color: #ccc;
+            font-size: 4em;
+            line-height: 0.1em;
+            margin-right: 0.25em;
+            vertical-align: -0.4em;
+        }
+
+        blockquote p {
+            display: inline;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Publishing your documentation</h1>
 <p>After you've run <code>doxidize generate</code> to build your docs, run this:</p>
 <pre><code class="language-shell">$ doxidize publish
 </code></pre>
 <p>This will create a local branch, <code>gh-pages</code>, containing your generated docs.
 It will then push it to the <code>origin</code> remote. Your docs should be live on
 GitHub Pages!</p>
-<p>lol</p>
+
+</body>
+
+</html>
