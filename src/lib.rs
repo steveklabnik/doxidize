@@ -85,20 +85,6 @@ pub fn generate(dir: &Path) -> Result<()> {
       }));
 
 
-    // make the README.md render as an index.html
-    let readme_path = docs_dir.join("README.md");
-
-    let mut readme = File::open(readme_path)?;
-    let mut contents = String::new();
-    readme.read_to_string(&mut contents)?;
-
-    let rendered = comrak::markdown_to_html(&contents, &ComrakOptions::default());
-
-    let index_path = target_dir.join("index.html");
-    let mut index = File::create(index_path)?;
-
-    index.write_all(handlebars.render("page", &json!({"contents": rendered, "nest-count": 0}))?.as_bytes())?;
-
     // render all other *.md files as *.html, walking the tree
     for entry in WalkDir::new(&docs_dir) {
         let entry = entry?;
@@ -120,11 +106,6 @@ pub fn generate(dir: &Path) -> Result<()> {
         // we certainly have a file name, since we're looping over real files
         let file_name = path.file_name().unwrap();
 
-        // we don't want READMEs
-        if file_name == "README.md" {
-            continue;
-        }
-
         // make sure the containing directory is created
         //
         // to do this, we get the containing directory, strip off the base, and then re-apply that path
@@ -141,7 +122,12 @@ pub fn generate(dir: &Path) -> Result<()> {
 
         let rendered_contents = comrak::markdown_to_html(&contents, &ComrakOptions::default());
 
-        let rendered_path = new_containing_dir.join(file_name).with_extension("html");
+        let rendered_path = if file_name == "README.md" {
+            new_containing_dir.join("index.html")
+        } else {
+            new_containing_dir.join(file_name).with_extension("html")
+        };
+
         let mut file = File::create(rendered_path)?;
 
         // TODO: this only works at one level down; we need to calculate the real number
