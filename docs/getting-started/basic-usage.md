@@ -2,7 +2,7 @@
 
 Here's the basic workflow to get going with Doxidize:
 
-## Initialization
+## Initialize your project
 
 First, initialize Doxidize for your project:
 
@@ -14,7 +14,9 @@ This will create a top-level `docs` dir and a `README.md` file inside of it.
 
 Edit the `README.md` to your heart's content.
 
-## Generate your docs
+For more about the `doxidize` command, [see its guide](../guides/doxidize.html).
+
+## Generate your documentation
 
 To generate HTML documentation:
 
@@ -22,11 +24,11 @@ To generate HTML documentation:
 $ doxidize generate
 ```
 
-Your generated docs will appear in `target/docs`. `README.md` will be
-transformed into `index.html`, so that on GitHub, you can see it rendered,
-but when you put your docs on the web, you can also see them rendered.
+Your generated docs will appear in `target/docs`.
 
-## Viewing your docs
+For more about the `doxidize generate` command, [see its guide](../guides/doxidize-generate.html).
+
+## Viewing your documentation
 
 To view your docs in a web browser:
 
@@ -34,9 +36,7 @@ To view your docs in a web browser:
 $ doxidize serve
 ```
 
-And then open `http://127.0.0.1:7878` in your browser. Doxidize does not need
-any special kind of server to run; but absolute paths will not work if you
-view via `file://`.
+For more about the `doxidize serve` command, [see its guide](../guides/doxidize-serve.html).
 
 ## Publishing to GitHub Pages
 
@@ -46,5 +46,4 @@ To publish your docs to GitHub Pages:
 $ doxidize publish
 ```
 
-This will create your rendered docs in a local `gh-pages` branch, and then
-push that branch to `origin`.
+For more about the `doxidize publish` command, [see its guide](../guides/doxidize-publish.html).
