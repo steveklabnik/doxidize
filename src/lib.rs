@@ -232,7 +232,7 @@ mod git {
         let output = Command::new("git")
             .arg("-C")
             .arg(git_dir.as_os_str())
-            .args(&["remote", "add", remote_name, "../../.git"])
+            .args(&["remote", "add", remote_name, "../../../.git"])
             .output()
             .expect("failed to execute git init");
 

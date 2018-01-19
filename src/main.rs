@@ -17,6 +17,9 @@ fn main() {
     } else if args[0] == "generate" {
         doxidize::generate(&current_dir).expect("could not generate docs");
     } else if args[0] == "publish" {
+        // we want to publish the public directory, straight-up
+        target_dir.push("public");
+
         doxidize::publish(&current_dir, &target_dir).expect("could not publish docs");
     } else if args[0] == "serve" {
         doxidize::serve(&target_dir).expect("could not serve docs");
