@@ -57,6 +57,16 @@ pub fn generate(dir: &Path) -> Result<()> {
     let mut handlebars = Handlebars::new();
 
     handlebars.register_template_file("page", "templates/page.hbs")?;
+    handlebars.register_helper("up-dir",
+        Box::new(|h: &handlebars::Helper, _: &Handlebars, rc: &mut handlebars::RenderContext| -> handlebars::HelperResult {
+            let count = h.param(0).map(|v| v.value().as_u64().unwrap()).unwrap();
+
+            for _ in 0..count {
+                rc.writer.write(b"../")?;
+            }
+
+            Ok(())
+      }));
 
 
     // make the README.md render as an index.html
@@ -71,7 +81,7 @@ pub fn generate(dir: &Path) -> Result<()> {
     let index_path = target_dir.join("index.html");
     let mut index = File::create(index_path)?;
 
-    index.write_all(handlebars.render("page", &json!({"contents": rendered}))?.as_bytes())?;
+    index.write_all(handlebars.render("page", &json!({"contents": rendered, "nest-count": 0}))?.as_bytes())?;
 
     // render all other *.md files as *.html, walking the tree
     for entry in WalkDir::new(&docs_dir) {
@@ -118,7 +128,8 @@ pub fn generate(dir: &Path) -> Result<()> {
         let rendered_path = new_containing_dir.join(file_name).with_extension("html");
         let mut file = File::create(rendered_path)?;
 
-        file.write_all(handlebars.render("page", &json!({"contents": rendered_contents}))?.as_bytes())?;
+        // TODO: this only works at one level down; we need to calculate the real number
+        file.write_all(handlebars.render("page", &json!({"contents": rendered_contents, "nest-count": 1}))?.as_bytes())?;
     }
 
     Ok(())
