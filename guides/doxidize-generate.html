@@ -210,17 +210,16 @@ a.article, a.article:hover {
 
         <!-- Page Content Holder -->
         <div id="content">
-            <h1>Generation</h1>
-<p>This is what happens when you run</p>
+            <h1><code>doxidize generate</code></h1>
+<p>This command takes the documentation you've written in the <code>docs</code> directory
+and renders it to the <code>target/docs</code> directory.</p>
 <pre><code class="language-shell">$ doxidize generate
 </code></pre>
-<p>When this command is run, it will inspect your <code>docs</code> directory, and
-generate rendered HTML documentation inside of the <code>target/docs</code> directory.</p>
-<h2>README.md</h2>
-<p><code>README.md</code> will be rendered as <code>index.html</code>.</p>
-<h2>Other Markdown Files</h2>
-<p>Any other file ending in <code>.md</code> will be rendered inside of <code>target/docs</code>,
-with a <code>.html</code> extension.</p>
+<p>It takes no parameters.</p>
+<h2><code>README.md</code> support</h2>
+<p><code>README.md</code> will be transformed into <code>index.html</code>, so that on GitHub, you can
+see it rendered, but when you put your docs on the web, you can see them at a
+nicer URL.</p>
 
         </div>
     </div>
