@@ -7,15 +7,20 @@ fn main() {
 
     // skip the program name
     let args: Vec<String> = env::args().skip(1).collect();
+    
+    // some commands need to fetch the target directory
+    let mut target_dir = current_dir.join("target");
+    target_dir.push("docs");
 
     if args.len() == 0 {
         doxidize::create_skeleton(&current_dir).expect("could not create skeleton");
     } else if args[0] == "generate" {
         doxidize::generate(&current_dir).expect("could not generate docs");
     } else if args[0] == "publish" {
-        let mut target_dir = current_dir.join("target");
-        target_dir.push("docs");
-
         doxidize::publish(&current_dir, &target_dir).expect("could not publish docs");
+    } else if args[0] == "serve" {
+        doxidize::serve(&target_dir).expect("could not serve docs");
+    } else {
+        panic!("incorrect command {}", args[0]);
     }
 }

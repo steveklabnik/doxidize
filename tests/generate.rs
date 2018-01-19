@@ -26,6 +26,7 @@ testing").expect("could not write to README");
 
     let mut output_dir = dir_path.join("target");
     output_dir.push("docs");
+    output_dir.push("public");
 
     let rendered_readme_path = output_dir.join("index.html");
 
@@ -60,6 +61,7 @@ testing").expect("could not write to guide");
 
     let mut output_dir = dir_path.join("target");
     output_dir.push("docs");
+    output_dir.push("public");
 
     let rendered_guide_path = output_dir.join("guide.html");
 
@@ -98,6 +100,7 @@ testing").expect("could not write to guide");
 
     let mut output_dir = dir_path.join("target");
     output_dir.push("docs");
+    output_dir.push("public");
 
     let mut rendered_guide_path = output_dir.join("nested");
     rendered_guide_path.push("guide.html");

@@ -9,6 +9,8 @@ extern crate handlebars;
 #[macro_use]
 extern crate serde_json;
 
+extern crate simple_server;
+
 extern crate walkdir;
 
 use comrak::ComrakOptions;
@@ -17,6 +19,9 @@ use failure::Error;
 
 use handlebars::Handlebars;
 
+use simple_server::Server;
+
+use std::env;
 use std::fs::{self, File, OpenOptions};
 use std::io::prelude::*;
 use std::path::Path;
@@ -46,7 +51,7 @@ pub fn generate(dir: &Path) -> Result<()> {
     let docs_dir = dir.join("docs");
 
     // ensure that the docs dir exists in target
-    let target_dir = dir.join("target").join("docs");
+    let target_dir = dir.join("target").join("docs").join("public");
     fs::create_dir_all(&target_dir)?;
 
     let mut handlebars = Handlebars::new();
@@ -72,7 +77,6 @@ pub fn generate(dir: &Path) -> Result<()> {
     for entry in WalkDir::new(&docs_dir) {
         let entry = entry?;
         let path = entry.path();
-        println!("Looking at {}", path.display());
 
         // we want only files
         if !path.is_file() { continue; }
@@ -95,8 +99,6 @@ pub fn generate(dir: &Path) -> Result<()> {
             continue;
         }
 
-        println!("passed all checks");
-
         // make sure the containing directory is created
         //
         // to do this, we get the containing directory, strip off the base, and then re-apply that path
@@ -114,7 +116,6 @@ pub fn generate(dir: &Path) -> Result<()> {
         let rendered_contents = comrak::markdown_to_html(&contents, &ComrakOptions::default());
 
         let rendered_path = new_containing_dir.join(file_name).with_extension("html");
-        println!("writing to: {}", rendered_path.display());
         let mut file = File::create(rendered_path)?;
 
         file.write_all(handlebars.render("page", &json!({"contents": rendered_contents}))?.as_bytes())?;
@@ -164,6 +165,25 @@ pub fn publish(dir: &Path, target_dir: &Path) -> Result<()> {
     git::sync_pages_branch(&target_dir, remote_name)?;
 
     git::push(&dir)?;
+
+    Ok(())
+}
+
+pub fn serve(directory: &Path) -> Result<()> {
+    let host = "127.0.0.1";
+    let port = "7878";
+
+    // everything is handled by the static serving, so any request here is
+    // an error
+    let server = Server::new(|_request, mut response| {
+        Ok(response.body("incorrect path".as_bytes())?)
+    });
+
+    env::set_current_dir(directory)?;
+
+    println!("serving docs at http://{}:{}", host, port);
+
+    server.listen(host, port);
 
     Ok(())
 }
