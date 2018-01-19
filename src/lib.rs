@@ -9,6 +9,8 @@ extern crate handlebars;
 #[macro_use]
 extern crate serde_json;
 
+extern crate walkdir;
+
 use comrak::ComrakOptions;
 
 use failure::Error;
@@ -18,6 +20,8 @@ use handlebars::Handlebars;
 use std::fs::{self, File, OpenOptions};
 use std::io::prelude::*;
 use std::path::Path;
+
+use walkdir::WalkDir;
 
 type Result<T> = std::result::Result<T, Error>;
 
@@ -64,10 +68,11 @@ pub fn generate(dir: &Path) -> Result<()> {
 
     index.write_all(handlebars.render("page", &json!({"contents": rendered}))?.as_bytes())?;
 
-    // render all other *.md files as *.html
-    for entry in fs::read_dir(docs_dir)? {
+    // render all other *.md files as *.html, walking the tree
+    for entry in WalkDir::new(&docs_dir) {
         let entry = entry?;
         let path = entry.path();
+        println!("Looking at {}", path.display());
 
         // we want only files
         if !path.is_file() { continue; }
@@ -90,13 +95,26 @@ pub fn generate(dir: &Path) -> Result<()> {
             continue;
         }
 
+        println!("passed all checks");
+
+        // make sure the containing directory is created
+        //
+        // to do this, we get the containing directory, strip off the base, and then re-apply that path
+        // to where we want to write the output. tricky!
+        let containing_dir = path.parent().expect("somehow this is running at the root");
+        let new_containing_dir = containing_dir.strip_prefix(&docs_dir)?;
+        let new_containing_dir = target_dir.join(new_containing_dir);
+        fs::create_dir_all(&new_containing_dir)?;
+
+        // now we can make the file
         let mut file = File::open(&path)?;
         let mut contents = String::new();
         file.read_to_string(&mut contents)?;
 
         let rendered_contents = comrak::markdown_to_html(&contents, &ComrakOptions::default());
 
-        let rendered_path = target_dir.join(file_name).with_extension("html");
+        let rendered_path = new_containing_dir.join(file_name).with_extension("html");
+        println!("writing to: {}", rendered_path.display());
         let mut file = File::create(rendered_path)?;
 
         file.write_all(handlebars.render("page", &json!({"contents": rendered_contents}))?.as_bytes())?;
