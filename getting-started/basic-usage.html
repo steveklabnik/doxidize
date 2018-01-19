@@ -203,7 +203,15 @@ a.article, a.article:hover {
                     </ul>
                 </li>
                 <li>
-                    <a href="#">API reference</a>
+                    <a href="#api" data-toggle="collapse" aria-expanded="false">API reference</a>
+                    <ul class="collapse list-unstyled" id="api">
+                        <li><a href="../api/index.html">Overview</a></li>
+                        <li><a href="../api/Config.html"><code>Config</code></a></li>
+                        <li><a href="../api/create_skeleton.html"><code>create_skeleton</code></a></li>
+                        <li><a href="../api/generate.html"><code>generate</code></a></li>
+                        <li><a href="../api/publish.html"><code>publish</code></a></li>
+                        <li><a href="../api/serve.html"><code>serve</code></a></li>
+                    </ul>
                 </li>
             </ul>
         </nav>
@@ -218,19 +226,23 @@ a.article, a.article:hover {
 </code></pre>
 <p>This will create a top-level <code>docs</code> dir and a <code>README.md</code> file inside of it.</p>
 <p>Edit the <code>README.md</code> to your heart's content.</p>
+<p>For more about the <code>doxidize</code> command, <a href="../guides/doxidize.html">see its guide</a>.</p>
 <h2>Generate your documentation</h2>
 <p>To generate HTML documentation:</p>
 <pre><code class="language-shell">$ doxidize generate
 </code></pre>
 <p>Your generated docs will appear in <code>target/docs</code>.</p>
+<p>For more about the <code>doxidize generate</code> command, <a href="../guides/doxidize-generate.html">see its guide</a>.</p>
 <h2>Viewing your documentation</h2>
 <p>To view your docs in a web browser:</p>
 <pre><code class="language-shell">$ doxidize serve
 </code></pre>
+<p>For more about the <code>doxidize serve</code> command, <a href="../guides/doxidize-serve.html">see its guide</a>.</p>
 <h2>Publishing to GitHub Pages</h2>
 <p>To publish your docs to GitHub Pages:</p>
 <pre><code class="language-shell">$ doxidize publish
 </code></pre>
+<p>For more about the <code>doxidize publish</code> command, <a href="../guides/doxidize-publish.html">see its guide</a>.</p>
 
         </div>
     </div>
