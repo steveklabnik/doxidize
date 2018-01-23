@@ -2,14 +2,19 @@ extern crate doxidize;
 extern crate tempdir;
 
 use tempdir::TempDir;
+use std::env;
 use std::fs::{self, File, OpenOptions};
 use std::io::prelude::*;
+
+mod util;
 
 #[test]
 fn generate_renders_readme() {
     let dir = TempDir::new("create_root_readme").expect("could not generate temp dir");
 
     let dir_path = dir.path();
+
+    util::cargo_init(dir_path).expect("Could not create sample crate");
 
     doxidize::create_skeleton(&dir_path).expect("create_skeleton failed");
 
@@ -46,6 +51,8 @@ fn generate_renders_additional_markdown_files() {
 
     let dir_path = dir.path();
 
+    util::cargo_init(dir_path).expect("Could not create sample crate");
+
     doxidize::create_skeleton(&dir_path).expect("create_skeleton failed");
 
     let docs_dir = dir_path.join("docs");
@@ -80,6 +87,8 @@ fn generate_renders_nested_directories() {
     let dir = TempDir::new("create_additional_markdown").expect("could not generate temp dir");
 
     let dir_path = dir.path();
+
+    util::cargo_init(dir_path).expect("Could not create sample crate");
 
     doxidize::create_skeleton(&dir_path).expect("create_skeleton failed");
 

@@ -79,7 +79,7 @@ pub fn create_skeleton(dir: &Path) -> Result<()> {
     let api_dir = docs_dir.join("api");
     fs::create_dir_all(&api_dir)?;
 
-    let manifest_path = PathBuf::from("Cargo.toml");
+    let manifest_path = dir.join("Cargo.toml");
     let verbosity = Verbosity::Normal;
 
     let config = Config::new(verbosity, manifest_path)?;

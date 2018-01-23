@@ -2,12 +2,17 @@ extern crate doxidize;
 extern crate tempdir;
 
 use tempdir::TempDir;
+use std::env;
+
+mod util;
 
 #[test]
 fn creates_docs_dir() {
     let dir = TempDir::new("create_docs_dir").expect("could not generate temp dir");
 
     let dir_path = dir.path();
+
+    util::cargo_init(dir_path).expect("Could not create sample crate");
 
     doxidize::create_skeleton(&dir_path).expect("create_skeleton failed");
 
@@ -19,6 +24,8 @@ fn creates_root_readme() {
     let dir = TempDir::new("create_root_readme").expect("could not generate temp dir");
 
     let dir_path = dir.path();
+
+    util::cargo_init(dir_path).expect("Could not create sample crate");
 
     doxidize::create_skeleton(&dir_path).expect("create_skeleton failed");
 
@@ -34,6 +41,8 @@ fn double_initialize() {
 
     let dir_path = dir.path();
 
+    util::cargo_init(dir_path).expect("Could not create sample crate");
+
     doxidize::create_skeleton(&dir_path).expect("create_skeleton failed");
 
     doxidize::create_skeleton(&dir_path).expect("create_skeleton failed when run a second time");
@@ -44,6 +53,8 @@ fn creates_menu_toml() {
     let dir = TempDir::new("create_menu_toml").expect("could not generate temp dir");
 
     let dir_path = dir.path();
+    
+    util::cargo_init(dir_path).expect("Could not create sample crate");
 
     doxidize::create_skeleton(&dir_path).expect("create_skeleton failed");
 
