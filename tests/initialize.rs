@@ -13,7 +13,7 @@ fn creates_docs_dir() {
 
     util::cargo_init(dir_path).expect("Could not create sample crate");
 
-    doxidize::create_skeleton(&dir_path).expect("create_skeleton failed");
+    doxidize::ops::create_skeleton(&dir_path).expect("create_skeleton failed");
 
     assert!(dir_path.join("docs").is_dir());
 }
@@ -26,7 +26,7 @@ fn creates_root_readme() {
 
     util::cargo_init(dir_path).expect("Could not create sample crate");
 
-    doxidize::create_skeleton(&dir_path).expect("create_skeleton failed");
+    doxidize::ops::create_skeleton(&dir_path).expect("create_skeleton failed");
 
     let docs_dir = dir_path.join("docs");
     let readme_path = docs_dir.join("README.md");
@@ -42,9 +42,9 @@ fn double_initialize() {
 
     util::cargo_init(dir_path).expect("Could not create sample crate");
 
-    doxidize::create_skeleton(&dir_path).expect("create_skeleton failed");
+    doxidize::ops::create_skeleton(&dir_path).expect("create_skeleton failed");
 
-    doxidize::create_skeleton(&dir_path).expect("create_skeleton failed when run a second time");
+    doxidize::ops::create_skeleton(&dir_path).expect("create_skeleton failed when run a second time");
 }
 
 #[test]
@@ -55,7 +55,7 @@ fn creates_menu_toml() {
     
     util::cargo_init(dir_path).expect("Could not create sample crate");
 
-    doxidize::create_skeleton(&dir_path).expect("create_skeleton failed");
+    doxidize::ops::create_skeleton(&dir_path).expect("create_skeleton failed");
 
     let docs_dir = dir_path.join("docs");
     let readme_path = docs_dir.join("Menu.toml");

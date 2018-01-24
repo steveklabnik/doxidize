@@ -15,7 +15,7 @@ fn build_renders_readme() {
 
     util::cargo_init(dir_path).expect("Could not create sample crate");
 
-    doxidize::create_skeleton(&dir_path).expect("create_skeleton failed");
+    doxidize::ops::create_skeleton(&dir_path).expect("create_skeleton failed");
 
     let docs_dir = dir_path.join("docs");
     let readme_path = docs_dir.join("README.md");
@@ -26,7 +26,7 @@ fn build_renders_readme() {
 
 testing").expect("could not write to README");
 
-    doxidize::build(&dir_path).expect("build failed");
+    doxidize::ops::build(&dir_path).expect("build failed");
 
     let mut output_dir = dir_path.join("target");
     output_dir.push("docs");
@@ -52,7 +52,7 @@ fn build_renders_additional_markdown_files() {
 
     util::cargo_init(dir_path).expect("Could not create sample crate");
 
-    doxidize::create_skeleton(&dir_path).expect("create_skeleton failed");
+    doxidize::ops::create_skeleton(&dir_path).expect("create_skeleton failed");
 
     let docs_dir = dir_path.join("docs");
     let guide_path = docs_dir.join("guide.md");
@@ -63,7 +63,7 @@ fn build_renders_additional_markdown_files() {
 
 testing").expect("could not write to guide");
 
-    doxidize::build(&dir_path).expect("generate failed");
+    doxidize::ops::build(&dir_path).expect("generate failed");
 
     let mut output_dir = dir_path.join("target");
     output_dir.push("docs");
@@ -89,7 +89,7 @@ fn build_renders_nested_directories() {
 
     util::cargo_init(dir_path).expect("Could not create sample crate");
 
-    doxidize::create_skeleton(&dir_path).expect("create_skeleton failed");
+    doxidize::ops::create_skeleton(&dir_path).expect("create_skeleton failed");
 
     let docs_dir = dir_path.join("docs");
     let nested_dir = docs_dir.join("nested");
@@ -104,7 +104,7 @@ fn build_renders_nested_directories() {
 
 testing").expect("could not write to guide");
 
-    doxidize::build(&dir_path).expect("build failed");
+    doxidize::ops::build(&dir_path).expect("build failed");
 
     let mut output_dir = dir_path.join("target");
     output_dir.push("docs");

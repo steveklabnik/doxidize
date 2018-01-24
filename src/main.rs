@@ -13,16 +13,16 @@ fn main() {
     target_dir.push("docs");
 
     if args.len() == 0 {
-        doxidize::create_skeleton(&current_dir).expect("could not create skeleton");
+        doxidize::ops::create_skeleton(&current_dir).expect("could not create skeleton");
     } else if args[0] == "build" {
-        doxidize::build(&current_dir).expect("could not build docs");
+        doxidize::ops::build(&current_dir).expect("could not build docs");
     } else if args[0] == "publish" {
         // we want to publish the public directory, straight-up
         target_dir.push("public");
 
-        doxidize::publish(&current_dir, &target_dir).expect("could not publish docs");
+        doxidize::ops::publish(&current_dir, &target_dir).expect("could not publish docs");
     } else if args[0] == "serve" {
-        doxidize::serve(&target_dir).expect("could not serve docs");
+        doxidize::ops::serve(&target_dir).expect("could not serve docs");
     } else {
         panic!("incorrect command {}", args[0]);
     }
