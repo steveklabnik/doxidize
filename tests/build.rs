@@ -2,7 +2,6 @@ extern crate doxidize;
 extern crate tempdir;
 
 use tempdir::TempDir;
-use std::env;
 use std::fs::{self, File, OpenOptions};
 use std::io::prelude::*;
 
