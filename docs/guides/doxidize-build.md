@@ -1,10 +1,10 @@
-# `doxidize generate`
+# `doxidize build`
 
 This command takes the documentation you've written in the `docs` directory
 and renders it to the `target/docs` directory.
 
 ```shell
-$ doxidize generate
+$ doxidize build
 ```
 
 It takes no parameters.

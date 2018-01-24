@@ -1,6 +1,6 @@
 # Publishing your documentation
 
-After you've run `doxidize generate` to build your docs, run this:
+After you've run `doxidize build` to build your docs, run this:
 
 ```shell
 $ doxidize publish

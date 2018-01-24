@@ -204,7 +204,7 @@ pub fn create_skeleton(dir: &Path) -> Result<()> {
     Ok(())
 }
 
-pub fn generate(dir: &Path) -> Result<()> {
+pub fn build(dir: &Path) -> Result<()> {
     // we need to know where the docs are
     let docs_dir = dir.join("docs");
 

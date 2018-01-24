@@ -1,9 +1,9 @@
-# Generation
+# Building
 
 This is what happens when you run
 
 ```shell
-$ doxidize generate
+$ doxidize build
 ```
 
 When this command is run, it will inspect your `docs` directory, and

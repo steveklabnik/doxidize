@@ -14,8 +14,8 @@ fn main() {
 
     if args.len() == 0 {
         doxidize::create_skeleton(&current_dir).expect("could not create skeleton");
-    } else if args[0] == "generate" {
-        doxidize::generate(&current_dir).expect("could not generate docs");
+    } else if args[0] == "build" {
+        doxidize::build(&current_dir).expect("could not build docs");
     } else if args[0] == "publish" {
         // we want to publish the public directory, straight-up
         target_dir.push("public");

@@ -9,7 +9,7 @@ use std::io::prelude::*;
 mod util;
 
 #[test]
-fn generate_renders_readme() {
+fn build_renders_readme() {
     let dir = TempDir::new("create_root_readme").expect("could not generate temp dir");
 
     let dir_path = dir.path();
@@ -27,7 +27,7 @@ fn generate_renders_readme() {
 
 testing").expect("could not write to README");
 
-    doxidize::generate(&dir_path).expect("generate failed");
+    doxidize::build(&dir_path).expect("build failed");
 
     let mut output_dir = dir_path.join("target");
     output_dir.push("docs");
@@ -46,7 +46,7 @@ testing").expect("could not write to README");
 }
 
 #[test]
-fn generate_renders_additional_markdown_files() {
+fn build_renders_additional_markdown_files() {
     let dir = TempDir::new("create_additional_markdown").expect("could not generate temp dir");
 
     let dir_path = dir.path();
@@ -64,7 +64,7 @@ fn generate_renders_additional_markdown_files() {
 
 testing").expect("could not write to guide");
 
-    doxidize::generate(&dir_path).expect("generate failed");
+    doxidize::build(&dir_path).expect("generate failed");
 
     let mut output_dir = dir_path.join("target");
     output_dir.push("docs");
@@ -83,7 +83,7 @@ testing").expect("could not write to guide");
 }
 
 #[test]
-fn generate_renders_nested_directories() {
+fn build_renders_nested_directories() {
     let dir = TempDir::new("create_additional_markdown").expect("could not generate temp dir");
 
     let dir_path = dir.path();
@@ -105,7 +105,7 @@ fn generate_renders_nested_directories() {
 
 testing").expect("could not write to guide");
 
-    doxidize::generate(&dir_path).expect("generate failed");
+    doxidize::build(&dir_path).expect("build failed");
 
     let mut output_dir = dir_path.join("target");
     output_dir.push("docs");

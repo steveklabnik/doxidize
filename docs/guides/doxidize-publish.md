@@ -4,7 +4,7 @@ This command takes the documentation in the `target/docs` directory and
 publishes it to GitHub Pages.
 
 ```shell
-$ doxidize generate
+$ doxidize publish
 ```
 
 It takes no parameters.

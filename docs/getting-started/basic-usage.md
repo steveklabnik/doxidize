@@ -16,17 +16,17 @@ Edit the `README.md` to your heart's content.
 
 For more about the `doxidize` command, [see its guide](../guides/doxidize.html).
 
-## Generate your documentation
+## Build your documentation
 
 To generate HTML documentation:
 
 ```shell
-$ doxidize generate
+$ doxidize build
 ```
 
 Your generated docs will appear in `target/docs`.
 
-For more about the `doxidize generate` command, [see its guide](../guides/doxidize-generate.html).
+For more about the `doxidize build` command, [see its guide](../guides/doxidize-build.html).
 
 ## Viewing your documentation
 
