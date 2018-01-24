@@ -9,11 +9,15 @@ description = "none for now"
 failure = "0.1.1"
 failure_derive = "0.1.1"
 comrak = "0.2.5"
+serde = "1.0"
+serde_derive = "1.0"
 serde_json = "1.0"
 walkdir = "2.0.1"
 simple-server = "0.3.0"
 rls-analysis = "0.10"
 rls-data = { version = "0.14", features = ["serialize-serde"] }
+configure = "0.1.1"
+configure_derive = "0.1.1"
 
 handlebars = "0.30.0-beta.4" # https://github.com/sunng87/handlebars-rust/issues/194
 pest = "=1.0.0-beta.17" # https://github.com/sunng87/handlebars-rust/issues/197

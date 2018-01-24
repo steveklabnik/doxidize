@@ -1,4 +1,4 @@
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Deserialize)]
 pub struct Ui {
     verbosity: Verbosity,
 }
@@ -20,7 +20,7 @@ impl Ui {
 }
 
 /// The verbosity of the output displayed to the user.
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Deserialize, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Verbosity {
     /// No output.
     Quiet,

@@ -1,8 +1,13 @@
 extern crate doxidize;
 
+#[macro_use]
+extern crate configure;
+
 use std::env;
 
 fn main() {
+    use_default_config!();
+
     let current_dir = env::current_dir().expect("failed to get the current directory");
 
     // skip the program name
