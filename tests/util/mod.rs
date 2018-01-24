@@ -10,10 +10,7 @@ pub fn cargo_init(path: &Path) -> Result<(), Box<Error>> {
         .expect("failed to execute cargo init");
 
     if !output.status.success() {
-        return Err(format!(
-            "couldn't cargo init:\n{}",
-            String::from_utf8_lossy(&output.stderr)
-        ).into());
+        return Err(format!("couldn't cargo init:\n{}", String::from_utf8_lossy(&output.stderr)).into());
     }
 
     Ok(())

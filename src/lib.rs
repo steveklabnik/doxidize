@@ -63,23 +63,17 @@ pub fn create_skeleton(dir: &Path) -> Result<()> {
 
     handlebars.register_template_file("page", "templates/page.hbs")?;
     handlebars.register_template_file("api", "templates/api.hbs")?;
-    handlebars.register_helper(
-        "up-dir",
-        Box::new(
-            |h: &handlebars::Helper,
-             _: &Handlebars,
-             rc: &mut handlebars::RenderContext|
-             -> handlebars::HelperResult {
-                let count = h.param(0).map(|v| v.value().as_u64().unwrap()).unwrap();
+    handlebars.register_helper("up-dir",
+        Box::new(|h: &handlebars::Helper, _: &Handlebars, rc: &mut handlebars::RenderContext| -> handlebars::HelperResult {
+            let count = h.param(0).map(|v| v.value().as_u64().unwrap()).unwrap();
 
-                for _ in 0..count {
-                    rc.writer.write(b"../")?;
-                }
+            for _ in 0..count {
+                rc.writer.write(b"../")?;
+            }
 
-                Ok(())
-            },
-        ),
-    );
+            Ok(())
+    }));
+
 
     // ensure that the api dir exists
     let api_dir = docs_dir.join("api");
@@ -124,11 +118,7 @@ pub fn create_skeleton(dir: &Path) -> Result<()> {
 
     let mut file = File::create(markdown_path)?;
 
-    file.write_all(
-        handlebars
-            .render("api", &json!({ "name": crate_name }))?
-            .as_bytes(),
-    )?;
+    file.write_all(handlebars.render("api", &json!({"name": crate_name, "docs": root_def.docs}))?.as_bytes())?;
 
     // Now that we have that, it's time to get the children; these are
     // the top-level items for the crate.
@@ -167,6 +157,7 @@ pub fn create_skeleton(dir: &Path) -> Result<()> {
             // DefKind::Method => (String::from("method"), String::from("methods")),
             _ => continue,
         };
+
     }
 
     // The loop below is basically creating this vector.
@@ -206,12 +197,9 @@ pub fn create_skeleton(dir: &Path) -> Result<()> {
 
         let mut file = File::create(markdown_path)?;
 
-        file.write_all(
-            handlebars
-                .render("api", &json!({ "name": def }))?
-                .as_bytes(),
-        )?;
+        file.write_all(handlebars.render("api", &json!({"name": def.name, "docs": def.docs}))?.as_bytes())?;
     }
+
 
     Ok(())
 }
@@ -228,23 +216,17 @@ pub fn build(dir: &Path) -> Result<()> {
 
     handlebars.register_template_file("page", "templates/page.hbs")?;
     handlebars.register_template_file("api", "templates/api.hbs")?;
-    handlebars.register_helper(
-        "up-dir",
-        Box::new(
-            |h: &handlebars::Helper,
-             _: &Handlebars,
-             rc: &mut handlebars::RenderContext|
-             -> handlebars::HelperResult {
-                let count = h.param(0).map(|v| v.value().as_u64().unwrap()).unwrap();
+    handlebars.register_helper("up-dir",
+        Box::new(|h: &handlebars::Helper, _: &Handlebars, rc: &mut handlebars::RenderContext| -> handlebars::HelperResult {
+            let count = h.param(0).map(|v| v.value().as_u64().unwrap()).unwrap();
 
-                for _ in 0..count {
-                    rc.writer.write(b"../")?;
-                }
+            for _ in 0..count {
+                rc.writer.write(b"../")?;
+            }
 
-                Ok(())
-            },
-        ),
-    );
+            Ok(())
+      }));
+
 
     // render all other *.md files as *.html, walking the tree
     for entry in WalkDir::new(&docs_dir) {
@@ -252,9 +234,7 @@ pub fn build(dir: &Path) -> Result<()> {
         let path = entry.path();
 
         // we want only files
-        if !path.is_file() {
-            continue;
-        }
+        if !path.is_file() { continue; }
 
         if let Some(extension) = path.extension() {
             // we only want .md files
@@ -294,11 +274,7 @@ pub fn build(dir: &Path) -> Result<()> {
         let mut file = File::create(rendered_path)?;
 
         // TODO: this only works at one level down; we need to calculate the real number
-        file.write_all(
-            handlebars
-                .render("page", &json!({ "contents": rendered_contents }))?
-                .as_bytes(),
-        )?;
+        file.write_all(handlebars.render("page", &json!({"contents": rendered_contents, "nest-count": 1}))?.as_bytes())?;
     }
 
     Ok(())
@@ -328,6 +304,7 @@ pub fn publish(dir: &Path, target_dir: &Path) -> Result<()> {
         path
     };
 
+
     // if this file doesn't exist, then we don't have the gh-pages remote set up
     // to set it up we need to initialize the git repositry, add the remote, and sync the two
     if !pages_head.is_file() {
@@ -354,8 +331,9 @@ pub fn serve(directory: &Path) -> Result<()> {
 
     // everything is handled by the static serving, so any request here is
     // an error
-    let server =
-        Server::new(|_request, mut response| Ok(response.body("incorrect path".as_bytes())?));
+    let server = Server::new(|_request, mut response| {
+        Ok(response.body("incorrect path".as_bytes())?)
+    });
 
     env::set_current_dir(directory)?;
 
@@ -440,7 +418,8 @@ impl Config {
 ///             `Cargo.toml` file
 /// - `target`: The target to document
 fn generate_and_load_analysis(config: &Config, target: &Target) -> Result<()> {
-    let analysis_result = cargo::generate_analysis(config, target, |_| {});
+    let analysis_result = cargo::generate_analysis(config, target, |_| {
+    });
 
     if analysis_result.is_err() {
         return analysis_result;

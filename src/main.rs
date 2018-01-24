@@ -7,7 +7,7 @@ fn main() {
 
     // skip the program name
     let args: Vec<String> = env::args().skip(1).collect();
-
+    
     // some commands need to fetch the target directory
     let mut target_dir = current_dir.join("target");
     target_dir.push("docs");
