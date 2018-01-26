@@ -1,9 +1,28 @@
 use Result;
 use std::path::Path;
 use git;
+use std::fs::File;
+use std::io::prelude::*;
+use toml_edit;
 
 // adapted from https://github.com/rtomayko/rocco/blob/2586dc3bd4b0e9fa9bd076f492cdbf2924527199/Rakefile#L46
 pub fn publish(dir: &Path, target_dir: &Path) -> Result<()> {
+    // load up our Doxidize.toml so we can handle any base urls
+    let path = dir.join("Doxidize.toml");
+    let mut contents = String::new();
+    let mut toml_file = File::open(path)?;
+    toml_file.read_to_string(&mut contents)?;
+
+    let doc = contents.parse::<toml_edit::Document>().expect("invalid doxidize.toml");
+
+    let base_url = doc["docs"]["base-url"].as_value().map(|v| v.as_str().expect("value of base-url was not a string")).unwrap_or_default().to_string();
+
+    let target_dir = if !base_url.is_empty() {
+        target_dir.join(&base_url)
+    } else {
+        target_dir.to_path_buf()
+    };
+
     let git_dir = target_dir.join(".git");
 
     // this name is totally arbitrary, but o was chosen to match rocco's Rakefile above.
@@ -30,7 +49,7 @@ pub fn publish(dir: &Path, target_dir: &Path) -> Result<()> {
     // to set it up we need to initialize the git repositry, add the remote, and sync the two
     if !pages_head.is_file() {
         git::init(&target_dir)?;
-        git::initialize_remote(&target_dir, remote_name)?;
+        git::initialize_remote(&target_dir, remote_name, !base_url.is_empty())?;
         git::reset_to_remote_head(&target_dir, remote_name)?;
     }
 

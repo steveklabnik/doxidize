@@ -41,11 +41,17 @@ pub fn init(git_dir: &Path) -> Result<()> {
     Ok(())
 }
 
-pub fn initialize_remote(git_dir: &Path, remote_name: &str) -> Result<()> {
+pub fn initialize_remote(git_dir: &Path, remote_name: &str, has_base_url: bool) -> Result<()> {
+    let dot_dot = if has_base_url {
+        "../../../../.git"
+    } else {
+        "../../../.git"
+    };
+
     let output = Command::new("git")
         .arg("-C")
         .arg(git_dir.as_os_str())
-        .args(&["remote", "add", remote_name, "../../../.git"])
+        .args(&["remote", "add", remote_name, dot_dot])
         .output()
         .expect("failed to execute git init");
 
