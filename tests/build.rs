@@ -5,6 +5,8 @@ use tempdir::TempDir;
 use std::fs::{self, File, OpenOptions};
 use std::io::prelude::*;
 
+use doxidize::Config;
+
 mod util;
 
 #[test]
@@ -15,7 +17,10 @@ fn build_renders_readme() {
 
     util::cargo_init(dir_path).expect("Could not create sample crate");
 
-    doxidize::ops::create_skeleton(&dir_path).expect("create_skeleton failed");
+    let mut config = Config::default();
+    config.set_manifest_path(dir_path.join("Cargo.toml"));
+
+    doxidize::ops::create_skeleton(&dir_path, &config).expect("create_skeleton failed");
 
     let docs_dir = dir_path.join("docs");
     let readme_path = docs_dir.join("README.md");
@@ -34,7 +39,7 @@ testing",
         )
         .expect("could not write to README");
 
-    doxidize::ops::build(&dir_path).expect("build failed");
+    doxidize::ops::build(&dir_path, &config).expect("build failed");
 
     let mut output_dir = dir_path.join("target");
     output_dir.push("docs");
@@ -65,7 +70,10 @@ fn build_renders_additional_markdown_files() {
 
     util::cargo_init(dir_path).expect("Could not create sample crate");
 
-    doxidize::ops::create_skeleton(&dir_path).expect("create_skeleton failed");
+    let mut config = Config::default();
+    config.set_manifest_path(dir_path.join("Cargo.toml"));
+
+    doxidize::ops::create_skeleton(&dir_path, &config).expect("create_skeleton failed");
 
     let docs_dir = dir_path.join("docs");
     let guide_path = docs_dir.join("guide.md");
@@ -84,7 +92,7 @@ testing",
         )
         .expect("could not write to guide");
 
-    doxidize::ops::build(&dir_path).expect("generate failed");
+    doxidize::ops::build(&dir_path, &config).expect("generate failed");
 
     let mut output_dir = dir_path.join("target");
     output_dir.push("docs");
@@ -115,7 +123,10 @@ fn build_renders_nested_directories() {
 
     util::cargo_init(dir_path).expect("Could not create sample crate");
 
-    doxidize::ops::create_skeleton(&dir_path).expect("create_skeleton failed");
+    let mut config = Config::default();
+    config.set_manifest_path(dir_path.join("Cargo.toml"));
+
+    doxidize::ops::create_skeleton(&dir_path, &config).expect("create_skeleton failed");
 
     let docs_dir = dir_path.join("docs");
     let nested_dir = docs_dir.join("nested");
@@ -138,7 +149,7 @@ testing",
         )
         .expect("could not write to guide");
 
-    doxidize::ops::build(&dir_path).expect("build failed");
+    doxidize::ops::build(&dir_path, &config).expect("build failed");
 
     let mut output_dir = dir_path.join("target");
     output_dir.push("docs");

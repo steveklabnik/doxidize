@@ -2,8 +2,9 @@ use Result;
 use std::path::Path;
 use simple_server::Server;
 use std::env;
+use config::Config;
 
-pub fn serve(directory: &Path) -> Result<()> {
+pub fn serve(directory: &Path, config: &Config) -> Result<()> {
     let host = "127.0.0.1";
     let port = "7878";
 

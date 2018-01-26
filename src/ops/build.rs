@@ -6,8 +6,9 @@ use walkdir::WalkDir;
 use comrak::{self, ComrakOptions};
 use std::io::prelude::*;
 use toml_edit;
+use config::Config;
 
-pub fn build(dir: &Path) -> Result<()> {
+pub fn build(dir: &Path, config: &Config) -> Result<()> {
     // load up our Doxidize.toml so we can handle any base urls
     let path = dir.join("Doxidize.toml");
     let mut contents = String::new();

@@ -1,6 +1,7 @@
 extern crate doxidize;
 extern crate tempdir;
 
+use doxidize::Config;
 use tempdir::TempDir;
 
 mod util;
@@ -13,7 +14,10 @@ fn creates_docs_dir() {
 
     util::cargo_init(dir_path).expect("Could not create sample crate");
 
-    doxidize::ops::create_skeleton(&dir_path).expect("create_skeleton failed");
+    let mut config = Config::default();
+    config.set_manifest_path(dir_path.join("Cargo.toml"));
+
+    doxidize::ops::create_skeleton(&dir_path, &config).expect("create_skeleton failed");
 
     assert!(dir_path.join("docs").is_dir());
 }
@@ -26,7 +30,10 @@ fn creates_root_readme() {
 
     util::cargo_init(dir_path).expect("Could not create sample crate");
 
-    doxidize::ops::create_skeleton(&dir_path).expect("create_skeleton failed");
+    let mut config = Config::default();
+    config.set_manifest_path(dir_path.join("Cargo.toml"));
+
+    doxidize::ops::create_skeleton(&dir_path, &config).expect("create_skeleton failed");
 
     let docs_dir = dir_path.join("docs");
     let readme_path = docs_dir.join("README.md");
@@ -42,7 +49,10 @@ fn creates_doxidize_config() {
 
     util::cargo_init(dir_path).expect("Could not create sample crate");
 
-    doxidize::ops::create_skeleton(&dir_path).expect("create_skeleton failed");
+    let mut config = Config::default();
+    config.set_manifest_path(dir_path.join("Cargo.toml"));
+
+    doxidize::ops::create_skeleton(&dir_path, &config).expect("create_skeleton failed");
 
     let config_path = dir_path.join("Doxidize.toml");
 
@@ -57,9 +67,12 @@ fn double_initialize() {
 
     util::cargo_init(dir_path).expect("Could not create sample crate");
 
-    doxidize::ops::create_skeleton(&dir_path).expect("create_skeleton failed");
+    let mut config = Config::default();
+    config.set_manifest_path(dir_path.join("Cargo.toml"));
 
-    doxidize::ops::create_skeleton(&dir_path)
+    doxidize::ops::create_skeleton(&dir_path, &config).expect("create_skeleton failed");
+
+    doxidize::ops::create_skeleton(&dir_path, &config)
         .expect("create_skeleton failed when run a second time");
 }
 
@@ -71,7 +84,10 @@ fn creates_menu_toml() {
 
     util::cargo_init(dir_path).expect("Could not create sample crate");
 
-    doxidize::ops::create_skeleton(&dir_path).expect("create_skeleton failed");
+    let mut config = Config::default();
+    config.set_manifest_path(dir_path.join("Cargo.toml"));
+
+    doxidize::ops::create_skeleton(&dir_path, &config).expect("create_skeleton failed");
 
     let docs_dir = dir_path.join("docs");
     let readme_path = docs_dir.join("Menu.toml");

@@ -4,9 +4,10 @@ use git;
 use std::fs::File;
 use std::io::prelude::*;
 use toml_edit;
+use config::Config;
 
 // adapted from https://github.com/rtomayko/rocco/blob/2586dc3bd4b0e9fa9bd076f492cdbf2924527199/Rakefile#L46
-pub fn publish(dir: &Path, target_dir: &Path) -> Result<()> {
+pub fn publish(dir: &Path, target_dir: &Path, config: &Config) -> Result<()> {
     // load up our Doxidize.toml so we can handle any base urls
     let path = dir.join("Doxidize.toml");
     let mut contents = String::new();

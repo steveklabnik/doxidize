@@ -1,8 +1,6 @@
 use analysis;
 use ui::{Ui, Verbosity};
-use Result;
 use std::path::{Path, PathBuf};
-use failure;
 use std::default::Default;
 use serde::Deserializer;
 
@@ -50,30 +48,6 @@ where
 }
 
 impl Config {
-    /// Create a new `Config` based off the location of the manifest as well as assets generated
-    /// during the build phase
-    ///
-    /// ## Arguments
-    ///
-    /// - `manifest_path`: The path to the `Cargo.toml` of the crate being documented
-    pub fn new(verbosity: Verbosity, manifest_path: PathBuf, base_url: String) -> Result<Config> {
-        let host = analysis::AnalysisHost::new(analysis::Target::Debug);
-
-        if !manifest_path.is_file() || !manifest_path.ends_with("Cargo.toml") {
-            return Err(failure::err_msg(
-                "The --manifest-path must be a path to a Cargo.toml file",
-            ));
-        }
-
-        Ok(Config {
-            ui: Ui::new(verbosity),
-            manifest_path,
-            output_path: None,
-            host,
-            base_url,
-        })
-    }
-
     /// Returns the directory containing the `Cargo.toml` of the crate being documented.
     pub fn root_path(&self) -> &Path {
         // unwrap() is safe, as manifest_path will point to a file
@@ -99,6 +73,10 @@ impl Config {
 
     pub fn manifest_path(&self) -> &Path {
         &self.manifest_path
+    }
+
+    pub fn set_manifest_path(&mut self, path: PathBuf) {
+        self.manifest_path = path;
     }
 
     pub fn host(&self) -> &analysis::AnalysisHost {

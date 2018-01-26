@@ -9,9 +9,8 @@ use std::fs::File;
 use std::collections::VecDeque;
 use error;
 use std::io::prelude::*;
-use ui::Verbosity;
 
-pub fn create_skeleton(dir: &Path) -> Result<()> {
+pub fn create_skeleton(dir: &Path, config: &Config) -> Result<()> {
     // create the top-level docs dir
     let docs_dir = dir.join("docs");
     fs::create_dir_all(&docs_dir)?;
@@ -21,8 +20,8 @@ pub fn create_skeleton(dir: &Path) -> Result<()> {
     OpenOptions::new().create(true).append(true).open(readme)?;
 
     // create a Doxidize.toml & Menu.toml
-    let config = dir.join("Doxidize.toml");
-    OpenOptions::new().create(true).append(true).open(config)?;
+    let doxidize_config = dir.join("Doxidize.toml");
+    OpenOptions::new().create(true).append(true).open(doxidize_config)?;
 
     let menu = docs_dir.join("Menu.toml");
     OpenOptions::new().create(true).append(true).open(menu)?;
@@ -53,12 +52,6 @@ pub fn create_skeleton(dir: &Path) -> Result<()> {
     // ensure that the api dir exists
     let api_dir = docs_dir.join("api");
     fs::create_dir_all(&api_dir)?;
-
-    let manifest_path = dir.join("Cargo.toml");
-    let verbosity = Verbosity::Normal;
-
-    // we created the Doxidize.toml, so there's no base url
-    let config = Config::new(verbosity, manifest_path, String::new())?;
 
     let metadata = cargo::retrieve_metadata(config.manifest_path())?;
     let target = cargo::target_from_metadata(config.ui(), &metadata)?;

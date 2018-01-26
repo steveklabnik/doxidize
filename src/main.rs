@@ -3,6 +3,8 @@ extern crate doxidize;
 #[macro_use]
 extern crate configure;
 
+use doxidize::Config;
+
 use std::env;
 
 fn main() {
@@ -17,17 +19,20 @@ fn main() {
     let mut target_dir = current_dir.join("target");
     target_dir.push("docs");
 
+    let config = Config::default();
+
     if args.len() == 0 {
-        doxidize::ops::create_skeleton(&current_dir).expect("could not create skeleton");
+
+        doxidize::ops::create_skeleton(&current_dir, &config).expect("could not create skeleton");
     } else if args[0] == "build" {
-        doxidize::ops::build(&current_dir).expect("could not build docs");
+        doxidize::ops::build(&current_dir, &config).expect("could not build docs");
     } else if args[0] == "publish" {
         // we want to publish the public directory, straight-up
         target_dir.push("public");
 
-        doxidize::ops::publish(&current_dir, &target_dir).expect("could not publish docs");
+        doxidize::ops::publish(&current_dir, &target_dir, &config).expect("could not publish docs");
     } else if args[0] == "serve" {
-        doxidize::ops::serve(&target_dir).expect("could not serve docs");
+        doxidize::ops::serve(&target_dir, &config).expect("could not serve docs");
     } else {
         panic!("incorrect command {}", args[0]);
     }
