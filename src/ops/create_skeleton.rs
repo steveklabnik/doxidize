@@ -1,5 +1,4 @@
 use Result;
-use std::path::Path;
 use std::fs::{self, OpenOptions};
 use Config;
 use cargo::{self, Target};
@@ -10,9 +9,9 @@ use std::collections::VecDeque;
 use error;
 use std::io::prelude::*;
 
-pub fn create_skeleton(dir: &Path, config: &Config) -> Result<()> {
+pub fn create_skeleton(config: &Config) -> Result<()> {
     // create the top-level docs dir
-    let docs_dir = dir.join("docs");
+    let docs_dir = config.root_path().join("docs");
     fs::create_dir_all(&docs_dir)?;
 
     // create a README.md
@@ -20,7 +19,7 @@ pub fn create_skeleton(dir: &Path, config: &Config) -> Result<()> {
     OpenOptions::new().create(true).append(true).open(readme)?;
 
     // create a Doxidize.toml & Menu.toml
-    let doxidize_config = dir.join("Doxidize.toml");
+    let doxidize_config = config.root_path().join("Doxidize.toml");
     OpenOptions::new().create(true).append(true).open(doxidize_config)?;
 
     let menu = docs_dir.join("Menu.toml");

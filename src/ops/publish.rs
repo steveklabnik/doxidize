@@ -1,5 +1,4 @@
 use Result;
-use std::path::Path;
 use git;
 use std::fs::File;
 use std::io::prelude::*;
@@ -7,9 +6,9 @@ use toml_edit;
 use config::Config;
 
 // adapted from https://github.com/rtomayko/rocco/blob/2586dc3bd4b0e9fa9bd076f492cdbf2924527199/Rakefile#L46
-pub fn publish(dir: &Path, target_dir: &Path, config: &Config) -> Result<()> {
+pub fn publish(config: &Config) -> Result<()> {
     // load up our Doxidize.toml so we can handle any base urls
-    let path = dir.join("Doxidize.toml");
+    let path = config.root_path().join("Doxidize.toml");
     let mut contents = String::new();
     let mut toml_file = File::open(path)?;
     toml_file.read_to_string(&mut contents)?;
@@ -18,11 +17,11 @@ pub fn publish(dir: &Path, target_dir: &Path, config: &Config) -> Result<()> {
 
     let base_url = doc["docs"]["base-url"].as_value().map(|v| v.as_str().expect("value of base-url was not a string")).unwrap_or_default().to_string();
 
-    let target_dir = if !base_url.is_empty() {
-        target_dir.join(&base_url)
-    } else {
-        target_dir.to_path_buf()
-    };
+    let mut target_dir = config.output_path().join("public");
+
+    if !base_url.is_empty() {
+        target_dir.push(&base_url)
+    }
 
     let git_dir = target_dir.join(".git");
 
@@ -54,14 +53,14 @@ pub fn publish(dir: &Path, target_dir: &Path, config: &Config) -> Result<()> {
         git::reset_to_remote_head(&target_dir, remote_name)?;
     }
 
-    let git_revision = git::head_revision(&dir)?;
+    let git_revision = git::head_revision(config.root_path())?;
 
     git::add_all(&target_dir)?;
     git::commit(&target_dir, &git_revision)?;
 
     git::sync_pages_branch(&target_dir, remote_name)?;
 
-    git::push(&dir)?;
+    git::push(config.root_path())?;
 
     Ok(())
 }

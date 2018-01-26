@@ -20,7 +20,7 @@ fn build_renders_readme() {
     let mut config = Config::default();
     config.set_manifest_path(dir_path.join("Cargo.toml"));
 
-    doxidize::ops::create_skeleton(&dir_path, &config).expect("create_skeleton failed");
+    doxidize::ops::create_skeleton(&config).expect("create_skeleton failed");
 
     let docs_dir = dir_path.join("docs");
     let readme_path = docs_dir.join("README.md");
@@ -39,7 +39,7 @@ testing",
         )
         .expect("could not write to README");
 
-    doxidize::ops::build(&dir_path, &config).expect("build failed");
+    doxidize::ops::build(&config).expect("build failed");
 
     let mut output_dir = dir_path.join("target");
     output_dir.push("docs");
@@ -73,7 +73,7 @@ fn build_renders_additional_markdown_files() {
     let mut config = Config::default();
     config.set_manifest_path(dir_path.join("Cargo.toml"));
 
-    doxidize::ops::create_skeleton(&dir_path, &config).expect("create_skeleton failed");
+    doxidize::ops::create_skeleton(&config).expect("create_skeleton failed");
 
     let docs_dir = dir_path.join("docs");
     let guide_path = docs_dir.join("guide.md");
@@ -92,7 +92,7 @@ testing",
         )
         .expect("could not write to guide");
 
-    doxidize::ops::build(&dir_path, &config).expect("generate failed");
+    doxidize::ops::build(&config).expect("generate failed");
 
     let mut output_dir = dir_path.join("target");
     output_dir.push("docs");
@@ -126,7 +126,7 @@ fn build_renders_nested_directories() {
     let mut config = Config::default();
     config.set_manifest_path(dir_path.join("Cargo.toml"));
 
-    doxidize::ops::create_skeleton(&dir_path, &config).expect("create_skeleton failed");
+    doxidize::ops::create_skeleton(&config).expect("create_skeleton failed");
 
     let docs_dir = dir_path.join("docs");
     let nested_dir = docs_dir.join("nested");
@@ -149,7 +149,7 @@ testing",
         )
         .expect("could not write to guide");
 
-    doxidize::ops::build(&dir_path, &config).expect("build failed");
+    doxidize::ops::build(&config).expect("build failed");
 
     let mut output_dir = dir_path.join("target");
     output_dir.push("docs");

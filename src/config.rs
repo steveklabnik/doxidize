@@ -58,7 +58,7 @@ impl Config {
     pub fn output_path(&self) -> PathBuf {
         match self.output_path {
             Some(ref path) => path.clone(),
-            None => self.root_path().join("target").join("doc"),
+            None => self.root_path().join("target").join("docs"),
         }
     }
 

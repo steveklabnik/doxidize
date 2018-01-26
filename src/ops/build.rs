@@ -1,5 +1,4 @@
 use Result;
-use std::path::Path;
 use std::fs::{self, File};
 use handlebars::{self, Handlebars};
 use walkdir::WalkDir;
@@ -8,9 +7,9 @@ use std::io::prelude::*;
 use toml_edit;
 use config::Config;
 
-pub fn build(dir: &Path, config: &Config) -> Result<()> {
+pub fn build(config: &Config) -> Result<()> {
     // load up our Doxidize.toml so we can handle any base urls
-    let path = dir.join("Doxidize.toml");
+    let path = config.root_path().join("Doxidize.toml");
     let mut contents = String::new();
     let mut toml_file = File::open(path)?;
     toml_file.read_to_string(&mut contents)?;
@@ -20,10 +19,10 @@ pub fn build(dir: &Path, config: &Config) -> Result<()> {
     let base_url = doc["docs"]["base-url"].as_value().map(|v| v.as_str().expect("value of base-url was not a string")).unwrap_or_default().to_string();
 
     // we need to know where the docs are
-    let docs_dir = dir.join("docs");
+    let docs_dir = config.root_path().join("docs");
 
     // ensure that the docs dir exists in target
-    let mut target_dir = dir.join("target").join("docs").join("public");
+    let mut target_dir = config.output_path().join("public");
 
     // keep track of how far we're nested
     let mut base_nesting_count = 0;
