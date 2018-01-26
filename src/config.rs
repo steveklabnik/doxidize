@@ -3,6 +3,9 @@ use ui::{Ui, Verbosity};
 use std::path::{Path, PathBuf};
 use std::default::Default;
 use serde::Deserializer;
+use toml_edit;
+use std::fs::File;
+use std::io::prelude::*;
 
 /// A structure that contains various fields that hold data in order to generate doc output.
 #[derive(Debug, Deserialize, Configure)]
@@ -30,12 +33,27 @@ impl Default for Config {
         let manifest_path = PathBuf::from("Cargo.toml");
         let host = analysis::AnalysisHost::new(analysis::Target::Debug);
 
+        let config_path = PathBuf::from("Doxidize.toml");
+        let mut contents = String::new();
+
+        let base_url = (|| {
+            let mut toml_file = File::open(config_path)?;
+            toml_file.read_to_string(&mut contents)?;
+            let doc = contents.parse::<toml_edit::Document>()?;
+
+            Ok((|| {
+                let value = doc["docs"]["base-url"].as_value()?;
+                let value = value.as_str()?;
+                Some(value.to_string())
+            })().ok_or("")?)
+        })().unwrap_or_else(|_: Box<::std::error::Error>| String::from(""));
+
         Config {
             ui,
             manifest_path,
             host,
             output_path: None,
-            base_url: String::from(""),
+            base_url,
         }
     }
 }
@@ -48,6 +66,35 @@ where
 }
 
 impl Config {
+    pub fn with_manifest_path(manifest_path: PathBuf) -> Config {
+        let ui = Ui::new(Verbosity::Normal);
+        let host = analysis::AnalysisHost::new(analysis::Target::Debug);
+
+        let config_path = manifest_path.parent().unwrap().join("Doxidize.toml");
+        let mut contents = String::new();
+
+        let base_url = (|| {
+            let mut toml_file = File::open(config_path)?;
+            toml_file.read_to_string(&mut contents)?;
+            let doc = contents.parse::<toml_edit::Document>()?;
+
+            Ok((|| {
+                let value = doc["docs"]["base-url"].as_value()?;
+                let value = value.as_str()?;
+                Some(value.to_string())
+            })().ok_or("")?)
+        })().unwrap_or_else(|_: Box<::std::error::Error>| String::from(""));
+
+        Config {
+            ui,
+            manifest_path,
+            host,
+            output_path: None,
+            base_url,
+        }
+
+    }
+
     /// Returns the directory containing the `Cargo.toml` of the crate being documented.
     pub fn root_path(&self) -> &Path {
         // unwrap() is safe, as manifest_path will point to a file
@@ -81,5 +128,9 @@ impl Config {
 
     pub fn host(&self) -> &analysis::AnalysisHost {
         &self.host
+    }
+
+    pub fn base_url(&self) -> &str {
+        &self.base_url
     }
 }

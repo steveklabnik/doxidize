@@ -4,20 +4,9 @@ use handlebars::{self, Handlebars};
 use walkdir::WalkDir;
 use comrak::{self, ComrakOptions};
 use std::io::prelude::*;
-use toml_edit;
 use config::Config;
 
 pub fn build(config: &Config) -> Result<()> {
-    // load up our Doxidize.toml so we can handle any base urls
-    let path = config.root_path().join("Doxidize.toml");
-    let mut contents = String::new();
-    let mut toml_file = File::open(path)?;
-    toml_file.read_to_string(&mut contents)?;
-
-    let doc = contents.parse::<toml_edit::Document>().expect("invalid doxidize.toml");
-
-    let base_url = doc["docs"]["base-url"].as_value().map(|v| v.as_str().expect("value of base-url was not a string")).unwrap_or_default().to_string();
-
     // we need to know where the docs are
     let docs_dir = config.root_path().join("docs");
 
@@ -28,15 +17,15 @@ pub fn build(config: &Config) -> Result<()> {
     let mut base_nesting_count = 0;
 
     // if we have a base_url, we need to push that on
-    if !base_url.is_empty() {
+    if !config.base_url().is_empty() {
         base_nesting_count += 1;
-        target_dir.push(&base_url);
+        target_dir.push(config.base_url());
     }
 
     fs::create_dir_all(&target_dir)?;
 
     // finally, we need to tag a `/` on so that it's added automatically in the output
-    let base_url = base_url + "/";
+    let base_url = format!("{}/", config.base_url());
 
     let mut handlebars = Handlebars::new();
 

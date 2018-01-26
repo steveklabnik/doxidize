@@ -1,13 +1,14 @@
 extern crate doxidize;
 extern crate tempdir;
 
-use tempdir::TempDir;
-use std::fs::{self, File, OpenOptions};
-use std::io::prelude::*;
+mod util;
 
 use doxidize::Config;
 
-mod util;
+use std::fs::{self, File, OpenOptions};
+use std::io::prelude::*;
+
+use tempdir::TempDir;
 
 #[test]
 fn build_renders_readme() {
@@ -17,8 +18,7 @@ fn build_renders_readme() {
 
     util::cargo_init(dir_path).expect("Could not create sample crate");
 
-    let mut config = Config::default();
-    config.set_manifest_path(dir_path.join("Cargo.toml"));
+    let config = Config::with_manifest_path(dir_path.join("Cargo.toml"));
 
     doxidize::ops::create_skeleton(&config).expect("create_skeleton failed");
 
@@ -70,8 +70,7 @@ fn build_renders_additional_markdown_files() {
 
     util::cargo_init(dir_path).expect("Could not create sample crate");
 
-    let mut config = Config::default();
-    config.set_manifest_path(dir_path.join("Cargo.toml"));
+    let config = Config::with_manifest_path(dir_path.join("Cargo.toml"));
 
     doxidize::ops::create_skeleton(&config).expect("create_skeleton failed");
 
@@ -123,8 +122,7 @@ fn build_renders_nested_directories() {
 
     util::cargo_init(dir_path).expect("Could not create sample crate");
 
-    let mut config = Config::default();
-    config.set_manifest_path(dir_path.join("Cargo.toml"));
+    let config = Config::with_manifest_path(dir_path.join("Cargo.toml"));
 
     doxidize::ops::create_skeleton(&config).expect("create_skeleton failed");
 

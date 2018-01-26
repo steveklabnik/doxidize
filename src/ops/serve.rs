@@ -14,7 +14,11 @@ pub fn serve(config: &Config) -> Result<()> {
 
     env::set_current_dir(config.output_path())?;
 
-    println!("serving docs at http://{}:{}", host, port);
+    if config.base_url().is_empty() {
+        println!("serving docs at http://{}:{}/index.html", host, port);
+    } else {
+        println!("serving docs at http://{}:{}/{}/index.html", host, port, config.base_url());
+    };
 
     server.listen(host, port);
 
