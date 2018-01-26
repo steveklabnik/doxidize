@@ -14,9 +14,9 @@ extern crate rls_data as analysis_data;
 
 extern crate serde;
 #[macro_use]
-extern crate serde_json;
-#[macro_use]
 extern crate serde_derive;
+#[macro_use]
+extern crate serde_json;
 
 extern crate simple_server;
 
@@ -36,4 +36,3 @@ use failure::Error;
 use ui::Verbosity;
 
 type Result<T> = std::result::Result<T, Error>;
-

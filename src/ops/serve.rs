@@ -9,9 +9,8 @@ pub fn serve(directory: &Path) -> Result<()> {
 
     // everything is handled by the static serving, so any request here is
     // an error
-    let server = Server::new(|_request, mut response| {
-        Ok(response.body("incorrect path".as_bytes())?)
-    });
+    let server =
+        Server::new(|_request, mut response| Ok(response.body("incorrect path".as_bytes())?));
 
     env::set_current_dir(directory)?;
 

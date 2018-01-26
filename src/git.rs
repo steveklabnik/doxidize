@@ -15,7 +15,11 @@ impl fmt::Display for GitFailure {
         let stdout = String::from_utf8_lossy(&self.output.stdout);
         let stderr = String::from_utf8_lossy(&self.output.stderr);
 
-        write!(f, "An error occurred while running '{}'\n\nstdout:\n{}\n\nstderr:\n{}", self.command_name, stdout, stderr)
+        write!(
+            f,
+            "An error occurred while running '{}'\n\nstdout:\n{}\n\nstderr:\n{}",
+            self.command_name, stdout, stderr
+        )
     }
 }
 

@@ -44,7 +44,8 @@ fn double_initialize() {
 
     doxidize::ops::create_skeleton(&dir_path).expect("create_skeleton failed");
 
-    doxidize::ops::create_skeleton(&dir_path).expect("create_skeleton failed when run a second time");
+    doxidize::ops::create_skeleton(&dir_path)
+        .expect("create_skeleton failed when run a second time");
 }
 
 #[test]
@@ -52,7 +53,7 @@ fn creates_menu_toml() {
     let dir = TempDir::new("create_menu_toml").expect("could not generate temp dir");
 
     let dir_path = dir.path();
-    
+
     util::cargo_init(dir_path).expect("Could not create sample crate");
 
     doxidize::ops::create_skeleton(&dir_path).expect("create_skeleton failed");

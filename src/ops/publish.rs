@@ -26,7 +26,6 @@ pub fn publish(dir: &Path, target_dir: &Path) -> Result<()> {
         path
     };
 
-
     // if this file doesn't exist, then we don't have the gh-pages remote set up
     // to set it up we need to initialize the git repositry, add the remote, and sync the two
     if !pages_head.is_file() {

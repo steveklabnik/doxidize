@@ -18,17 +18,23 @@ pub fn build(dir: &Path) -> Result<()> {
 
     handlebars.register_template_file("page", "templates/page.hbs")?;
     handlebars.register_template_file("api", "templates/api.hbs")?;
-    handlebars.register_helper("up-dir",
-        Box::new(|h: &handlebars::Helper, _: &Handlebars, rc: &mut handlebars::RenderContext| -> handlebars::HelperResult {
-            let count = h.param(0).map(|v| v.value().as_u64().unwrap()).unwrap();
+    handlebars.register_helper(
+        "up-dir",
+        Box::new(
+            |h: &handlebars::Helper,
+             _: &Handlebars,
+             rc: &mut handlebars::RenderContext|
+             -> handlebars::HelperResult {
+                let count = h.param(0).map(|v| v.value().as_u64().unwrap()).unwrap();
 
-            for _ in 0..count {
-                rc.writer.write(b"../")?;
-            }
+                for _ in 0..count {
+                    rc.writer.write(b"../")?;
+                }
 
-            Ok(())
-      }));
-
+                Ok(())
+            },
+        ),
+    );
 
     // render all other *.md files as *.html, walking the tree
     for entry in WalkDir::new(&docs_dir) {
@@ -36,7 +42,9 @@ pub fn build(dir: &Path) -> Result<()> {
         let path = entry.path();
 
         // we want only files
-        if !path.is_file() { continue; }
+        if !path.is_file() {
+            continue;
+        }
 
         if let Some(extension) = path.extension() {
             // we only want .md files
@@ -76,7 +84,14 @@ pub fn build(dir: &Path) -> Result<()> {
         let mut file = File::create(rendered_path)?;
 
         // TODO: this only works at one level down; we need to calculate the real number
-        file.write_all(handlebars.render("page", &json!({"contents": rendered_contents, "nest-count": 1}))?.as_bytes())?;
+        file.write_all(
+            handlebars
+                .render(
+                    "page",
+                    &json!({"contents": rendered_contents, "nest-count": 1}),
+                )?
+                .as_bytes(),
+        )?;
     }
 
     Ok(())

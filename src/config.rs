@@ -30,7 +30,6 @@ impl Default for Config {
         let manifest_path = PathBuf::from("Cargo.toml");
         let host = analysis::AnalysisHost::new(analysis::Target::Debug);
 
-
         Config {
             ui,
             manifest_path,
@@ -40,8 +39,11 @@ impl Default for Config {
     }
 }
 
-fn default_host<'de, D>(_: D) -> ::std::result::Result<analysis::AnalysisHost, D::Error> where D: Deserializer<'de> {
-        Ok(analysis::AnalysisHost::new(analysis::Target::Debug))
+fn default_host<'de, D>(_: D) -> ::std::result::Result<analysis::AnalysisHost, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    Ok(analysis::AnalysisHost::new(analysis::Target::Debug))
 }
 
 impl Config {

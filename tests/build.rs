@@ -20,11 +20,19 @@ fn build_renders_readme() {
     let docs_dir = dir_path.join("docs");
     let readme_path = docs_dir.join("README.md");
 
-    let mut readme = OpenOptions::new().create(true).append(true).open(readme_path).expect("could not open README file");
+    let mut readme = OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open(readme_path)
+        .expect("could not open README file");
 
-    readme.write_all(b"# Testing
+    readme
+        .write_all(
+            b"# Testing
 
-testing").expect("could not write to README");
+testing",
+        )
+        .expect("could not write to README");
 
     doxidize::ops::build(&dir_path).expect("build failed");
 
@@ -34,14 +42,19 @@ testing").expect("could not write to README");
 
     let rendered_readme_path = output_dir.join("index.html");
 
-    let mut rendered_readme = File::open(rendered_readme_path).expect("could not open rendered README");
+    let mut rendered_readme =
+        File::open(rendered_readme_path).expect("could not open rendered README");
 
     let mut contents = String::new();
-    rendered_readme.read_to_string(&mut contents).expect("could not read README");
+    rendered_readme
+        .read_to_string(&mut contents)
+        .expect("could not read README");
 
-    assert!(contents.contains("<h1>Testing</h1>
+    assert!(contents.contains(
+        "<h1>Testing</h1>
 <p>testing</p>
-"));
+"
+    ));
 }
 
 #[test]
@@ -57,11 +70,19 @@ fn build_renders_additional_markdown_files() {
     let docs_dir = dir_path.join("docs");
     let guide_path = docs_dir.join("guide.md");
 
-    let mut guide = OpenOptions::new().create(true).append(true).open(guide_path).expect("could not open guide file");
+    let mut guide = OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open(guide_path)
+        .expect("could not open guide file");
 
-    guide.write_all(b"# Testing
+    guide
+        .write_all(
+            b"# Testing
 
-testing").expect("could not write to guide");
+testing",
+        )
+        .expect("could not write to guide");
 
     doxidize::ops::build(&dir_path).expect("generate failed");
 
@@ -71,14 +92,19 @@ testing").expect("could not write to guide");
 
     let rendered_guide_path = output_dir.join("guide.html");
 
-    let mut rendered_guide = File::open(rendered_guide_path).expect("could not open rendered guide");
+    let mut rendered_guide =
+        File::open(rendered_guide_path).expect("could not open rendered guide");
 
     let mut contents = String::new();
-    rendered_guide.read_to_string(&mut contents).expect("could not read rendered_guide");
+    rendered_guide
+        .read_to_string(&mut contents)
+        .expect("could not read rendered_guide");
 
-    assert!(contents.contains("<h1>Testing</h1>
+    assert!(contents.contains(
+        "<h1>Testing</h1>
 <p>testing</p>
-"));
+"
+    ));
 }
 
 #[test]
@@ -98,11 +124,19 @@ fn build_renders_nested_directories() {
 
     let guide_path = nested_dir.join("guide.md");
 
-    let mut guide = OpenOptions::new().create(true).append(true).open(guide_path).expect("could not open guide file");
+    let mut guide = OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open(guide_path)
+        .expect("could not open guide file");
 
-    guide.write_all(b"# Testing
+    guide
+        .write_all(
+            b"# Testing
 
-testing").expect("could not write to guide");
+testing",
+        )
+        .expect("could not write to guide");
 
     doxidize::ops::build(&dir_path).expect("build failed");
 
@@ -113,12 +147,17 @@ testing").expect("could not write to guide");
     let mut rendered_guide_path = output_dir.join("nested");
     rendered_guide_path.push("guide.html");
 
-    let mut rendered_guide = File::open(rendered_guide_path).expect("could not open rendered guide");
+    let mut rendered_guide =
+        File::open(rendered_guide_path).expect("could not open rendered guide");
 
     let mut contents = String::new();
-    rendered_guide.read_to_string(&mut contents).expect("could not read rendered_guide");
+    rendered_guide
+        .read_to_string(&mut contents)
+        .expect("could not read rendered_guide");
 
-    assert!(contents.contains("<h1>Testing</h1>
+    assert!(contents.contains(
+        "<h1>Testing</h1>
 <p>testing</p>
-"));
+"
+    ));
 }

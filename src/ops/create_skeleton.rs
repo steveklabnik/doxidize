@@ -29,17 +29,23 @@ pub fn create_skeleton(dir: &Path) -> Result<()> {
 
     handlebars.register_template_file("page", "templates/page.hbs")?;
     handlebars.register_template_file("api", "templates/api.hbs")?;
-    handlebars.register_helper("up-dir",
-        Box::new(|h: &handlebars::Helper, _: &Handlebars, rc: &mut handlebars::RenderContext| -> handlebars::HelperResult {
-            let count = h.param(0).map(|v| v.value().as_u64().unwrap()).unwrap();
+    handlebars.register_helper(
+        "up-dir",
+        Box::new(
+            |h: &handlebars::Helper,
+             _: &Handlebars,
+             rc: &mut handlebars::RenderContext|
+             -> handlebars::HelperResult {
+                let count = h.param(0).map(|v| v.value().as_u64().unwrap()).unwrap();
 
-            for _ in 0..count {
-                rc.writer.write(b"../")?;
-            }
+                for _ in 0..count {
+                    rc.writer.write(b"../")?;
+                }
 
-            Ok(())
-    }));
-
+                Ok(())
+            },
+        ),
+    );
 
     // ensure that the api dir exists
     let api_dir = docs_dir.join("api");
@@ -84,7 +90,11 @@ pub fn create_skeleton(dir: &Path) -> Result<()> {
 
     let mut file = File::create(markdown_path)?;
 
-    file.write_all(handlebars.render("api", &json!({"name": crate_name, "docs": root_def.docs}))?.as_bytes())?;
+    file.write_all(
+        handlebars
+            .render("api", &json!({"name": crate_name, "docs": root_def.docs}))?
+            .as_bytes(),
+    )?;
 
     // Now that we have that, it's time to get the children; these are
     // the top-level items for the crate.
@@ -123,7 +133,6 @@ pub fn create_skeleton(dir: &Path) -> Result<()> {
             // DefKind::Method => (String::from("method"), String::from("methods")),
             _ => continue,
         };
-
     }
 
     // The loop below is basically creating this vector.
@@ -163,9 +172,12 @@ pub fn create_skeleton(dir: &Path) -> Result<()> {
 
         let mut file = File::create(markdown_path)?;
 
-        file.write_all(handlebars.render("api", &json!({"name": def.name, "docs": def.docs}))?.as_bytes())?;
+        file.write_all(
+            handlebars
+                .render("api", &json!({"name": def.name, "docs": def.docs}))?
+                .as_bytes(),
+        )?;
     }
-
 
     Ok(())
 }
@@ -179,8 +191,7 @@ pub fn create_skeleton(dir: &Path) -> Result<()> {
 ///             `Cargo.toml` file
 /// - `target`: The target to document
 fn generate_and_load_analysis(config: &Config, target: &Target) -> Result<()> {
-    let analysis_result = cargo::generate_analysis(config, target, |_| {
-    });
+    let analysis_result = cargo::generate_analysis(config, target, |_| {});
 
     if analysis_result.is_err() {
         return analysis_result;
