@@ -8,13 +8,6 @@ use std::io::prelude::*;
 use toml_edit;
 
 pub fn build(dir: &Path) -> Result<()> {
-    // we need to know where the docs are
-    let docs_dir = dir.join("docs");
-
-    // ensure that the docs dir exists in target
-    let target_dir = dir.join("target").join("docs").join("public");
-    fs::create_dir_all(&target_dir)?;
-
     // load up our Doxidize.toml so we can handle any base urls
     let path = dir.join("Doxidize.toml");
     let mut contents = String::new();
@@ -24,6 +17,25 @@ pub fn build(dir: &Path) -> Result<()> {
     let doc = contents.parse::<toml_edit::Document>().expect("invalid doxidize.toml");
 
     let base_url = doc["docs"]["base-url"].as_value().map(|v| v.as_str().expect("value of base-url was not a string")).unwrap_or_default().to_string();
+
+    // we need to know where the docs are
+    let docs_dir = dir.join("docs");
+
+    // ensure that the docs dir exists in target
+    let mut target_dir = dir.join("target").join("docs").join("public");
+
+    // keep track of how far we're nested
+    let mut base_nesting_count = 0;
+
+    // if we have a base_url, we need to push that on
+    if !base_url.is_empty() {
+        base_nesting_count += 1;
+        target_dir.push(&base_url);
+    }
+
+    fs::create_dir_all(&target_dir)?;
+
+    // finally, we need to tag a `/` on so that it's added automatically in the output
     let base_url = base_url + "/";
 
     let mut handlebars = Handlebars::new();
@@ -52,6 +64,7 @@ pub fn build(dir: &Path) -> Result<()> {
     for entry in WalkDir::new(&docs_dir) {
         let entry = entry?;
         let path = entry.path();
+        let mut nesting_count = base_nesting_count;
 
         // we want only files
         if !path.is_file() {
@@ -95,12 +108,18 @@ pub fn build(dir: &Path) -> Result<()> {
 
         let mut file = File::create(rendered_path)?;
 
-        // TODO: this only works at one level down; we need to calculate the real number
+        // how many levels deep are we?
+        let containing_dir = path.parent().expect("somehow this is running at the root");
+        let new_containing_dir = containing_dir.strip_prefix(&docs_dir)?;
+        let component_count = new_containing_dir.components().count();
+
+        nesting_count += component_count;
+
         file.write_all(
             handlebars
                 .render(
                     "page",
-                    &json!({"contents": rendered_contents, "nest-count": 1, "base-url": base_url }),
+                    &json!({"contents": rendered_contents, "nest-count": nesting_count, "base-url": base_url }),
                 )?
                 .as_bytes(),
         )?;
