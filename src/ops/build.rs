@@ -5,6 +5,7 @@ use handlebars::{self, Handlebars};
 use walkdir::WalkDir;
 use comrak::{self, ComrakOptions};
 use std::io::prelude::*;
+use toml_edit;
 
 pub fn build(dir: &Path) -> Result<()> {
     // we need to know where the docs are
@@ -13,6 +14,17 @@ pub fn build(dir: &Path) -> Result<()> {
     // ensure that the docs dir exists in target
     let target_dir = dir.join("target").join("docs").join("public");
     fs::create_dir_all(&target_dir)?;
+
+    // load up our Doxidize.toml so we can handle any base urls
+    let path = dir.join("Doxidize.toml");
+    let mut contents = String::new();
+    let mut toml_file = File::open(path)?;
+    toml_file.read_to_string(&mut contents)?;
+
+    let doc = contents.parse::<toml_edit::Document>().expect("invalid doxidize.toml");
+
+    let base_url = doc["docs"]["base-url"].as_value().map(|v| v.as_str().expect("value of base-url was not a string")).unwrap_or_default().to_string();
+    let base_url = base_url + "/";
 
     let mut handlebars = Handlebars::new();
 
@@ -88,7 +100,7 @@ pub fn build(dir: &Path) -> Result<()> {
             handlebars
                 .render(
                     "page",
-                    &json!({"contents": rendered_contents, "nest-count": 1}),
+                    &json!({"contents": rendered_contents, "nest-count": 1, "base-url": base_url }),
                 )?
                 .as_bytes(),
         )?;

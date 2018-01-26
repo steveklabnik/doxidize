@@ -57,7 +57,8 @@ pub fn create_skeleton(dir: &Path) -> Result<()> {
     let manifest_path = dir.join("Cargo.toml");
     let verbosity = Verbosity::Normal;
 
-    let config = Config::new(verbosity, manifest_path)?;
+    // we created the Doxidize.toml, so there's no base url
+    let config = Config::new(verbosity, manifest_path, String::new())?;
 
     let metadata = cargo::retrieve_metadata(&config.manifest_path)?;
     let target = cargo::target_from_metadata(&config.ui, &metadata)?;
