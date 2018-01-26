@@ -60,12 +60,12 @@ pub fn create_skeleton(dir: &Path) -> Result<()> {
     // we created the Doxidize.toml, so there's no base url
     let config = Config::new(verbosity, manifest_path, String::new())?;
 
-    let metadata = cargo::retrieve_metadata(&config.manifest_path)?;
-    let target = cargo::target_from_metadata(&config.ui, &metadata)?;
+    let metadata = cargo::retrieve_metadata(config.manifest_path())?;
+    let target = cargo::target_from_metadata(config.ui(), &metadata)?;
 
     generate_and_load_analysis(&config, &target)?;
 
-    let host = &config.host;
+    let host = config.host();
     let crate_name = &target.crate_name();
 
     // This function does a lot, so here's the plan:
@@ -202,7 +202,7 @@ fn generate_and_load_analysis(config: &Config, target: &Target) -> Result<()> {
     }
 
     let root_path = config.root_path();
-    config.host.reload(root_path, root_path)?;
+    config.host().reload(root_path, root_path)?;
 
     Ok(())
 }

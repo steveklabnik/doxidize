@@ -11,17 +11,17 @@ use serde::Deserializer;
 #[serde(default)]
 pub struct Config {
     /// Interactions with the user interface.
-    pub ui: Ui,
+    ui: Ui,
 
     /// Path to the `Cargo.toml` file for the crate being analyzed
-    pub manifest_path: PathBuf,
+    manifest_path: PathBuf,
 
     /// Path to place rustdoc output
     output_path: Option<PathBuf>,
 
     /// Contains the Cargo analysis output for the crate being documented
     #[serde(deserialize_with = "default_host")]
-    pub host: analysis::AnalysisHost,
+    host: analysis::AnalysisHost,
 
     base_url: String,
 }
@@ -93,8 +93,15 @@ impl Config {
         self.output_path = Some(output_path);
     }
 
-    /// Returns the path to the generated documentation.
-    pub fn documentation_path(&self) -> PathBuf {
-        self.output_path().join("data.json")
+    pub fn ui(&self) -> &Ui {
+        &self.ui
+    }
+
+    pub fn manifest_path(&self) -> &Path {
+        &self.manifest_path
+    }
+
+    pub fn host(&self) -> &analysis::AnalysisHost {
+        &self.host
     }
 }

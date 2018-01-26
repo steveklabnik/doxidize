@@ -88,11 +88,7 @@ where
     let mut command = Command::new("cargo");
 
     let target_dir = config
-        .manifest_path
-        .parent()
-        .ok_or(failure::err_msg(
-            "Expected manifest_path to point to Cargo.toml",
-        ))?
+        .root_path()
         .join("target/rls");
 
     let analysis_config = AnalysisConfig {
@@ -104,7 +100,7 @@ where
     command
         .arg("check")
         .arg("--manifest-path")
-        .arg(&config.manifest_path)
+        .arg(config.manifest_path())
         .env(
             "RUST_SAVE_ANALYSIS_CONFIG",
             serde_json::to_string(&analysis_config)?,
@@ -114,7 +110,7 @@ where
         .stderr(Stdio::piped())
         .stdout(Stdio::null());
 
-    if let Verbosity::Verbose = *config.ui.verbosity() {
+    if let &Verbosity::Verbose = config.ui().verbosity() {
         command.arg("--verbose");
     }
 
