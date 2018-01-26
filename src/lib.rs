@@ -20,6 +20,8 @@ extern crate serde_json;
 
 extern crate simple_server;
 
+extern crate toml_edit;
+
 extern crate walkdir;
 
 mod cargo;

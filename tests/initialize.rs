@@ -35,6 +35,21 @@ fn creates_root_readme() {
 }
 
 #[test]
+fn creates_doxidize_config() {
+    let dir = TempDir::new("create_doxidize_config").expect("could not generate temp dir");
+
+    let dir_path = dir.path();
+
+    util::cargo_init(dir_path).expect("Could not create sample crate");
+
+    doxidize::ops::create_skeleton(&dir_path).expect("create_skeleton failed");
+
+    let config_path = dir_path.join("Doxidize.toml");
+
+    assert!(config_path.is_file());
+}
+
+#[test]
 fn double_initialize() {
     let dir = TempDir::new("create_root_readme").expect("could not generate temp dir");
 

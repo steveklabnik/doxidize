@@ -22,6 +22,8 @@ pub struct Config {
     /// Contains the Cargo analysis output for the crate being documented
     #[serde(deserialize_with = "default_host")]
     pub host: analysis::AnalysisHost,
+
+    base_url: String,
 }
 
 impl Default for Config {
@@ -35,6 +37,7 @@ impl Default for Config {
             manifest_path,
             host,
             output_path: None,
+            base_url: String::from(""),
         }
     }
 }
@@ -53,7 +56,7 @@ impl Config {
     /// ## Arguments
     ///
     /// - `manifest_path`: The path to the `Cargo.toml` of the crate being documented
-    pub fn new(verbosity: Verbosity, manifest_path: PathBuf) -> Result<Config> {
+    pub fn new(verbosity: Verbosity, manifest_path: PathBuf, base_url: String) -> Result<Config> {
         let host = analysis::AnalysisHost::new(analysis::Target::Debug);
 
         if !manifest_path.is_file() || !manifest_path.ends_with("Cargo.toml") {
@@ -67,6 +70,7 @@ impl Config {
             manifest_path,
             output_path: None,
             host,
+            base_url,
         })
     }
 
