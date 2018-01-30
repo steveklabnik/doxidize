@@ -1,6 +1,4 @@
 use slog;
-use slog_term;
-use slog_async;
 
 use std::error::Error;
 use std::path::Path;
@@ -28,6 +26,8 @@ pub fn make_logger() -> slog::Logger {
     // use this if you want to enable it
     /*
     use slog::Drain;
+    use slog_term;
+    use slog_async;
 
     let decorator = slog_term::TermDecorator::new().build();
     let drain = slog_term::CompactFormat::new(decorator).build().fuse();

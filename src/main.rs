@@ -31,9 +31,9 @@ fn main() {
     let config = Config::default();
 
     if args.len() == 0 {
-        doxidize::ops::create_skeleton(&config).expect("could not create skeleton");
+        doxidize::ops::create_skeleton(&config, &log).expect("could not create skeleton");
     } else if args[0] == "build" {
-        doxidize::ops::build(&config, log).expect("could not build docs");
+        doxidize::ops::build(&config, &log).expect("could not build docs");
     } else if args[0] == "publish" {
         doxidize::ops::publish(&config).expect("could not publish docs");
     } else if args[0] == "serve" {

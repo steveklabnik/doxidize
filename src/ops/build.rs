@@ -7,10 +7,10 @@ use slog::Logger;
 use std::io::prelude::*;
 use config::Config;
 
-pub fn build(config: &Config, log: Logger) -> Result<()> {
+pub fn build(config: &Config, log: &Logger) -> Result<()> {
     let log = log.new(o!("command" => "build"));
-
     info!(log, "starting");
+
     // we need to know where the docs are
     let docs_dir = config.root_path().join("docs");
 

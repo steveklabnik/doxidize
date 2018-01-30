@@ -8,26 +8,35 @@ use std::fs::File;
 use std::collections::VecDeque;
 use error;
 use std::io::prelude::*;
+use slog::Logger;
 
-pub fn create_skeleton(config: &Config) -> Result<()> {
+pub fn create_skeleton(config: &Config, log: &Logger) -> Result<()> {
+    let log = log.new(o!("command" => "create_skeleton"));
+    info!(log, "starting");
+
     // create the top-level docs dir
     let docs_dir = config.root_path().join("docs");
+    debug!(log, "creating top-level docs dir"; o!("dir" => docs_dir.display()));
     fs::create_dir_all(&docs_dir)?;
 
     // create a README.md
     let readme = docs_dir.join("README.md");
+    debug!(log, "creating README"; o!("file" => readme.display()));
     OpenOptions::new().create(true).append(true).open(readme)?;
 
     // create a Doxidize.toml & Menu.toml
     let doxidize_config = config.root_path().join("Doxidize.toml");
+    debug!(log, "creating Doxidize.toml"; o!("file" => doxidize_config.display()));
     OpenOptions::new().create(true).append(true).open(doxidize_config)?;
 
     let menu = docs_dir.join("Menu.toml");
+    debug!(log, "creating Menu.toml"; o!("file" => menu.display()));
     OpenOptions::new().create(true).append(true).open(menu)?;
 
     // now the api docs
     let mut handlebars = Handlebars::new();
 
+    debug!(log, "loading handlebars templates");
     handlebars.register_template_file("page", "templates/page.hbs")?;
     handlebars.register_template_file("api", "templates/api.hbs")?;
     handlebars.register_helper(
@@ -50,12 +59,13 @@ pub fn create_skeleton(config: &Config) -> Result<()> {
 
     // ensure that the api dir exists
     let api_dir = docs_dir.join("api");
+    debug!(log, "creating api dir"; o!("dir" => api_dir.display()));
     fs::create_dir_all(&api_dir)?;
 
     let metadata = cargo::retrieve_metadata(config.manifest_path())?;
     let target = cargo::target_from_metadata(config.ui(), &metadata)?;
 
-    generate_and_load_analysis(&config, &target)?;
+    generate_and_load_analysis(&config, &target, &log)?;
 
     let host = config.host();
     let crate_name = &target.crate_name();
@@ -84,6 +94,7 @@ pub fn create_skeleton(config: &Config) -> Result<()> {
 
     let markdown_path = api_dir.join("README.md");
 
+    debug!(log, "creating README.md for api"; o!("file" => markdown_path.display()));
     let mut file = File::create(markdown_path)?;
 
     file.write_all(
@@ -104,6 +115,7 @@ pub fn create_skeleton(config: &Config) -> Result<()> {
     // Additionally, we generate relationships between the crate itself and
     // these ids, as they're at the top level and hence linked with the crate.
 
+    info!(log, "turning analysis into markdown");
     let mut queue = VecDeque::new();
 
     for id in ids {
@@ -175,6 +187,7 @@ pub fn create_skeleton(config: &Config) -> Result<()> {
         )?;
     }
 
+    info!(log, "done");
     Ok(())
 }
 
@@ -186,7 +199,10 @@ pub fn create_skeleton(config: &Config) -> Result<()> {
 /// - `config`: Contains data for what needs to be output or used. In this case the path to the
 ///             `Cargo.toml` file
 /// - `target`: The target to document
-fn generate_and_load_analysis(config: &Config, target: &Target) -> Result<()> {
+fn generate_and_load_analysis(config: &Config, target: &Target, log: &Logger) -> Result<()> {
+    let log = log.new(o!("command" => "generate_and_load_analysis"));
+    info!(log, "analysizing your source code");
+
     let analysis_result = cargo::generate_analysis(config, target, |_| {});
 
     if analysis_result.is_err() {
@@ -194,7 +210,9 @@ fn generate_and_load_analysis(config: &Config, target: &Target) -> Result<()> {
     }
 
     let root_path = config.root_path();
+    debug!(log, "analysis complete, loading");
     config.host().reload(root_path, root_path)?;
 
+    info!(log, "done");
     Ok(())
 }
