@@ -37,8 +37,8 @@ pub fn build(config: &Config, log: &Logger) -> Result<()> {
     let mut handlebars = Handlebars::new();
 
     debug!(log, "loading handlebars templates");
-    handlebars.register_template_file("page", "templates/page.hbs")?;
-    handlebars.register_template_file("api", "templates/api.hbs")?;
+    handlebars.register_template_file("page", "templates/html/page.hbs")?;
+    handlebars.register_template_file("api", "templates/markdown/api.hbs")?;
     handlebars.register_helper(
         "up-dir",
         Box::new(

@@ -19,17 +19,17 @@ pub fn create_skeleton(config: &Config, log: &Logger) -> Result<()> {
 
     debug!(log, "loading handlebars templates");
 
-    handlebars.register_template_file("example", "templates/example.hbs")?;
-    handlebars.register_template_file("page", "templates/page.hbs")?;
-    handlebars.register_template_file("api", "templates/api.hbs")?;
-    handlebars.register_template_file("mod", "templates/mod.hbs")?;
-    handlebars.register_template_file("struct", "templates/struct.hbs")?;
-    handlebars.register_template_file("enum", "templates/enum.hbs")?;
-    handlebars.register_template_file("trait", "templates/trait.hbs")?;
-    handlebars.register_template_file("function", "templates/function.hbs")?;
-    handlebars.register_template_file("type", "templates/type.hbs")?;
-    handlebars.register_template_file("static", "templates/static.hbs")?;
-    handlebars.register_template_file("const", "templates/const.hbs")?;
+    handlebars.register_template_file("example", "templates/markdown/example.hbs")?;
+    handlebars.register_template_file("page", "templates/html/page.hbs")?;
+    handlebars.register_template_file("api", "templates/markdown/api.hbs")?;
+    handlebars.register_template_file("mod", "templates/markdown/mod.hbs")?;
+    handlebars.register_template_file("struct", "templates/markdown/struct.hbs")?;
+    handlebars.register_template_file("enum", "templates/markdown/enum.hbs")?;
+    handlebars.register_template_file("trait", "templates/markdown/trait.hbs")?;
+    handlebars.register_template_file("function", "templates/markdown/function.hbs")?;
+    handlebars.register_template_file("type", "templates/markdown/type.hbs")?;
+    handlebars.register_template_file("static", "templates/markdown/static.hbs")?;
+    handlebars.register_template_file("const", "templates/markdown/const.hbs")?;
 
     handlebars.register_helper(
         "up-dir",
