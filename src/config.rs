@@ -45,8 +45,10 @@ impl Default for Config {
                 let value = doc["docs"]["base-url"].as_value()?;
                 let value = value.as_str()?;
                 Some(value.to_string())
-            })().ok_or("")?)
-        })().unwrap_or_else(|_: Box<::std::error::Error>| String::from(""));
+            })()
+                .ok_or("")?)
+        })()
+            .unwrap_or_else(|_: Box<::std::error::Error>| String::from(""));
 
         Config {
             ui,
@@ -82,8 +84,10 @@ impl Config {
                 let value = doc["docs"]["base-url"].as_value()?;
                 let value = value.as_str()?;
                 Some(value.to_string())
-            })().ok_or("")?)
-        })().unwrap_or_else(|_: Box<::std::error::Error>| String::from(""));
+            })()
+                .ok_or("")?)
+        })()
+            .unwrap_or_else(|_: Box<::std::error::Error>| String::from(""));
 
         Config {
             ui,
@@ -92,7 +96,6 @@ impl Config {
             output_path: None,
             base_url,
         }
-
     }
 
     /// Returns the directory containing the `Cargo.toml` of the crate being documented.

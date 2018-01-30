@@ -17,9 +17,15 @@ pub fn publish(config: &Config, log: &Logger) -> Result<()> {
     let mut toml_file = File::open(path)?;
     toml_file.read_to_string(&mut contents)?;
 
-    let doc = contents.parse::<toml_edit::Document>().expect("invalid doxidize.toml");
+    let doc = contents
+        .parse::<toml_edit::Document>()
+        .expect("invalid doxidize.toml");
 
-    let base_url = doc["docs"]["base-url"].as_value().map(|v| v.as_str().expect("value of base-url was not a string")).unwrap_or_default().to_string();
+    let base_url = doc["docs"]["base-url"]
+        .as_value()
+        .map(|v| v.as_str().expect("value of base-url was not a string"))
+        .unwrap_or_default()
+        .to_string();
 
     let mut target_dir = config.output_path().join("public");
 

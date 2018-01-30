@@ -23,7 +23,13 @@ pub fn serve(config: &Config, log: &Logger) -> Result<()> {
     if config.base_url().is_empty() {
         info!(log, "serving docs at http://{}:{}/index.html", host, port);
     } else {
-        info!(log, "serving docs at http://{}:{}/{}/index.html", host, port, config.base_url());
+        info!(
+            log,
+            "serving docs at http://{}:{}/{}/index.html",
+            host,
+            port,
+            config.base_url()
+        );
     };
 
     server.listen(host, port);

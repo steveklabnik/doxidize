@@ -87,9 +87,7 @@ where
 {
     let mut command = Command::new("cargo");
 
-    let target_dir = config
-        .root_path()
-        .join("target/rls");
+    let target_dir = config.root_path().join("target/rls");
 
     let analysis_config = AnalysisConfig {
         full_docs: true,
