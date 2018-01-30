@@ -35,9 +35,9 @@ fn main() {
     } else if args[0] == "build" {
         doxidize::ops::build(&config, &log).expect("could not build docs");
     } else if args[0] == "publish" {
-        doxidize::ops::publish(&config).expect("could not publish docs");
+        doxidize::ops::publish(&config, &log).expect("could not publish docs");
     } else if args[0] == "serve" {
-        doxidize::ops::serve(&config).expect("could not serve docs");
+        doxidize::ops::serve(&config, &log).expect("could not serve docs");
     } else {
         panic!("incorrect command {}", args[0]);
     }

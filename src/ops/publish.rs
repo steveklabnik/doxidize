@@ -4,9 +4,13 @@ use std::fs::File;
 use std::io::prelude::*;
 use toml_edit;
 use config::Config;
+use slog::Logger;
 
 // adapted from https://github.com/rtomayko/rocco/blob/2586dc3bd4b0e9fa9bd076f492cdbf2924527199/Rakefile#L46
-pub fn publish(config: &Config) -> Result<()> {
+pub fn publish(config: &Config, log: &Logger) -> Result<()> {
+    let log = log.new(o!("command" => "publish"));
+    info!(log, "starting");
+
     // load up our Doxidize.toml so we can handle any base urls
     let path = config.root_path().join("Doxidize.toml");
     let mut contents = String::new();
