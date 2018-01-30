@@ -1,13 +1,15 @@
-use Result;
-use std::fs::{self, File, OpenOptions};
-use Config;
-use cargo::{self, Target};
-use handlebars::{self, Handlebars};
 use analysis::DefKind;
-use std::collections::VecDeque;
-use error;
-use std::io::prelude::*;
+use handlebars::{self, Handlebars};
 use slog::Logger;
+
+use std::collections::VecDeque;
+use std::fs::{self, File, OpenOptions};
+use std::io::prelude::*;
+
+use cargo::{self, Target};
+use Config;
+use error;
+use Result;
 
 pub fn create_skeleton(config: &Config, log: &Logger) -> Result<()> {
     let log = log.new(o!("command" => "create_skeleton"));

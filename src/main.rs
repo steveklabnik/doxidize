@@ -2,7 +2,6 @@ extern crate doxidize;
 
 #[macro_use]
 extern crate configure;
-
 #[macro_use]
 extern crate slog;
 extern crate slog_async;
@@ -10,9 +9,9 @@ extern crate slog_term;
 
 use slog::Drain;
 
-use doxidize::Config;
-
 use std::env;
+
+use doxidize::Config;
 
 fn main() {
     use_default_config!();

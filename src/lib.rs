@@ -1,30 +1,21 @@
+extern crate rls_analysis as analysis;
+extern crate rls_data as analysis_data;
+extern crate comrak;
+#[macro_use]
+extern crate configure;
 extern crate failure;
 #[macro_use]
 extern crate failure_derive;
-
-extern crate comrak;
-
-#[macro_use]
-extern crate configure;
-
 extern crate handlebars;
-
-extern crate rls_analysis as analysis;
-extern crate rls_data as analysis_data;
-
 extern crate serde;
 #[macro_use]
 extern crate serde_derive;
 #[macro_use]
 extern crate serde_json;
-
 extern crate simple_server;
-
 #[macro_use]
 extern crate slog;
-
 extern crate toml_edit;
-
 extern crate walkdir;
 
 mod cargo;

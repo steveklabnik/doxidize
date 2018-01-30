@@ -1,11 +1,13 @@
-use Result;
-use std::fs::{self, File};
-use handlebars::{self, Handlebars};
-use walkdir::WalkDir;
 use comrak::{self, ComrakOptions};
+use handlebars::{self, Handlebars};
 use slog::Logger;
+use walkdir::WalkDir;
+
+use std::fs::{self, File};
 use std::io::prelude::*;
+
 use config::Config;
+use Result;
 
 pub fn build(config: &Config, log: &Logger) -> Result<()> {
     let log = log.new(o!("command" => "build"));

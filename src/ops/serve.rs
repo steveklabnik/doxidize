@@ -1,8 +1,10 @@
-use Result;
 use simple_server::Server;
-use std::env;
-use config::Config;
 use slog::Logger;
+
+use std::env;
+
+use config::Config;
+use Result;
 
 pub fn serve(config: &Config, log: &Logger) -> Result<()> {
     let log = log.new(o!("command" => "serve"));

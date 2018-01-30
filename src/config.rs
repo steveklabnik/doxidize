@@ -1,11 +1,13 @@
 use analysis;
-use ui::{Ui, Verbosity};
-use std::path::{Path, PathBuf};
-use std::default::Default;
 use serde::Deserializer;
 use toml_edit;
+
+use std::default::Default;
 use std::fs::File;
+use std::path::{Path, PathBuf};
 use std::io::prelude::*;
+
+use ui::{Ui, Verbosity};
 
 /// A structure that contains various fields that hold data in order to generate doc output.
 #[derive(Debug, Deserialize, Configure)]

@@ -1,19 +1,19 @@
 //! Functions for retrieving package data from `cargo`.
 
+use analysis_data::config::Config as AnalysisConfig;
+use serde_json;
+
 use std::io::BufReader;
 use std::io::prelude::*;
 use std::path::Path;
 use std::process::{Command, Stdio};
 
-use analysis_data::config::Config as AnalysisConfig;
-use serde_json;
-
 use Config;
-use Verbosity;
 use error;
 use failure;
-use ui::Ui;
 use Result;
+use ui::Ui;
+use Verbosity;
 
 /// The kinds of targets that we can document.
 #[derive(Debug, PartialEq, Eq)]

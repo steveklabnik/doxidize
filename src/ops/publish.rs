@@ -1,10 +1,12 @@
-use Result;
-use git;
+use toml_edit;
+use slog::Logger;
+
 use std::fs::File;
 use std::io::prelude::*;
-use toml_edit;
+
 use config::Config;
-use slog::Logger;
+use git;
+use Result;
 
 // adapted from https://github.com/rtomayko/rocco/blob/2586dc3bd4b0e9fa9bd076f492cdbf2924527199/Rakefile#L46
 pub fn publish(config: &Config, log: &Logger) -> Result<()> {

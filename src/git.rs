@@ -1,7 +1,8 @@
-use Result;
 use std::fmt;
 use std::path::Path;
 use std::process::{self, Command};
+
+use Result;
 
 #[derive(Debug, Fail)]
 pub struct GitFailure {
