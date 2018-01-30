@@ -21,6 +21,8 @@ configure_derive = "0.1.1"
 toml_edit = "0.1.1"
 slog-term = "2.3.0"
 slog-async = "2.2.0"
+structopt = "0.1.0"
+structopt-derive = "0.1.0"
 
 handlebars = "0.30.0-beta.4" # https://github.com/sunng87/handlebars-rust/issues/194
 pest = "=1.0.0-beta.17" # https://github.com/sunng87/handlebars-rust/issues/197
