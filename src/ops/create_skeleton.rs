@@ -85,20 +85,21 @@ pub fn create_skeleton(config: &Config, log: &Logger) -> Result<()> {
 
         // we certainly have a file name, since we're looping over real files
         let file_name = path.file_name().unwrap();
+        let rust_file = config.examples_path().join(file_name);
 
-        let mut file = File::open(&file_name)?;
+        trace!(log, "reading file"; "file" => rust_file.display());
+        let mut file = File::open(&rust_file)?;
         let mut code = String::new();
-        trace!(log, "reading file"; "file" => file_name);
         file.read_to_string(&mut code)?;
 
-        let markdown_path = examples_dir.join(file_name).with_extension("html");
+        let markdown_path = examples_dir.join(file_name).with_extension("md");
 
         trace!(log, "rendering to markdown"; "file" => path.display(), "file" => markdown_path.display());
         let mut file = File::create(markdown_path)?;
 
         file.write_all(
             handlebars
-                .render("example", &json!({"name": file_name, "code": code}))?
+                .render("example", &json!({"name": file_name.to_str().unwrap(), "code": code}))?
                 .as_bytes(),
         )?;
     }
