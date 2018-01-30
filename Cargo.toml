@@ -19,11 +19,17 @@ rls-data = { version = "0.14", features = ["serialize-serde"] }
 configure = "0.1.1"
 configure_derive = "0.1.1"
 toml_edit = "0.1.1"
-slog = "2.1.1"
 slog-term = "2.3.0"
+slog-async = "2.2.0"
 
 handlebars = "0.30.0-beta.4" # https://github.com/sunng87/handlebars-rust/issues/194
 pest = "=1.0.0-beta.17" # https://github.com/sunng87/handlebars-rust/issues/197
 
 [dev-dependencies]
 tempdir = "0.3"
+
+
+[dependencies.slog]
+version = "2.1.1"
+# uncomment this if you'd like to read trace-level messages
+# features = ["max_level_trace"]

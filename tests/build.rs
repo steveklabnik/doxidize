@@ -1,4 +1,9 @@
 extern crate doxidize;
+
+#[macro_use]
+extern crate slog;
+extern crate slog_term;
+extern crate slog_async;
 extern crate tempdir;
 
 mod util;
@@ -13,6 +18,7 @@ use tempdir::TempDir;
 #[test]
 fn build_renders_readme() {
     let dir = TempDir::new("create_root_readme").expect("could not generate temp dir");
+    let log = util::make_logger();
 
     let dir_path = dir.path();
 
@@ -39,7 +45,7 @@ testing",
         )
         .expect("could not write to README");
 
-    doxidize::ops::build(&config).expect("build failed");
+    doxidize::ops::build(&config, log).expect("build failed");
 
     let mut output_dir = dir_path.join("target");
     output_dir.push("docs");
@@ -65,6 +71,7 @@ testing",
 #[test]
 fn build_renders_additional_markdown_files() {
     let dir = TempDir::new("create_additional_markdown").expect("could not generate temp dir");
+    let log = util::make_logger();
 
     let dir_path = dir.path();
 
@@ -91,7 +98,7 @@ testing",
         )
         .expect("could not write to guide");
 
-    doxidize::ops::build(&config).expect("generate failed");
+    doxidize::ops::build(&config, log).expect("generate failed");
 
     let mut output_dir = dir_path.join("target");
     output_dir.push("docs");
@@ -117,6 +124,7 @@ testing",
 #[test]
 fn build_renders_nested_directories() {
     let dir = TempDir::new("create_additional_markdown").expect("could not generate temp dir");
+    let log = util::make_logger();
 
     let dir_path = dir.path();
 
@@ -147,7 +155,7 @@ testing",
         )
         .expect("could not write to guide");
 
-    doxidize::ops::build(&config).expect("build failed");
+    doxidize::ops::build(&config, log).expect("build failed");
 
     let mut output_dir = dir_path.join("target");
     output_dir.push("docs");

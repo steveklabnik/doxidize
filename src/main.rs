@@ -3,12 +3,27 @@ extern crate doxidize;
 #[macro_use]
 extern crate configure;
 
+#[macro_use]
+extern crate slog;
+extern crate slog_term;
+extern crate slog_async;
+
+use slog::Drain;
+
 use doxidize::Config;
 
 use std::env;
 
 fn main() {
     use_default_config!();
+
+    let doxidize_version = env!("CARGO_PKG_VERSION");
+
+    let decorator = slog_term::TermDecorator::new().build();
+    let drain = slog_term::CompactFormat::new(decorator).build().fuse();
+    let drain = slog_async::Async::new(drain).build().fuse();
+
+    let log = slog::Logger::root(drain, o!("version" => doxidize_version));
 
     // skip the program name
     let args: Vec<String> = env::args().skip(1).collect();
@@ -18,7 +33,7 @@ fn main() {
     if args.len() == 0 {
         doxidize::ops::create_skeleton(&config).expect("could not create skeleton");
     } else if args[0] == "build" {
-        doxidize::ops::build(&config).expect("could not build docs");
+        doxidize::ops::build(&config, log).expect("could not build docs");
     } else if args[0] == "publish" {
         doxidize::ops::publish(&config).expect("could not publish docs");
     } else if args[0] == "serve" {

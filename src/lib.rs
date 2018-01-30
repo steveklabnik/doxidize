@@ -20,6 +20,9 @@ extern crate serde_json;
 
 extern crate simple_server;
 
+#[macro_use]
+extern crate slog;
+
 extern crate toml_edit;
 
 extern crate walkdir;

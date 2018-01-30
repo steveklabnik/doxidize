@@ -3,10 +3,14 @@ use std::fs::{self, File};
 use handlebars::{self, Handlebars};
 use walkdir::WalkDir;
 use comrak::{self, ComrakOptions};
+use slog::Logger;
 use std::io::prelude::*;
 use config::Config;
 
-pub fn build(config: &Config) -> Result<()> {
+pub fn build(config: &Config, log: Logger) -> Result<()> {
+    let log = log.new(o!("command" => "build"));
+
+    info!(log, "starting");
     // we need to know where the docs are
     let docs_dir = config.root_path().join("docs");
 
@@ -22,6 +26,7 @@ pub fn build(config: &Config) -> Result<()> {
         target_dir.push(config.base_url());
     }
 
+    debug!(log, "creating target directory"; "dir" => target_dir.display());
     fs::create_dir_all(&target_dir)?;
 
     // finally, we need to tag a `/` on so that it's added automatically in the output
@@ -29,6 +34,7 @@ pub fn build(config: &Config) -> Result<()> {
 
     let mut handlebars = Handlebars::new();
 
+    debug!(log, "loading handlebars templates");
     handlebars.register_template_file("page", "templates/page.hbs")?;
     handlebars.register_template_file("api", "templates/api.hbs")?;
     handlebars.register_helper(
@@ -49,16 +55,20 @@ pub fn build(config: &Config) -> Result<()> {
         ),
     );
 
+    debug!(log, "walking directory tree to render files"; "dir" => docs_dir.display());
     // render all other *.md files as *.html, walking the tree
     for entry in WalkDir::new(&docs_dir) {
         let entry = entry?;
         let path = entry.path();
         let mut nesting_count = base_nesting_count;
 
+        trace!(log, "processing file"; o!("path" => path.display(), "nesting_count" => nesting_count));
+
         // we want only files
         if !path.is_file() {
             continue;
         }
+        trace!(log, "file is a file, continuing");
 
         if let Some(extension) = path.extension() {
             // we only want .md files
@@ -69,6 +79,7 @@ pub fn build(config: &Config) -> Result<()> {
             // we don't want files with no extension
             continue;
         }
+        trace!(log, "file is a markdown file, continuing");
 
         // we certainly have a file name, since we're looping over real files
         let file_name = path.file_name().unwrap();
@@ -80,11 +91,13 @@ pub fn build(config: &Config) -> Result<()> {
         let containing_dir = path.parent().expect("somehow this is running at the root");
         let new_containing_dir = containing_dir.strip_prefix(&docs_dir)?;
         let new_containing_dir = target_dir.join(new_containing_dir);
+        trace!(log, "creating containing directory"; "dir" => new_containing_dir.display());
         fs::create_dir_all(&new_containing_dir)?;
 
         // now we can make the file
         let mut file = File::open(&path)?;
         let mut contents = String::new();
+        trace!(log, "reading file"; "file" => path.display());
         file.read_to_string(&mut contents)?;
 
         let rendered_contents = comrak::markdown_to_html(&contents, &ComrakOptions::default());
@@ -95,6 +108,7 @@ pub fn build(config: &Config) -> Result<()> {
             new_containing_dir.join(file_name).with_extension("html")
         };
 
+        trace!(log, "rendering to html"; "file" => path.display(), "rendered file" => rendered_path.display());
         let mut file = File::create(rendered_path)?;
 
         // how many levels deep are we?
@@ -104,6 +118,7 @@ pub fn build(config: &Config) -> Result<()> {
 
         nesting_count += component_count;
 
+        trace!(log, "writing rendered file");
         file.write_all(
             handlebars
                 .render(
@@ -114,5 +129,6 @@ pub fn build(config: &Config) -> Result<()> {
         )?;
     }
 
+    info!(log, "done");
     Ok(())
 }
