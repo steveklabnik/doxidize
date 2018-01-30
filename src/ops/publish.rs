@@ -66,5 +66,6 @@ pub fn publish(config: &Config, log: &Logger) -> Result<()> {
 
     git::push(config.root_path())?;
 
+    info!(log, "done");
     Ok(())
 }
