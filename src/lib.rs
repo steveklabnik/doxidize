@@ -21,6 +21,7 @@ extern crate walkdir;
 mod cargo;
 mod config;
 mod error;
+pub mod examples;
 mod git;
 pub mod ops;
 mod ui;
