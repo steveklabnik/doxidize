@@ -18,9 +18,19 @@ pub fn create_skeleton(config: &Config, log: &Logger) -> Result<()> {
     let mut handlebars = Handlebars::new();
 
     debug!(log, "loading handlebars templates");
+
     handlebars.register_template_file("example", "templates/example.hbs")?;
     handlebars.register_template_file("page", "templates/page.hbs")?;
     handlebars.register_template_file("api", "templates/api.hbs")?;
+    handlebars.register_template_file("mod", "templates/mod.hbs")?;
+    handlebars.register_template_file("struct", "templates/struct.hbs")?;
+    handlebars.register_template_file("enum", "templates/enum.hbs")?;
+    handlebars.register_template_file("trait", "templates/trait.hbs")?;
+    handlebars.register_template_file("function", "templates/function.hbs")?;
+    handlebars.register_template_file("type", "templates/type.hbs")?;
+    handlebars.register_template_file("static", "templates/static.hbs")?;
+    handlebars.register_template_file("const", "templates/const.hbs")?;
+
     handlebars.register_helper(
         "up-dir",
         Box::new(
@@ -215,16 +225,16 @@ pub fn create_skeleton(config: &Config, log: &Logger) -> Result<()> {
 
         // Using the item's metadata we create a new `Document` type to be put in the eventual
         // serialized JSON.
-        match def.kind {
-            DefKind::Mod => (),
-            DefKind::Struct => (),
-            DefKind::Enum => (),
-            DefKind::Trait => (),
-            DefKind::Function => (),
-            DefKind::Type => (),
-            DefKind::Static => (),
-            DefKind::Const => (),
-            DefKind::Field => (),
+        let template_name = match def.kind {
+            DefKind::Mod => "mod",
+            DefKind::Struct => "struct",
+            DefKind::Enum => "enum",
+            DefKind::Trait => "trait",
+            DefKind::Function => "function",
+            DefKind::Type => "type",
+            DefKind::Static => "static",
+            DefKind::Const => "const",
+            DefKind::Field => continue,
             DefKind::Tuple => continue,
             DefKind::Local => continue,
             // The below DefKinds are not supported in rls-analysis
@@ -240,7 +250,7 @@ pub fn create_skeleton(config: &Config, log: &Logger) -> Result<()> {
 
         file.write_all(
             handlebars
-                .render("api", &json!({"name": def.name, "docs": def.docs}))?
+                .render(template_name, &json!({"name": def.name, "docs": def.docs}))?
                 .as_bytes(),
         )?;
     }
