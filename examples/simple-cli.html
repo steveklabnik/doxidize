@@ -224,7 +224,53 @@ a.article, a.article:hover {
 
         <!-- Page Content Holder -->
         <div id="content">
-            <h1><code>build</code></h1>
+            <h1>simple-cli.rs</h1>
+<pre><code>extern crate doxidize;
+
+#[macro_use]
+extern crate configure;
+
+#[macro_use]
+extern crate slog;
+extern crate slog_term;
+extern crate slog_async;
+
+use slog::Drain;
+
+use doxidize::Config;
+
+use std::env;
+
+fn main() {
+    use_default_config!();
+
+    let doxidize_version = env!(&quot;CARGO_PKG_VERSION&quot;);
+
+    let decorator = slog_term::TermDecorator::new().build();
+    let drain = slog_term::CompactFormat::new(decorator).build().fuse();
+    let drain = slog_async::Async::new(drain).build().fuse();
+
+    let log = slog::Logger::root(drain, o!(&quot;version&quot; =&gt; doxidize_version));
+
+    // skip the program name
+    let args: Vec&lt;String&gt; = env::args().skip(1).collect();
+
+    let config = Config::default();
+
+    if args.len() == 0 {
+        doxidize::ops::create_skeleton(&amp;config, &amp;log).expect(&quot;could not create skeleton&quot;);
+    } else if args[0] == &quot;build&quot; {
+        doxidize::ops::build(&amp;config, &amp;log).expect(&quot;could not build docs&quot;);
+    } else if args[0] == &quot;publish&quot; {
+        doxidize::ops::publish(&amp;config, &amp;log).expect(&quot;could not publish docs&quot;);
+    } else if args[0] == &quot;serve&quot; {
+        doxidize::ops::serve(&amp;config, &amp;log).expect(&quot;could not serve docs&quot;);
+    } else {
+        panic!(&quot;incorrect command {}&quot;, args[0]);
+    }
+}
+
+</code></pre>
 
         </div>
     </div>
