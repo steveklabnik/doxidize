@@ -1,10 +1,9 @@
 use Result;
-use std::fs::{self, OpenOptions};
+use std::fs::{self, OpenOptions, File};
 use Config;
 use cargo::{self, Target};
 use handlebars::{self, Handlebars};
 use analysis::DefKind;
-use std::fs::File;
 use std::collections::VecDeque;
 use error;
 use std::io::prelude::*;
@@ -13,6 +12,31 @@ use slog::Logger;
 pub fn create_skeleton(config: &Config, log: &Logger) -> Result<()> {
     let log = log.new(o!("command" => "create_skeleton"));
     info!(log, "starting");
+
+    let mut handlebars = Handlebars::new();
+
+    debug!(log, "loading handlebars templates");
+    handlebars.register_template_file("example", "templates/example.hbs")?;
+    handlebars.register_template_file("page", "templates/page.hbs")?;
+    handlebars.register_template_file("api", "templates/api.hbs")?;
+    handlebars.register_helper(
+        "up-dir",
+        Box::new(
+            |h: &handlebars::Helper,
+             _: &Handlebars,
+             rc: &mut handlebars::RenderContext|
+             -> handlebars::HelperResult {
+                let count = h.param(0).map(|v| v.value().as_u64().unwrap()).unwrap();
+
+                for _ in 0..count {
+                    rc.writer.write(b"../")?;
+                }
+
+                Ok(())
+            },
+        ),
+    );
+
 
     // create the top-level docs dir
     let docs_dir = config.root_path().join("docs");
@@ -33,29 +57,53 @@ pub fn create_skeleton(config: &Config, log: &Logger) -> Result<()> {
     debug!(log, "creating Menu.toml"; o!("file" => menu.display()));
     OpenOptions::new().create(true).append(true).open(menu)?;
 
+    // next up: examples!
+    let examples_dir = docs_dir.join("examples");
+    debug!(log, "creating examples dir"; o!("dir" => examples_dir.display()));
+    fs::create_dir_all(&examples_dir)?;
+
+    for entry in fs::read_dir(config.examples_path())? {
+        let entry = entry?;
+        let path = entry.path();
+
+        // we want only files
+        if !path.is_file() {
+            continue;
+        }
+        trace!(log, "file is a file, continuing");
+
+        if let Some(extension) = path.extension() {
+            // we only want .rs files
+            if extension != "rs" {
+                continue;
+            }
+        } else {
+            // we don't want files with no extension
+            continue;
+        }
+        trace!(log, "file is a rust file, continuing");
+
+        // we certainly have a file name, since we're looping over real files
+        let file_name = path.file_name().unwrap();
+
+        let mut file = File::open(&file_name)?;
+        let mut code = String::new();
+        trace!(log, "reading file"; "file" => file_name);
+        file.read_to_string(&mut code)?;
+
+        let markdown_path = examples_dir.join(file_name).with_extension("html");
+
+        trace!(log, "rendering to markdown"; "file" => path.display(), "file" => markdown_path.display());
+        let mut file = File::create(markdown_path)?;
+
+        file.write_all(
+            handlebars
+                .render("example", &json!({"name": file_name, "code": code}))?
+                .as_bytes(),
+        )?;
+    }
+
     // now the api docs
-    let mut handlebars = Handlebars::new();
-
-    debug!(log, "loading handlebars templates");
-    handlebars.register_template_file("page", "templates/page.hbs")?;
-    handlebars.register_template_file("api", "templates/api.hbs")?;
-    handlebars.register_helper(
-        "up-dir",
-        Box::new(
-            |h: &handlebars::Helper,
-             _: &Handlebars,
-             rc: &mut handlebars::RenderContext|
-             -> handlebars::HelperResult {
-                let count = h.param(0).map(|v| v.value().as_u64().unwrap()).unwrap();
-
-                for _ in 0..count {
-                    rc.writer.write(b"../")?;
-                }
-
-                Ok(())
-            },
-        ),
-    );
 
     // ensure that the api dir exists
     let api_dir = docs_dir.join("api");

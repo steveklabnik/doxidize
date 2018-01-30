@@ -114,6 +114,10 @@ impl Config {
         self.output_path = Some(output_path);
     }
 
+    pub fn examples_path(&self) -> PathBuf {
+        self.root_path().join("examples")
+    }
+
     pub fn ui(&self) -> &Ui {
         &self.ui
     }
