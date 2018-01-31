@@ -1,6 +1,6 @@
 # simple-cli.rs
 
-```
+```rust
 extern crate doxidize;
 
 #[macro_use]
