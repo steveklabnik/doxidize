@@ -1,2 +1,2 @@
-# `ops`
+# module `ops`
 

@@ -1,3 +1,3 @@
-# `Speak`
+# trait `Speak`
 
- A trait for things that can speak
+A trait for things that can speak

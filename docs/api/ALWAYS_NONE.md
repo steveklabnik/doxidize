@@ -1,3 +1,3 @@
-# `ALWAYS_NONE`
+# static `ALWAYS_NONE`
 
- holds nothing, really.
+holds nothing, really.

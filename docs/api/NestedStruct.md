@@ -1,3 +1,3 @@
-# `NestedStruct`
+# struct `NestedStruct`
 
- A nested struct
+A nested struct

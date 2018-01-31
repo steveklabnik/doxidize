@@ -1,3 +1,3 @@
-# `Point`
+# struct `Point`
 
- A point in space
+A point in space

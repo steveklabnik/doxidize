@@ -10,6 +10,7 @@ use cargo::{self, Target};
 use Config;
 use error;
 use Result;
+use strip_leading_space;
 
 pub fn create_skeleton(config: &Config, log: &Logger) -> Result<()> {
     let log = log.new(o!("command" => "create_skeleton"));
@@ -167,7 +168,7 @@ pub fn create_skeleton(config: &Config, log: &Logger) -> Result<()> {
 
     file.write_all(
         handlebars
-            .render("api", &json!({"name": crate_name, "docs": root_def.docs}))?
+            .render("api", &json!({"name": crate_name, "docs": strip_leading_space(&root_def.docs)}))?
             .as_bytes(),
     )?;
 
@@ -250,7 +251,7 @@ pub fn create_skeleton(config: &Config, log: &Logger) -> Result<()> {
 
         file.write_all(
             handlebars
-                .render(template_name, &json!({"name": def.name, "docs": def.docs}))?
+                .render(template_name, &json!({"name": def.name, "docs": strip_leading_space(&def.docs)}))?
                 .as_bytes(),
         )?;
     }

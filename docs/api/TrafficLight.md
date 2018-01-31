@@ -1,3 +1,3 @@
-# `TrafficLight`
+# enum `TrafficLight`
 
- A traffic light
+A traffic light

@@ -1,3 +1,3 @@
-# `StructAlias`
+# type `StructAlias`
 
- another name for `NestedStruct`
+another name for `NestedStruct`
