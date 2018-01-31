@@ -24,12 +24,9 @@ struct Opt {
 
 #[derive(StructOpt, Debug)]
 enum Command {
-    #[structopt(name = "build")]
-    Build,
-    #[structopt(name = "publish")]
-    Publish,
-    #[structopt(name = "serve")]
-    Serve,
+    #[structopt(name = "build")] Build,
+    #[structopt(name = "publish")] Publish,
+    #[structopt(name = "serve")] Serve,
 }
 
 fn main() {
@@ -51,13 +48,13 @@ fn main() {
             match command.as_ref().unwrap() {
                 &Command::Build => {
                     doxidize::ops::build(&config, &log).expect("could not build docs");
-                },
+                }
                 &Command::Publish => {
                     doxidize::ops::publish(&config, &log).expect("could not publish docs");
-                },
+                }
                 &Command::Serve => {
                     doxidize::ops::serve(&config, &log).expect("could not serve docs");
-                },
+                }
             }
         }
         _ => {

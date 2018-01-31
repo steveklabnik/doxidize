@@ -4,7 +4,7 @@
 //! item and see how Doxidize decides to render them!
 
 /// An example of a module in another module
-/// 
+///
 /// Nothing super exciting!
 pub mod nested_module {
     /// A nested struct
@@ -14,13 +14,10 @@ pub mod nested_module {
     }
 
     /// This function should be a method...
-    /// 
+    ///
     /// ... but it isn't, so we can show off what functions look like.
     pub fn this_should_be_a_method(s: NestedStruct) {
-        NestedStruct {
-            x: 5,
-            .. s
-        };
+        NestedStruct { x: 5, ..s };
     }
 
     /// another name for `NestedStruct`
@@ -31,16 +28,12 @@ pub mod nested_module {
         /// and deeper
         pub mod next_level2 {
             /// and deeper
-            pub mod next_level3 {
-
-            }
+            pub mod next_level3 {}
         }
     }
 
     /// an empty submodule
-    pub mod empty {
-
-    }
+    pub mod empty {}
 }
 
 /// holds nothing, really.
@@ -57,10 +50,10 @@ pub struct Point {
 
 impl Point {
     /// create a new point
-    /// 
+    ///
     /// ```
     /// use doxidize::examples::Point;
-    /// 
+    ///
     /// let p = Point::new();
     /// ```
     pub fn new() -> Point {
