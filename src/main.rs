@@ -20,6 +20,9 @@ use doxidize::Config;
 struct Opt {
     #[structopt(subcommand)]
     command: Option<Command>,
+
+    #[structopt(long = "manifest-path", help = "The path to a Cargo.toml, defaults to `./Cargo.toml`")]
+    manifest_path: Option<String>,
 }
 
 #[derive(StructOpt, Debug)]
@@ -40,10 +43,16 @@ fn main() {
 
     let log = slog::Logger::root(drain, o!("version" => doxidize_version));
 
-    let config = Config::default();
+    let opts = Opt::from_args();
 
-    match Opt::from_args() {
-        Opt { ref command } if command.is_some() => {
+    let config = if let Some(ref manifest_path) = opts.manifest_path {
+        Config::with_manifest_path(manifest_path)
+    } else {
+        Config::default()
+    };
+
+    match opts {
+        Opt { ref command, .. } if command.is_some() => {
             // we just checked that it's Some
             match command.as_ref().unwrap() {
                 &Command::Build => {

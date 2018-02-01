@@ -70,7 +70,8 @@ where
 }
 
 impl Config {
-    pub fn with_manifest_path(manifest_path: PathBuf) -> Config {
+    pub fn with_manifest_path<P: Into<PathBuf>>(manifest_path: P) -> Config {
+        let manifest_path = manifest_path.into();
         let ui = Ui::new(Verbosity::Normal);
         let host = analysis::AnalysisHost::new(analysis::Target::Debug);
 

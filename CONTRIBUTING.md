@@ -185,6 +185,18 @@ From there, make the changes you'd like, and then use a combination
 of `cargo check`, `cargo test`, and `cargo run` to make sure
 everything is working as you expect.
 
+The `--manifest-path` flag can be useful when trying out your changes.
+For example, let's say that we had the `semver` crate checked out next
+to `doxidize`. To run your modified Doxidize against it, inside the
+`doxidize` checkout, do this:
+
+```bash
+$ cargo run -- --manifest-path=../semver/Cargo.toml build
+```
+
+All subcommands take this argument.
+
+
 If you haven't already, make a commit:
 
 ```bash
