@@ -325,11 +325,7 @@ fn generate_and_load_analysis(config: &Config, target: &Target, log: &Logger) ->
     let log = log.new(o!("command" => "generate_and_load_analysis"));
     info!(log, "analysizing your source code");
 
-    let analysis_result = cargo::generate_analysis(config, target, |_| {});
-
-    if analysis_result.is_err() {
-        return analysis_result;
-    }
+    cargo::generate_analysis(config, target)?;
 
     let root_path = config.root_path();
     debug!(log, "analysis complete, loading");
