@@ -102,7 +102,10 @@ pub fn build(config: &Config, log: &Logger) -> Result<()> {
         trace!(log, "reading file"; "file" => path.display());
         file.read_to_string(&mut contents)?;
 
-        let rendered_contents = comrak::markdown_to_html(&contents, &ComrakOptions::default());
+        let mut options = ComrakOptions::default();
+        options.default_info_string = Some(String::from("rust"));
+
+        let rendered_contents = comrak::markdown_to_html(&contents, &options);
 
         let rendered_path = if file_name == "README.md" {
             new_containing_dir.join("index.html")
