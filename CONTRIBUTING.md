@@ -3,6 +3,18 @@
 Thank you for your interest in making Doxidize better! We'd love to have your
 contribution, especially in these early, formative days.
 
+This document is long, so here's a table of contents!
+
+* [Code of Conduct](#code-of-conduct)
+* [License](#license)
+* [Pull Requests](#pull-requests)
+* [Issue Tracker](#issue-tracker)
+* [Assigned Issues](#assigned-issues)
+* [Milestones](#milestones)
+* [Issue Triage](#issue-triage)
+* [Development Workflow](#development-workflow)
+* [Who is on the Team?](#who-is-on-the-team)
+
 ## Code of Conduct
 
 This project abides by Rust's Code of Conduct, which you can find a copy of
