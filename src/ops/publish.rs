@@ -39,14 +39,6 @@ pub fn publish(config: &Config, log: &Logger) -> Result<()> {
 
     // this name is totally arbitrary, but o was chosen to match rocco's Rakefile above.
     let remote_name = "o";
-    /*
-
-    # Update the pages/ directory clone
-    file 'docs/.git' => ['docs/', '.git/refs/heads/gh-pages'] do |f|
-        sh "cd docs && git init -q && git remote add o ../.git" if !File.exist?(f.name)
-        sh "cd docs && git fetch -q o && git reset -q --hard o/gh-pages && touch ."
-    end
-    */
 
     // our sub-repo uses 'master' as its branch name, even though it pushes it to a branch
     // named 'gh-pages'. Subtle!

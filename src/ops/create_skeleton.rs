@@ -139,14 +139,6 @@ pub fn create_skeleton(config: &Config, log: &Logger) -> Result<()> {
     let host = config.host();
     let crate_name = &target.crate_name();
 
-    // This function does a lot, so here's the plan:
-    //
-    // First, we need to process the root def and get its list of children.
-    // Then, we process all of the children. Children may produce more children
-    // to be processed too. Once we've processed them all, we're done.
-
-    // Step one: we need to get all of the "def roots", and then find the
-    // one that's our crate.
     let roots = host.def_roots()?;
 
     // we want to keep track of all modules for the module overview page
@@ -175,17 +167,7 @@ pub fn create_skeleton(config: &Config, log: &Logger) -> Result<()> {
             .as_bytes(),
     )?;
 
-    // Now that we have that, it's time to get the children; these are
-    // the top-level items for the crate.
     let ids = host.for_each_child_def(root_id, |id, _def| id).unwrap();
-
-    // Now, we push all of those children onto a channel. The channel functions
-    // as a work queue; we take an item off, process it, and then if it has
-    // children, push them onto the queue. When the queue is empty, we've processed
-    // everything.
-    //
-    // Additionally, we generate relationships between the crate itself and
-    // these ids, as they're at the top level and hence linked with the crate.
 
     info!(log, "turning analysis into markdown");
     let mut queue = VecDeque::new();
@@ -215,10 +197,7 @@ pub fn create_skeleton(config: &Config, log: &Logger) -> Result<()> {
         };
     }
 
-    // The loop below is basically creating this vector.
     while let Some(id) = queue.pop_front() {
-        // push each child to be processed itself, and also record
-        // their ids so we can create the relationships for later
         host.for_each_child_def(id, |id, _def| {
             queue.push_back(id);
         })?;
@@ -235,8 +214,6 @@ pub fn create_skeleton(config: &Config, log: &Logger) -> Result<()> {
             _ => (),
         }
 
-        // Using the item's metadata we create a new `Document` type to be put in the eventual
-        // serialized JSON.
         let template_name = match def.kind {
             DefKind::Mod => "mod",
             DefKind::Struct => "struct",
@@ -344,12 +321,6 @@ pub fn create_skeleton(config: &Config, log: &Logger) -> Result<()> {
 
 /// Generate save analysis data of a crate to be used later by the RLS library later and load it
 /// into the analysis host.
-///
-/// ## Arguments:
-///
-/// - `config`: Contains data for what needs to be output or used. In this case the path to the
-///             `Cargo.toml` file
-/// - `target`: The target to document
 fn generate_and_load_analysis(config: &Config, target: &Target, log: &Logger) -> Result<()> {
     let log = log.new(o!("command" => "generate_and_load_analysis"));
     info!(log, "analysizing your source code");

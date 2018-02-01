@@ -103,7 +103,7 @@ impl Config {
 
     /// Returns the directory containing the `Cargo.toml` of the crate being documented.
     pub fn root_path(&self) -> &Path {
-        // unwrap() is safe, as manifest_path will point to a file
+        // unwrap() is okay, as manifest_path will point to a file
         self.manifest_path.parent().unwrap()
     }
 

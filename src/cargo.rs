@@ -50,10 +50,6 @@ impl Target {
 }
 
 /// Generate and parse the metadata of a cargo project.
-///
-/// ## Arguments
-///
-/// - `manifest_path`: The path to the crate's `Cargo.toml`
 pub fn retrieve_metadata(manifest_path: &Path) -> Result<serde_json::Value> {
     let output = Command::new("cargo")
         .arg("metadata")
@@ -75,12 +71,6 @@ pub fn retrieve_metadata(manifest_path: &Path) -> Result<serde_json::Value> {
 }
 
 /// Invoke cargo to generate the save-analysis data for the crate being documented.
-///
-/// ## Arguments
-///
-/// - `config`: Rustdoc configuration
-/// - `target`: The target that we should generate the analysis data for
-/// - `report_progress`: A closure that should be called to report a progress message
 pub fn generate_analysis<F>(config: &Config, target: &Target, report_progress: F) -> Result<()>
 where
     F: Fn(&str) -> (),
@@ -162,10 +152,6 @@ where
 }
 
 /// Parse the library target from the crate metadata.
-///
-/// ## Arguments
-///
-/// - metadata: The JSON metadata of the crate.
 pub fn target_from_metadata(ui: &Ui, metadata: &serde_json::Value) -> Result<Target> {
     // We can expect at least one package and target, otherwise the metadata generation would have
     // failed.
