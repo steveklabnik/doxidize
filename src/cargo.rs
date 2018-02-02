@@ -173,7 +173,10 @@ pub fn target_from_metadata(log: &Logger, metadata: &serde_json::Value) -> Resul
             TargetKind::Binary => "first binary",
         };
 
-        warn!(log, "Found more than one target to document. Documenting the {}: {}", kind, target.name);
+        warn!(
+            log,
+            "Found more than one target to document. Documenting the {}: {}", kind, target.name
+        );
 
         Ok(target)
     }

@@ -1,4 +1,4 @@
-use notify::{self, RecommendedWatcher, Watcher, RecursiveMode};
+use notify::{self, RecommendedWatcher, RecursiveMode, Watcher};
 use simple_server::Server;
 use slog::Logger;
 
@@ -57,7 +57,8 @@ fn watch(config: Arc<Config>, log: &Logger) -> notify::Result<()> {
     thread::spawn(move || {
         let (tx, rx) = channel();
 
-        let mut watcher: RecommendedWatcher = Watcher::new(tx, Duration::from_secs(2)).expect("could not create a Watcher");
+        let mut watcher: RecommendedWatcher =
+            Watcher::new(tx, Duration::from_secs(2)).expect("could not create a Watcher");
 
         let path = config.markdown_path();
         info!(log, "watching {} for changes", path.display());
@@ -68,7 +69,7 @@ fn watch(config: Arc<Config>, log: &Logger) -> notify::Result<()> {
 
         loop {
             match rx.recv() {
-                Ok(_) =>  {
+                Ok(_) => {
                     info!(log, "file changed, regenerating docs");
 
                     if let Err(e) = ops::build(&*config, &log) {

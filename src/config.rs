@@ -122,7 +122,7 @@ impl Config {
     pub fn public_path(&self) -> PathBuf {
         self.output_path().join("public")
     }
-    
+
     pub fn readme_path(&self) -> PathBuf {
         self.markdown_path().join("README.md")
     }
