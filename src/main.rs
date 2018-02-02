@@ -51,24 +51,29 @@ fn main() {
         Config::default()
     };
 
-    match opts {
+    let result = match opts {
         Opt { ref command, .. } if command.is_some() => {
             // we just checked that it's Some
             match command.as_ref().unwrap() {
                 &Command::Build => {
-                    doxidize::ops::build(&config, &log).expect("could not build docs");
+                    doxidize::ops::build(&config, &log)
                 }
                 &Command::Publish => {
-                    doxidize::ops::publish(&config, &log).expect("could not publish docs");
+                    doxidize::ops::publish(&config, &log)
                 }
                 &Command::Serve => {
-                    doxidize::ops::serve(&config, &log).expect("could not serve docs");
+                    doxidize::ops::serve(&config, &log)
                 }
             }
         }
         _ => {
             // default with no command
-            doxidize::ops::create_skeleton(&config, &log).expect("could not create skeleton");
+            doxidize::ops::create_skeleton(&config, &log)
         }
+    };
+
+    if let Err(err) = result {
+        eprintln!("error! {}", err);
+        std::process::exit(1);
     }
 }

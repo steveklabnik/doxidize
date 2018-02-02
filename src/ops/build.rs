@@ -7,6 +7,7 @@ use std::fs::{self, File};
 use std::io::prelude::*;
 
 use config::Config;
+use error;
 use Result;
 
 pub fn build(config: &Config, log: &Logger) -> Result<()> {
@@ -15,6 +16,12 @@ pub fn build(config: &Config, log: &Logger) -> Result<()> {
 
     // we need to know where the docs are
     let docs_dir = config.root_path().join("docs");
+
+    if !docs_dir.is_dir() {
+        return Err(error::UninitializedProject {
+            location: config.root_path().to_path_buf(),
+        }.into());
+    }
 
     // ensure that the docs dir exists in target
     let mut target_dir = config.output_path().join("public");
