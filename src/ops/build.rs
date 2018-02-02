@@ -15,7 +15,7 @@ pub fn build(config: &Config, log: &Logger) -> Result<()> {
     info!(log, "starting");
 
     // we need to know where the docs are
-    let docs_dir = config.root_path().join("docs");
+    let docs_dir = config.markdown_path();
 
     if !docs_dir.is_dir() {
         return Err(error::UninitializedProject {
@@ -24,7 +24,7 @@ pub fn build(config: &Config, log: &Logger) -> Result<()> {
     }
 
     // ensure that the docs dir exists in target
-    let mut target_dir = config.output_path().join("public");
+    let mut target_dir = config.public_path();
 
     // keep track of how far we're nested
     let mut base_nesting_count = 0;

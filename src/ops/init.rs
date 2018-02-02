@@ -51,29 +51,29 @@ pub fn init(config: &Config, log: &Logger) -> Result<()> {
     );
 
     // create the top-level docs dir
-    let docs_dir = config.root_path().join("docs");
+    let docs_dir = config.markdown_path();
     debug!(log, "creating top-level docs dir"; o!("dir" => docs_dir.display()));
     fs::create_dir_all(&docs_dir)?;
 
     // create a README.md
-    let readme = docs_dir.join("README.md");
+    let readme = config.readme_path();
     debug!(log, "creating README"; o!("file" => readme.display()));
     OpenOptions::new().create(true).append(true).open(readme)?;
 
     // create a Doxidize.toml & Menu.toml
-    let doxidize_config = config.root_path().join("Doxidize.toml");
+    let doxidize_config = config.config_path();
     debug!(log, "creating Doxidize.toml"; o!("file" => doxidize_config.display()));
     OpenOptions::new()
         .create(true)
         .append(true)
         .open(doxidize_config)?;
 
-    let menu = docs_dir.join("Menu.toml");
+    let menu = config.menu_path();
     debug!(log, "creating Menu.toml"; o!("file" => menu.display()));
     OpenOptions::new().create(true).append(true).open(menu)?;
 
     // next up: examples!
-    let examples_dir = docs_dir.join("examples");
+    let examples_dir = config.examples_path();
     debug!(log, "creating examples dir"; o!("dir" => examples_dir.display()));
     fs::create_dir_all(&examples_dir)?;
 
@@ -127,7 +127,7 @@ pub fn init(config: &Config, log: &Logger) -> Result<()> {
     // now the api docs
 
     // ensure that the api dir exists
-    let api_dir = docs_dir.join("api");
+    let api_dir = config.api_markdown_path();
     debug!(log, "creating api dir"; o!("dir" => api_dir.display()));
     fs::create_dir_all(&api_dir)?;
 
@@ -156,7 +156,7 @@ pub fn init(config: &Config, log: &Logger) -> Result<()> {
 
     let root_def = host.get_def(root_id)?;
 
-    let markdown_path = api_dir.join("README.md");
+    let markdown_path = config.api_readme_path();
 
     debug!(log, "creating README.md for api"; o!("file" => markdown_path.display()));
     let mut file = File::create(markdown_path)?;
@@ -302,7 +302,7 @@ pub fn init(config: &Config, log: &Logger) -> Result<()> {
 
         // time to write out the markdown
 
-        let markdown_path = api_dir.join("module-overview.md");
+        let markdown_path = config.api_module_overview_path();
 
         let mut file = File::create(markdown_path)?;
 

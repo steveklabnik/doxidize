@@ -14,7 +14,7 @@ pub fn publish(config: &Config, log: &Logger) -> Result<()> {
     info!(log, "starting");
 
     // load up our Doxidize.toml so we can handle any base urls
-    let path = config.root_path().join("Doxidize.toml");
+    let path = config.config_path();
     let mut contents = String::new();
     let mut toml_file = File::open(path)?;
     toml_file.read_to_string(&mut contents)?;
@@ -29,7 +29,7 @@ pub fn publish(config: &Config, log: &Logger) -> Result<()> {
         .unwrap_or_default()
         .to_string();
 
-    let mut target_dir = config.output_path().join("public");
+    let mut target_dir = config.output_path();
 
     if !base_url.is_empty() {
         target_dir.push(&base_url)

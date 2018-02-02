@@ -71,7 +71,7 @@ pub fn retrieve_metadata(manifest_path: &Path) -> Result<serde_json::Value> {
 pub fn generate_analysis(config: &Config, target: &Target) -> Result<()> {
     let mut command = Command::new("cargo");
 
-    let target_dir = config.root_path().join("target/rls");
+    let target_dir = config.rls_target_path();
 
     let analysis_config = AnalysisConfig {
         full_docs: true,

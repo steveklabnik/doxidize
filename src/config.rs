@@ -106,9 +106,29 @@ impl Config {
         }
     }
 
+    pub fn config_path(&self) -> PathBuf {
+        self.root_path().join("Doxidize.toml")
+    }
+
+    pub fn menu_path(&self) -> PathBuf {
+        self.markdown_path().join("Menu.toml")
+    }
+
     /// Set the directory where output files should be placed
     pub fn set_output_path(&mut self, output_path: PathBuf) {
-        self.output_path = Some(output_path);
+        self.output_path = Some(output_path)
+    }
+
+    pub fn public_path(&self) -> PathBuf {
+        self.output_path().join("public")
+    }
+    
+    pub fn readme_path(&self) -> PathBuf {
+        self.markdown_path().join("README.md")
+    }
+
+    pub fn rls_target_path(&self) -> PathBuf {
+        self.root_path().join("target").join("rls")
     }
 
     pub fn examples_path(&self) -> PathBuf {
@@ -117,6 +137,18 @@ impl Config {
 
     pub fn markdown_path(&self) -> PathBuf {
         self.root_path().join("docs")
+    }
+
+    pub fn api_markdown_path(&self) -> PathBuf {
+        self.markdown_path().join("api")
+    }
+
+    pub fn api_readme_path(&self) -> PathBuf {
+        self.api_markdown_path().join("README.md")
+    }
+
+    pub fn api_module_overview_path(&self) -> PathBuf {
+        self.api_markdown_path().join("module-overview.md")
     }
 
     pub fn manifest_path(&self) -> &Path {
