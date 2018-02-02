@@ -28,6 +28,7 @@ struct Opt {
 #[derive(StructOpt, Debug)]
 enum Command {
     #[structopt(name = "build")] Build,
+    #[structopt(name = "clean")] Clean,
     #[structopt(name = "publish")] Publish,
     #[structopt(name = "serve")] Serve,
     #[structopt(name = "init")] Init,
@@ -58,6 +59,9 @@ fn main() {
             match command.as_ref().unwrap() {
                 &Command::Build => {
                     doxidize::ops::build(&config, &log)
+                }
+                &Command::Clean => {
+                    doxidize::ops::clean(&config, &log)
                 }
                 &Command::Publish => {
                     doxidize::ops::publish(&config, &log)
