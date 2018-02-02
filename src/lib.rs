@@ -39,13 +39,13 @@ use ui::Verbosity;
 type Result<T> = std::result::Result<T, Error>;
 
 /// this removes the first space from each line of its input.
-/// 
+///
 /// this is useful because doc comments geneerally look like this:
-/// 
+///
 /// ```text
 /// /// some words
 /// ```
-/// 
+///
 /// see that space before `some`? it's technically part of the comment,
 /// so the RLS will give it to us in the docs.
 pub fn strip_leading_space(s: &str) -> String {
@@ -55,17 +55,18 @@ pub fn strip_leading_space(s: &str) -> String {
 
     // s.len() is going to be long enough, as we're only dropping some characters,
     // so let's preallocate even though it's going to be slightly bigger
-    let mut s = s.lines().fold(String::with_capacity(s.len()), |mut s, line| {
-        // some lines don't have any content, and so we should handle that.
-        if !line.is_empty() {
-            s += &line[1..];
-        }
+    let mut s = s.lines()
+        .fold(String::with_capacity(s.len()), |mut s, line| {
+            // some lines don't have any content, and so we should handle that.
+            if !line.is_empty() {
+                s += &line[1..];
+            }
 
-        // we still want to retain the newlines in the output, but `lines` strips them
-        s += "\n";
+            // we still want to retain the newlines in the output, but `lines` strips them
+            s += "\n";
 
-        s
-    });
+            s
+        });
 
     // remove the trailing newline
     s.truncate(s.len() - 1);
@@ -84,8 +85,11 @@ mod tests {
 
         let result = strip_leading_space(input);
 
-        assert_eq!(result, "a doc comment
-this is the form they're generally in");
+        assert_eq!(
+            result,
+            "a doc comment
+this is the form they're generally in"
+        );
     }
 
     #[test]
@@ -104,9 +108,12 @@ this is the form they're generally in");
 
         let result = strip_leading_space(input);
 
-        assert_eq!(result, "Examples of rendering
+        assert_eq!(
+            result,
+            "Examples of rendering
 
 This module and its submodules are purely for show. Check out each type of
-item and see how Doxidize decides to render them!");
+item and see how Doxidize decides to render them!"
+        );
     }
 }

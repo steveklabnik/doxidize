@@ -27,7 +27,10 @@ fn clean_deletes_directory_in_target() {
     doxidize::ops::build(&config, &log).expect("build failed");
 
     let target_docs_dir = dir_path.join("target").join("docs");
-    assert!(target_docs_dir.is_dir(), format!("{} is not a directory", target_docs_dir.display()));
+    assert!(
+        target_docs_dir.is_dir(),
+        format!("{} is not a directory", target_docs_dir.display())
+    );
 
     doxidize::ops::clean(&config, &log).expect("clean failed");
 

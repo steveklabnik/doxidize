@@ -82,8 +82,7 @@ fn double_initialize() {
 
     doxidize::ops::init(&config, &log).expect("init failed");
 
-    doxidize::ops::init(&config, &log)
-        .expect("init failed when run a second time");
+    doxidize::ops::init(&config, &log).expect("init failed when run a second time");
 }
 
 #[test]

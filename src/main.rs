@@ -21,7 +21,8 @@ struct Opt {
     #[structopt(subcommand)]
     command: Option<Command>,
 
-    #[structopt(long = "manifest-path", help = "The path to a Cargo.toml, defaults to `./Cargo.toml`")]
+    #[structopt(long = "manifest-path",
+                help = "The path to a Cargo.toml, defaults to `./Cargo.toml`")]
     manifest_path: Option<String>,
 }
 
@@ -57,21 +58,11 @@ fn main() {
         Opt { ref command, .. } if command.is_some() => {
             // we just checked that it's Some
             match command.as_ref().unwrap() {
-                &Command::Build => {
-                    doxidize::ops::build(&config, &log)
-                }
-                &Command::Clean => {
-                    doxidize::ops::clean(&config, &log)
-                }
-                &Command::Publish => {
-                    doxidize::ops::publish(&config, &log)
-                }
-                &Command::Serve => {
-                    doxidize::ops::serve(&config, &log)
-                }
-                &Command::Init => {
-                    doxidize::ops::init(&config, &log)
-                }
+                &Command::Build => doxidize::ops::build(&config, &log),
+                &Command::Clean => doxidize::ops::clean(&config, &log),
+                &Command::Publish => doxidize::ops::publish(&config, &log),
+                &Command::Serve => doxidize::ops::serve(&config, &log),
+                &Command::Init => doxidize::ops::init(&config, &log),
             }
         }
         _ => {

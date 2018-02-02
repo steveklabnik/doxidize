@@ -2,7 +2,7 @@ use analysis::{self, DefKind};
 use handlebars::{self, Handlebars};
 use slog::Logger;
 
-use std::collections::{VecDeque, HashSet};
+use std::collections::{HashSet, VecDeque};
 use std::fs::{self, File, OpenOptions};
 use std::io::prelude::*;
 
@@ -163,7 +163,10 @@ pub fn init(config: &Config, log: &Logger) -> Result<()> {
 
     file.write_all(
         handlebars
-            .render("api", &json!({"name": crate_name, "docs": strip_leading_space(&root_def.docs)}))?
+            .render(
+                "api",
+                &json!({"name": crate_name, "docs": strip_leading_space(&root_def.docs)}),
+            )?
             .as_bytes(),
     )?;
 
@@ -214,7 +217,7 @@ pub fn init(config: &Config, log: &Logger) -> Result<()> {
             match def.kind {
                 DefKind::Mod => {
                     module_set.insert(id);
-                },
+                }
                 _ => (),
             }
 
@@ -243,7 +246,10 @@ pub fn init(config: &Config, log: &Logger) -> Result<()> {
 
             file.write_all(
                 handlebars
-                    .render(template_name, &json!({"name": def.name, "docs": strip_leading_space(&def.docs)}))?
+                    .render(
+                        template_name,
+                        &json!({"name": def.name, "docs": strip_leading_space(&def.docs)}),
+                    )?
                     .as_bytes(),
             )?;
         }
@@ -261,13 +267,19 @@ pub fn init(config: &Config, log: &Logger) -> Result<()> {
             children: Vec::new(),
         };
 
-
         // is our call stack smaller than the module depth? hopefully! this is good enough for now
-        fn add_children(parent: &mut Module, possible_children: &HashSet<analysis::Id>, host: &analysis::AnalysisHost) {
-            let children: Vec<&analysis::Id> = possible_children.iter().filter(|child| {
-                let def = host.get_def(**child).unwrap();
-                def.parent == Some(parent.id)
-            }).collect();
+        fn add_children(
+            parent: &mut Module,
+            possible_children: &HashSet<analysis::Id>,
+            host: &analysis::AnalysisHost,
+        ) {
+            let children: Vec<&analysis::Id> = possible_children
+                .iter()
+                .filter(|child| {
+                    let def = host.get_def(**child).unwrap();
+                    def.parent == Some(parent.id)
+                })
+                .collect();
 
             // the base case!
             if children.is_empty() {
@@ -304,8 +316,15 @@ pub fn init(config: &Config, log: &Logger) -> Result<()> {
             } else {
                 def.name
             };
-            
-            let line = format!("{}* {}\n", ::std::iter::repeat("  ").take(depth).collect::<Vec<_>>().join(""), name);
+
+            let line = format!(
+                "{}* {}\n",
+                ::std::iter::repeat("  ")
+                    .take(depth)
+                    .collect::<Vec<_>>()
+                    .join(""),
+                name
+            );
             file.write_all(line.as_bytes()).unwrap();
 
             if node.children.is_empty() {
