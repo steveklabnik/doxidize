@@ -26,7 +26,7 @@ fn build_renders_readme() {
 
     let config = Config::with_manifest_path(dir_path.join("Cargo.toml"));
 
-    doxidize::ops::create_skeleton(&config, &log).expect("create_skeleton failed");
+    doxidize::ops::init(&config, &log).expect("init failed");
 
     let docs_dir = dir_path.join("docs");
     let readme_path = docs_dir.join("README.md");
@@ -79,7 +79,7 @@ fn build_renders_additional_markdown_files() {
 
     let config = Config::with_manifest_path(dir_path.join("Cargo.toml"));
 
-    doxidize::ops::create_skeleton(&config, &log).expect("create_skeleton failed");
+    doxidize::ops::init(&config, &log).expect("init failed");
 
     let docs_dir = dir_path.join("docs");
     let guide_path = docs_dir.join("guide.md");
@@ -132,7 +132,7 @@ fn build_renders_nested_directories() {
 
     let config = Config::with_manifest_path(dir_path.join("Cargo.toml"));
 
-    doxidize::ops::create_skeleton(&config, &log).expect("create_skeleton failed");
+    doxidize::ops::init(&config, &log).expect("init failed");
 
     let docs_dir = dir_path.join("docs");
     let nested_dir = docs_dir.join("nested");

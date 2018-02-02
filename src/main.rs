@@ -30,6 +30,7 @@ enum Command {
     #[structopt(name = "build")] Build,
     #[structopt(name = "publish")] Publish,
     #[structopt(name = "serve")] Serve,
+    #[structopt(name = "init")] Init,
 }
 
 fn main() {
@@ -64,11 +65,14 @@ fn main() {
                 &Command::Serve => {
                     doxidize::ops::serve(&config, &log)
                 }
+                &Command::Init => {
+                    doxidize::ops::init(&config, &log)
+                }
             }
         }
         _ => {
             // default with no command
-            doxidize::ops::create_skeleton(&config, &log)
+            doxidize::ops::init(&config, &log)
         }
     };
 

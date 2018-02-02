@@ -12,7 +12,7 @@ use error;
 use Result;
 use strip_leading_space;
 
-pub fn create_skeleton(config: &Config, log: &Logger) -> Result<()> {
+pub fn init(config: &Config, log: &Logger) -> Result<()> {
     let log = log.new(o!("command" => "create_skeleton"));
     info!(log, "starting");
 
