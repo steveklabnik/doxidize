@@ -9,6 +9,7 @@ extern crate failure;
 #[macro_use]
 extern crate failure_derive;
 extern crate handlebars;
+extern crate notify;
 extern crate rls_analysis as analysis;
 extern crate rls_data as analysis_data;
 extern crate serde;

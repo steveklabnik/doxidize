@@ -1,5 +1,7 @@
 # simple-cli.rs
 
+A simple command-line example.
+
 ```
 extern crate doxidize;
 

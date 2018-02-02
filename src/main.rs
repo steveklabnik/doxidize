@@ -61,7 +61,7 @@ fn main() {
                 &Command::Build => doxidize::ops::build(&config, &log),
                 &Command::Clean => doxidize::ops::clean(&config, &log),
                 &Command::Publish => doxidize::ops::publish(&config, &log),
-                &Command::Serve => doxidize::ops::serve(&config, &log),
+                &Command::Serve => doxidize::ops::serve(config, &log),
                 &Command::Init => doxidize::ops::init(&config, &log),
             }
         }
