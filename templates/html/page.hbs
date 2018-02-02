@@ -13,7 +13,6 @@
     <style>
  @import url('https://fonts.googleapis.com/css?family=Fira+Sans');
 
-
 body {
     font-family: 'Fira Sans', sans-serif;
     background: #fafafa;
@@ -59,6 +58,10 @@ a, a:hover, a:focus {
     align-items: stretch;
 }
 
+.hidden {
+    display: none;
+}
+
 #sidebar {
     min-width: 250px;
     max-width: 250px;
@@ -90,6 +93,7 @@ a, a:hover, a:focus {
     font-size: 1.1em;
     display: block;
 }
+
 #sidebar ul li a:hover {
     color: #93C;
     background: #fff;
@@ -110,10 +114,10 @@ a[aria-expanded="false"]::before, a[aria-expanded="true"]::before {
     position: absolute;
     right: 20px;
 }
+
 a[aria-expanded="true"]::before {
     content: '▲';
 }
-
 
 ul ul a {
     font-size: 0.9em !important;
@@ -195,5 +199,34 @@ ul ul a {
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/rust.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
+    <script>
+        var hiding_character = "#";
+        Array.from(document.querySelectorAll("code.language-rust")).forEach(function (block) {
+            var code_block = block;
+            // hide lines
+            var lines = code_block.innerHTML.split("\n");
+            var first_non_hidden_line = false;
+            var lines_hidden = false;
+
+            for (var n = 0; n < lines.length; n++) {
+                if (lines[n].trim()[0] == hiding_character) {
+                    if (first_non_hidden_line) {
+                        lines[n] = "<span class=\"hidden\">" + "\n" + lines[n].replace(/(\s*)# ?/, "$1") + "</span>";
+                    }
+                    else {
+                        lines[n] = "<span class=\"hidden\">" + lines[n].replace(/(\s*)# ?/, "$1") + "\n" + "</span>";
+                    }
+                    lines_hidden = true;
+                }
+                else if (first_non_hidden_line) {
+                    lines[n] = "\n" + lines[n];
+                }
+                else {
+                    first_non_hidden_line = true;
+                }
+            }
+            code_block.innerHTML = lines.join("");
+        });
+    </script>
   </body>
 </html>
