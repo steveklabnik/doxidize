@@ -132,7 +132,7 @@ pub fn init(config: &Config, log: &Logger) -> Result<()> {
     fs::create_dir_all(&api_dir)?;
 
     let metadata = cargo::retrieve_metadata(config.manifest_path())?;
-    let target = cargo::target_from_metadata(config.ui(), &metadata)?;
+    let target = cargo::target_from_metadata(&log, &metadata)?;
 
     generate_and_load_analysis(&config, &target, &log)?;
 

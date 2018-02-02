@@ -28,13 +28,10 @@ mod error;
 pub mod examples;
 mod git;
 pub mod ops;
-mod ui;
 
 pub use config::Config;
 
 use failure::Error;
-
-use ui::Verbosity;
 
 type Result<T> = std::result::Result<T, Error>;
 

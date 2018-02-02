@@ -1,6 +1,7 @@
 //! Functions for retrieving package data from `cargo`.
 
 use analysis_data::config::Config as AnalysisConfig;
+use slog::Logger;
 use serde_json;
 
 use std::path::Path;
@@ -10,8 +11,6 @@ use Config;
 use error;
 use failure;
 use Result;
-use ui::Ui;
-use Verbosity;
 
 /// The kinds of targets that we can document.
 #[derive(Debug, PartialEq, Eq)]
@@ -93,10 +92,6 @@ pub fn generate_analysis(config: &Config, target: &Target) -> Result<()> {
         .stderr(Stdio::piped())
         .stdout(Stdio::null());
 
-    if let &Verbosity::Verbose = config.ui().verbosity() {
-        command.arg("--verbose");
-    }
-
     match target.kind {
         TargetKind::Library => {
             command.arg("--lib");
@@ -120,7 +115,7 @@ pub fn generate_analysis(config: &Config, target: &Target) -> Result<()> {
 }
 
 /// Parse the library target from the crate metadata.
-pub fn target_from_metadata(ui: &Ui, metadata: &serde_json::Value) -> Result<Target> {
+pub fn target_from_metadata(log: &Logger, metadata: &serde_json::Value) -> Result<Target> {
     // We can expect at least one package and target, otherwise the metadata generation would have
     // failed.
     let targets = metadata["packages"][0]["targets"]
@@ -178,10 +173,7 @@ pub fn target_from_metadata(ui: &Ui, metadata: &serde_json::Value) -> Result<Tar
             TargetKind::Binary => "first binary",
         };
 
-        ui.warn(&format!(
-            "Found more than one target to document. Documenting the {}: {}",
-            kind, target.name
-        ));
+        warn!(log, "Found more than one target to document. Documenting the {}: {}", kind, target.name);
 
         Ok(target)
     }
@@ -189,12 +181,12 @@ pub fn target_from_metadata(ui: &Ui, metadata: &serde_json::Value) -> Result<Tar
 
 #[cfg(test)]
 mod tests {
-    use ui::Ui;
+    use slog;
     use super::{Target, TargetKind};
 
     #[test]
     fn target_from_metadata() {
-        let ui = Ui::default();
+        let log = slog::Logger::root(slog::Discard, o!());
 
         // work around until https://github.com/rust-lang-nursery/rustfmt/issues/2344 is fixed
         #[cfg_attr(rustfmt, rustfmt_skip)]
@@ -211,7 +203,7 @@ mod tests {
             },
             ],
         });
-        let target = super::target_from_metadata(&ui, &metadata).unwrap();
+        let target = super::target_from_metadata(&log, &metadata).unwrap();
         assert_eq!(
             target,
             Target {
@@ -236,7 +228,7 @@ mod tests {
             },
             ],
         });
-        let target = super::target_from_metadata(&ui, &metadata).unwrap();
+        let target = super::target_from_metadata(&log, &metadata).unwrap();
         assert_eq!(
             target,
             Target {
@@ -261,7 +253,7 @@ mod tests {
             },
             ],
         });
-        let target = super::target_from_metadata(&ui, &metadata).unwrap();
+        let target = super::target_from_metadata(&log, &metadata).unwrap();
         assert_eq!(
             target,
             Target {
@@ -287,7 +279,7 @@ mod tests {
             ],
         });
         assert_eq!(
-            super::target_from_metadata(&ui, &metadata).unwrap().kind,
+            super::target_from_metadata(&log, &metadata).unwrap().kind,
             TargetKind::Library
         );
 
@@ -307,7 +299,7 @@ mod tests {
             ],
         });
         assert_eq!(
-            super::target_from_metadata(&ui, &metadata).unwrap().kind,
+            super::target_from_metadata(&log, &metadata).unwrap().kind,
             TargetKind::Binary
         );
 
@@ -331,7 +323,7 @@ mod tests {
             ],
         });
         assert_eq!(
-            super::target_from_metadata(&ui, &metadata).unwrap().kind,
+            super::target_from_metadata(&log, &metadata).unwrap().kind,
             TargetKind::Library
         );
     }

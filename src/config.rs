@@ -7,15 +7,10 @@ use std::fs::File;
 use std::path::{Path, PathBuf};
 use std::io::prelude::*;
 
-use ui::{Ui, Verbosity};
-
 /// A structure that contains various fields that hold data in order to generate doc output.
 #[derive(Debug, Deserialize, Configure)]
 #[serde(default)]
 pub struct Config {
-    /// Interactions with the user interface.
-    ui: Ui,
-
     /// Path to the `Cargo.toml` file for the crate being analyzed
     manifest_path: PathBuf,
 
@@ -31,7 +26,6 @@ pub struct Config {
 
 impl Default for Config {
     fn default() -> Config {
-        let ui = Ui::new(Verbosity::Normal);
         let manifest_path = PathBuf::from("Cargo.toml");
         let host = analysis::AnalysisHost::new(analysis::Target::Debug);
 
@@ -53,7 +47,6 @@ impl Default for Config {
             .unwrap_or_else(|_: Box<::std::error::Error>| String::from(""));
 
         Config {
-            ui,
             manifest_path,
             host,
             output_path: None,
@@ -72,7 +65,6 @@ where
 impl Config {
     pub fn with_manifest_path<P: Into<PathBuf>>(manifest_path: P) -> Config {
         let manifest_path = manifest_path.into();
-        let ui = Ui::new(Verbosity::Normal);
         let host = analysis::AnalysisHost::new(analysis::Target::Debug);
 
         let config_path = manifest_path.parent().unwrap().join("Doxidize.toml");
@@ -93,7 +85,6 @@ impl Config {
             .unwrap_or_else(|_: Box<::std::error::Error>| String::from(""));
 
         Config {
-            ui,
             manifest_path,
             host,
             output_path: None,
@@ -122,10 +113,6 @@ impl Config {
 
     pub fn examples_path(&self) -> PathBuf {
         self.root_path().join("examples")
-    }
-
-    pub fn ui(&self) -> &Ui {
-        &self.ui
     }
 
     pub fn manifest_path(&self) -> &Path {
