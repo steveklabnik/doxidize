@@ -115,6 +115,10 @@ impl Config {
         self.root_path().join("examples")
     }
 
+    pub fn markdown_path(&self) -> PathBuf {
+        self.root_path().join("docs")
+    }
+
     pub fn manifest_path(&self) -> &Path {
         &self.manifest_path
     }
