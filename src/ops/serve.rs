@@ -22,6 +22,8 @@ pub fn serve(config: &Config, log: &Logger) -> Result<()> {
     trace!(log, "setting current directory"; o!("dir" => path.display()));
     env::set_current_dir(path)?;
 
+    let log = log.new(o!("step" => "starting server"));
+
     if config.base_url().is_empty() {
         info!(log, "serving docs at http://{}:{}/index.html", host, port);
     } else {
