@@ -1,5 +1,4 @@
 use analysis::{self, DefKind};
-use handlebars::{self, Handlebars};
 use slog::Logger;
 
 use std::collections::{HashSet, VecDeque};
@@ -15,40 +14,6 @@ use strip_leading_space;
 pub fn init(config: &Config, log: &Logger) -> Result<()> {
     let log = log.new(o!("command" => "init"));
     info!(log, "starting");
-
-    let mut handlebars = Handlebars::new();
-
-    debug!(log, "loading handlebars templates");
-
-    handlebars.register_template_file("example", "templates/markdown/example.hbs")?;
-    handlebars.register_template_file("page", "templates/html/page.hbs")?;
-    handlebars.register_template_file("api", "templates/markdown/api.hbs")?;
-    handlebars.register_template_file("mod", "templates/markdown/mod.hbs")?;
-    handlebars.register_template_file("struct", "templates/markdown/struct.hbs")?;
-    handlebars.register_template_file("enum", "templates/markdown/enum.hbs")?;
-    handlebars.register_template_file("trait", "templates/markdown/trait.hbs")?;
-    handlebars.register_template_file("function", "templates/markdown/function.hbs")?;
-    handlebars.register_template_file("type", "templates/markdown/type.hbs")?;
-    handlebars.register_template_file("static", "templates/markdown/static.hbs")?;
-    handlebars.register_template_file("const", "templates/markdown/const.hbs")?;
-
-    handlebars.register_helper(
-        "up-dir",
-        Box::new(
-            |h: &handlebars::Helper,
-             _: &Handlebars,
-             rc: &mut handlebars::RenderContext|
-             -> handlebars::HelperResult {
-                let count = h.param(0).map(|v| v.value().as_u64().unwrap()).unwrap();
-
-                for _ in 0..count {
-                    rc.writer.write(b"../")?;
-                }
-
-                Ok(())
-            },
-        ),
-    );
 
     // create the top-level docs dir
     let docs_dir = config.markdown_path();
@@ -114,7 +79,7 @@ pub fn init(config: &Config, log: &Logger) -> Result<()> {
             let mut file = File::create(markdown_path)?;
 
             file.write_all(
-                handlebars
+                config.handlebars()
                     .render(
                         "example",
                         &json!({"name": file_name.to_str().unwrap(), "code": code}),
@@ -162,7 +127,7 @@ pub fn init(config: &Config, log: &Logger) -> Result<()> {
     let mut file = File::create(markdown_path)?;
 
     file.write_all(
-        handlebars
+        config.handlebars()
             .render(
                 "api",
                 &json!({"name": crate_name, "docs": strip_leading_space(&root_def.docs)}),
@@ -245,7 +210,7 @@ pub fn init(config: &Config, log: &Logger) -> Result<()> {
             let mut file = File::create(markdown_path)?;
 
             file.write_all(
-                handlebars
+                config.handlebars()
                     .render(
                         template_name,
                         &json!({"name": def.name, "docs": strip_leading_space(&def.docs)}),

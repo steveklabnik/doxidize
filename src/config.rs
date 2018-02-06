@@ -1,4 +1,5 @@
 use analysis;
+use handlebars::{self, Handlebars};
 use serde::Deserializer;
 use toml_edit;
 
@@ -18,10 +19,13 @@ pub struct Config {
     output_path: Option<PathBuf>,
 
     /// Contains the Cargo analysis output for the crate being documented
-    #[serde(deserialize_with = "default_host")]
+    #[serde(deserialize_with = "deserialize_host")]
     host: analysis::AnalysisHost,
 
     base_url: String,
+
+    #[serde(deserialize_with = "deserialize_handlebars")]
+    handlebars: Handlebars,
 }
 
 impl Default for Config {
@@ -46,20 +50,66 @@ impl Default for Config {
         })()
             .unwrap_or_else(|_: Box<::std::error::Error>| String::from(""));
 
+        let handlebars = default_handlebars();
+
         Config {
             manifest_path,
             host,
             output_path: None,
             base_url,
+            handlebars,
         }
     }
 }
 
-fn default_host<'de, D>(_: D) -> ::std::result::Result<analysis::AnalysisHost, D::Error>
+fn deserialize_host<'de, D>(_: D) -> ::std::result::Result<analysis::AnalysisHost, D::Error>
 where
     D: Deserializer<'de>,
 {
     Ok(analysis::AnalysisHost::new(analysis::Target::Debug))
+}
+
+fn deserialize_handlebars<'de, D>(_: D) -> ::std::result::Result<Handlebars, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    Ok(default_handlebars())
+}
+
+fn default_handlebars() -> Handlebars {
+        let mut handlebars = Handlebars::new();
+
+        handlebars.register_template_file("example", "templates/markdown/example.hbs").unwrap();
+        handlebars.register_template_file("page", "templates/html/page.hbs").unwrap();
+        handlebars.register_template_file("api", "templates/markdown/api.hbs").unwrap();
+        handlebars.register_template_file("mod", "templates/markdown/mod.hbs").unwrap();
+        handlebars.register_template_file("struct", "templates/markdown/struct.hbs").unwrap();
+        handlebars.register_template_file("enum", "templates/markdown/enum.hbs").unwrap();
+        handlebars.register_template_file("trait", "templates/markdown/trait.hbs").unwrap();
+        handlebars.register_template_file("function", "templates/markdown/function.hbs").unwrap();
+        handlebars.register_template_file("type", "templates/markdown/type.hbs").unwrap();
+        handlebars.register_template_file("static", "templates/markdown/static.hbs").unwrap();
+        handlebars.register_template_file("const", "templates/markdown/const.hbs").unwrap();
+
+        handlebars.register_helper(
+            "up-dir",
+            Box::new(
+                |h: &handlebars::Helper,
+                _: &Handlebars,
+                rc: &mut handlebars::RenderContext|
+                -> handlebars::HelperResult {
+                    let count = h.param(0).map(|v| v.value().as_u64().unwrap()).unwrap();
+
+                    for _ in 0..count {
+                        rc.writer.write(b"../")?;
+                    }
+
+                    Ok(())
+                },
+            ),
+        );
+
+        handlebars
 }
 
 impl Config {
@@ -84,11 +134,14 @@ impl Config {
         })()
             .unwrap_or_else(|_: Box<::std::error::Error>| String::from(""));
 
+        let handlebars = default_handlebars();
+
         Config {
             manifest_path,
             host,
             output_path: None,
             base_url,
+            handlebars,
         }
     }
 
@@ -165,5 +218,9 @@ impl Config {
 
     pub fn base_url(&self) -> &str {
         &self.base_url
+    }
+
+    pub fn handlebars(&self) -> &Handlebars {
+        &self.handlebars
     }
 }

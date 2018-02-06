@@ -1,5 +1,4 @@
 use comrak::{self, ComrakOptions};
-use handlebars::{self, Handlebars};
 use slog::Logger;
 use walkdir::WalkDir;
 
@@ -40,29 +39,6 @@ pub fn build(config: &Config, log: &Logger) -> Result<()> {
 
     // finally, we need to tag a `/` on so that it's added automatically in the output
     let base_url = format!("{}/", config.base_url());
-
-    let mut handlebars = Handlebars::new();
-
-    debug!(log, "loading handlebars templates");
-    handlebars.register_template_file("page", "templates/html/page.hbs")?;
-    handlebars.register_template_file("api", "templates/markdown/api.hbs")?;
-    handlebars.register_helper(
-        "up-dir",
-        Box::new(
-            |h: &handlebars::Helper,
-             _: &Handlebars,
-             rc: &mut handlebars::RenderContext|
-             -> handlebars::HelperResult {
-                let count = h.param(0).map(|v| v.value().as_u64().unwrap()).unwrap();
-
-                for _ in 0..count {
-                    rc.writer.write(b"../")?;
-                }
-
-                Ok(())
-            },
-        ),
-    );
 
     debug!(log, "walking directory tree to render files"; "dir" => docs_dir.display());
     // render all other *.md files as *.html, walking the tree
@@ -132,7 +108,7 @@ pub fn build(config: &Config, log: &Logger) -> Result<()> {
 
         trace!(log, "writing rendered file");
         file.write_all(
-            handlebars
+            config.handlebars()
                 .render(
                     "page",
                     &json!({"contents": rendered_contents, "nest-count": nesting_count, "base-url": base_url }),
