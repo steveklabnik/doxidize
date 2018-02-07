@@ -4,6 +4,7 @@ use slog::Logger;
 use std::collections::{HashSet, VecDeque};
 use std::fs::{self, File};
 use std::io::prelude::*;
+use std::path::PathBuf;
 
 use error;
 use cargo::{self, Target};
@@ -129,7 +130,14 @@ pub fn create(config: &Config, log: &Logger) -> Result<()> {
                 _ => continue,
             };
 
-            let markdown_path = api_dir.join(&format!("{}.md", def.name));
+            let containing_path = name_to_path(&def.qualname);
+            let containing_path = api_dir.join(containing_path);
+
+            info!(log, "creating"; o!("containing_path" => containing_path.display()));
+            fs::create_dir_all(&containing_path)?;
+
+            let markdown_path = containing_path.join(&format!("{}.md", def.name));
+            info!(log, "writing"; o!("markdown_path" => markdown_path.display()));
 
             let mut file = File::create(markdown_path)?;
 
@@ -234,6 +242,19 @@ pub fn create(config: &Config, log: &Logger) -> Result<()> {
     Ok(())
 }
 
+fn name_to_path(name: &str) -> PathBuf {
+    // we skip the first bit since it's the crate name
+    let mut path = name.split("::").skip(1).fold(PathBuf::new(), |mut path, component| {
+       path.push(component);
+       path
+    });
+
+    // we want the containing directory here, so we *also* have to pop off the last part
+    path.pop();
+
+    path
+}
+
 /// Generate save analysis data of a crate to be used later by the RLS library later and load it
 /// into the analysis host.
 fn generate_and_load_analysis(config: &Config, target: &Target, log: &Logger) -> Result<()> {
@@ -248,4 +269,43 @@ fn generate_and_load_analysis(config: &Config, target: &Target, log: &Logger) ->
 
     info!(log, "done");
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    mod name_to_path {
+        use std::path::PathBuf;
+        use super::super::name_to_path;
+
+        #[test]
+        fn nest_level1() {
+            let name = "doxidize::examples";
+
+            assert_eq!(PathBuf::new(), name_to_path(name));
+        }
+
+        #[test]
+        fn nest_level2() {
+            let name = "doxidize::examples::nested_module";
+
+            let path = PathBuf::from("examples");
+            assert_eq!(path, name_to_path(name));
+        }
+
+        #[test]
+        fn nest_level3() {
+            let name = "doxidize::examples::nested_module::second_nested_module";
+
+            let path = PathBuf::from("examples").join("nested_module");
+            assert_eq!(path, name_to_path(name));
+        }
+
+        #[test]
+        fn nest_level4() {
+            let name = "doxidize::examples::nested_module::second_nested_module::third";
+
+            let path = PathBuf::from("examples").join("nested_module").join("second_nested_module");
+            assert_eq!(path, name_to_path(name));
+        }
+    }
 }
