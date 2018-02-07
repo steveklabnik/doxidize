@@ -244,10 +244,12 @@ pub fn create(config: &Config, log: &Logger) -> Result<()> {
 
 fn name_to_path(name: &str) -> PathBuf {
     // we skip the first bit since it's the crate name
-    let mut path = name.split("::").skip(1).fold(PathBuf::new(), |mut path, component| {
-       path.push(component);
-       path
-    });
+    let mut path = name.split("::")
+        .skip(1)
+        .fold(PathBuf::new(), |mut path, component| {
+            path.push(component);
+            path
+        });
 
     // we want the containing directory here, so we *also* have to pop off the last part
     path.pop();
@@ -304,7 +306,9 @@ mod tests {
         fn nest_level4() {
             let name = "doxidize::examples::nested_module::second_nested_module::third";
 
-            let path = PathBuf::from("examples").join("nested_module").join("second_nested_module");
+            let path = PathBuf::from("examples")
+                .join("nested_module")
+                .join("second_nested_module");
             assert_eq!(path, name_to_path(name));
         }
     }
