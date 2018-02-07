@@ -215,13 +215,28 @@ pub fn create(config: &Config, log: &Logger) -> Result<()> {
                 def.name
             };
 
+            // skip the initial crate name
+            let mut path: Vec<_> = def.qualname.split("::").skip(1).collect();
+            // pop off the final bit of the path, as that's the name, not the path itself
+            path.pop();
+
+            // the web uses / for paths, not \ or /
+            let path = path.join("/");
+
+            let url = if path.is_empty() {
+                format!("/api/{}.html", name)
+            } else {
+                format!("/api/{}/{}.html", path, name)
+            };
+
             let line = format!(
-                "{}* {}\n",
+                "{}* [{}]({})\n",
                 ::std::iter::repeat("  ")
                     .take(depth)
                     .collect::<Vec<_>>()
                     .join(""),
-                name
+                name,
+                url,
             );
             file.write_all(line.as_bytes()).unwrap();
 
