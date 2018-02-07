@@ -28,11 +28,16 @@ struct Opt {
 
 #[derive(StructOpt, Debug)]
 enum Command {
-    #[structopt(name = "build")] Build,
-    #[structopt(name = "clean")] Clean,
-    #[structopt(name = "publish")] Publish,
-    #[structopt(name = "serve")] Serve,
-    #[structopt(name = "init")] Init,
+    #[structopt(name = "build")]
+    Build,
+    #[structopt(name = "clean")]
+    Clean,
+    #[structopt(name = "publish")]
+    Publish,
+    #[structopt(name = "serve")]
+    Serve,
+    #[structopt(name = "init")]
+    Init,
 }
 
 fn main() {

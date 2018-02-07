@@ -51,7 +51,8 @@ pub fn create(config: &Config, log: &Logger) -> Result<()> {
             let mut file = File::create(markdown_path)?;
 
             file.write_all(
-                config.handlebars()
+                config
+                    .handlebars()
                     .render(
                         "example",
                         &json!({"name": file_name.to_str().unwrap(), "code": code}),
@@ -61,8 +62,5 @@ pub fn create(config: &Config, log: &Logger) -> Result<()> {
         }
     }
 
-
-
     Ok(())
 }
-

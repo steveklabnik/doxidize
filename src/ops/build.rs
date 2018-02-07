@@ -108,7 +108,8 @@ pub fn build(config: &Config, log: &Logger) -> Result<()> {
 
         trace!(log, "writing rendered file");
         file.write_all(
-            config.handlebars()
+            config
+                .handlebars()
                 .render(
                     "page",
                     &json!({"contents": rendered_contents, "nest-count": nesting_count, "base-url": base_url }),

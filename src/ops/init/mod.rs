@@ -68,5 +68,3 @@ fn create_menu_toml(config: &Config, log: &Logger) -> Result<()> {
 
     Ok(())
 }
-
-

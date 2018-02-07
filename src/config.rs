@@ -77,39 +77,61 @@ where
 }
 
 fn default_handlebars() -> Handlebars {
-        let mut handlebars = Handlebars::new();
+    let mut handlebars = Handlebars::new();
 
-        handlebars.register_template_file("example", "templates/markdown/example.hbs").unwrap();
-        handlebars.register_template_file("page", "templates/html/page.hbs").unwrap();
-        handlebars.register_template_file("api", "templates/markdown/api.hbs").unwrap();
-        handlebars.register_template_file("mod", "templates/markdown/mod.hbs").unwrap();
-        handlebars.register_template_file("struct", "templates/markdown/struct.hbs").unwrap();
-        handlebars.register_template_file("enum", "templates/markdown/enum.hbs").unwrap();
-        handlebars.register_template_file("trait", "templates/markdown/trait.hbs").unwrap();
-        handlebars.register_template_file("function", "templates/markdown/function.hbs").unwrap();
-        handlebars.register_template_file("type", "templates/markdown/type.hbs").unwrap();
-        handlebars.register_template_file("static", "templates/markdown/static.hbs").unwrap();
-        handlebars.register_template_file("const", "templates/markdown/const.hbs").unwrap();
+    handlebars
+        .register_template_file("example", "templates/markdown/example.hbs")
+        .unwrap();
+    handlebars
+        .register_template_file("page", "templates/html/page.hbs")
+        .unwrap();
+    handlebars
+        .register_template_file("api", "templates/markdown/api.hbs")
+        .unwrap();
+    handlebars
+        .register_template_file("mod", "templates/markdown/mod.hbs")
+        .unwrap();
+    handlebars
+        .register_template_file("struct", "templates/markdown/struct.hbs")
+        .unwrap();
+    handlebars
+        .register_template_file("enum", "templates/markdown/enum.hbs")
+        .unwrap();
+    handlebars
+        .register_template_file("trait", "templates/markdown/trait.hbs")
+        .unwrap();
+    handlebars
+        .register_template_file("function", "templates/markdown/function.hbs")
+        .unwrap();
+    handlebars
+        .register_template_file("type", "templates/markdown/type.hbs")
+        .unwrap();
+    handlebars
+        .register_template_file("static", "templates/markdown/static.hbs")
+        .unwrap();
+    handlebars
+        .register_template_file("const", "templates/markdown/const.hbs")
+        .unwrap();
 
-        handlebars.register_helper(
-            "up-dir",
-            Box::new(
-                |h: &handlebars::Helper,
-                _: &Handlebars,
-                rc: &mut handlebars::RenderContext|
-                -> handlebars::HelperResult {
-                    let count = h.param(0).map(|v| v.value().as_u64().unwrap()).unwrap();
+    handlebars.register_helper(
+        "up-dir",
+        Box::new(
+            |h: &handlebars::Helper,
+             _: &Handlebars,
+             rc: &mut handlebars::RenderContext|
+             -> handlebars::HelperResult {
+                let count = h.param(0).map(|v| v.value().as_u64().unwrap()).unwrap();
 
-                    for _ in 0..count {
-                        rc.writer.write(b"../")?;
-                    }
+                for _ in 0..count {
+                    rc.writer.write(b"../")?;
+                }
 
-                    Ok(())
-                },
-            ),
-        );
+                Ok(())
+            },
+        ),
+    );
 
-        handlebars
+    handlebars
 }
 
 impl Config {

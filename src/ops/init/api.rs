@@ -50,7 +50,8 @@ pub fn create(config: &Config, log: &Logger) -> Result<()> {
     let mut file = File::create(markdown_path)?;
 
     file.write_all(
-        config.handlebars()
+        config
+            .handlebars()
             .render(
                 "api",
                 &json!({"name": crate_name, "docs": strip_leading_space(&root_def.docs)}),
@@ -133,7 +134,8 @@ pub fn create(config: &Config, log: &Logger) -> Result<()> {
             let mut file = File::create(markdown_path)?;
 
             file.write_all(
-                config.handlebars()
+                config
+                    .handlebars()
                     .render(
                         template_name,
                         &json!({"name": def.name, "docs": strip_leading_space(&def.docs)}),
@@ -247,4 +249,3 @@ fn generate_and_load_analysis(config: &Config, target: &Target, log: &Logger) ->
     info!(log, "done");
     Ok(())
 }
-
