@@ -188,6 +188,10 @@ impl Config {
         self.root_path().join("examples")
     }
 
+    pub fn examples_markdown_path(&self) -> PathBuf {
+        self.markdown_path().join("examples")
+    }
+
     pub fn markdown_path(&self) -> PathBuf {
         self.root_path().join("docs")
     }

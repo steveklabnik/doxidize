@@ -38,7 +38,7 @@ pub fn init(config: &Config, log: &Logger) -> Result<()> {
     OpenOptions::new().create(true).append(true).open(menu)?;
 
     // next up: examples!
-    let examples_dir = config.examples_path();
+    let examples_dir = config.examples_markdown_path();
     debug!(log, "creating examples dir"; o!("dir" => examples_dir.display()));
     fs::create_dir_all(&examples_dir)?;
 
