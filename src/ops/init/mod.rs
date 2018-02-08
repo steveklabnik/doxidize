@@ -18,9 +18,10 @@ pub fn init(config: &Config, log: &Logger) -> Result<()> {
 
     create_docs_readme(config, &log)?;
     create_doxidize_config(config, &log)?;
-    create_menu_toml(config, &log)?;
 
-    create_examples(config, &log)?;
+    let examples = create_examples(config, &log)?;
+
+    create_menu_toml(config, &log, examples)?;
 
     api::create(config, &log)?;
 
@@ -43,7 +44,18 @@ fn create_docs_readme(config: &Config, log: &Logger) -> Result<()> {
 
     debug!(log, "creating README"; o!("file" => readme.display()));
 
-    OpenOptions::new().create(true).append(true).open(readme)?;
+    let mut readme = OpenOptions::new().create(true).append(true).open(readme)?;
+    readme
+        .write_all(
+            br#"---
+id = "overview"
+title = "Overview"
+---
+# Overview
+
+An overview of your project."#,
+        )
+        .expect("could not write to README.md");
 
     Ok(())
 }
@@ -60,20 +72,37 @@ fn create_doxidize_config(config: &Config, log: &Logger) -> Result<()> {
     Ok(())
 }
 
-fn create_menu_toml(config: &Config, log: &Logger) -> Result<()> {
+fn create_menu_toml(config: &Config, log: &Logger, examples: Vec<String>) -> Result<()> {
     let menu = config.menu_path();
 
     debug!(log, "creating Menu.toml"; o!("file" => menu.display()));
-    OpenOptions::new().create(true).append(true).open(menu)?;
+    let mut menu = OpenOptions::new().create(true).append(true).open(menu)?;
+    menu.write_all(
+        br#""Getting Started" = [
+    "overview",
+]
+
+"Examples" = [
+"#,
+    ).expect("could not write to Menu.toml");
+
+    for example in examples {
+        menu.write_all(format!("    \"{}\",\n", example).as_bytes())
+            .expect("could not write to Menu.toml");
+    }
+
+    menu.write_all(b"]").expect("could not write to Menu.toml");
 
     Ok(())
 }
 
-fn create_examples(config: &Config, log: &Logger) -> Result<()> {
+fn create_examples(config: &Config, log: &Logger) -> Result<Vec<String>> {
     let examples_dir = config.examples_markdown_path();
     debug!(log, "creating examples dir";
     o!("dir" => examples_dir.display()));
     fs::create_dir_all(&examples_dir)?;
+
+    let mut ids = Vec::new();
 
     if config.examples_path().is_dir() {
         for entry in fs::read_dir(config.examples_path())? {
@@ -112,18 +141,18 @@ fn create_examples(config: &Config, log: &Logger) -> Result<()> {
             trace!(log, "rendering to markdown";
             "file" => path.display(), "file" => markdown_path.display());
             let mut file = File::create(markdown_path)?;
+            let name = file_name.to_str().unwrap();
 
             file.write_all(
                 config
                     .handlebars()
-                    .render(
-                        "example",
-                        &json!({"name": file_name.to_str().unwrap(), "code": code}),
-                    )?
+                    .render("example", &json!({"name": name, "code": code}))?
                     .as_bytes(),
             )?;
+
+            ids.push(name.to_string())
         }
     }
 
-    Ok(())
+    Ok(ids)
 }

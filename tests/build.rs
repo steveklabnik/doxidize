@@ -39,9 +39,13 @@ fn build_renders_readme() {
 
     readme
         .write_all(
-            b"# Testing
+            br#"---
+id = "readme"
+title = "Testing"
+---
+# Testing
 
-testing",
+testing"#,
         )
         .expect("could not write to README");
 
@@ -92,9 +96,13 @@ fn build_renders_additional_markdown_files() {
 
     guide
         .write_all(
-            b"# Testing
+            br#"---
+id = "guide"
+title = "Testing"
+---
+# Testing
 
-testing",
+testing"#,
         )
         .expect("could not write to guide");
 
@@ -149,9 +157,13 @@ fn build_renders_nested_directories() {
 
     guide
         .write_all(
-            b"# Testing
+            br#"---
+id = "guide"
+title = "Testing"
+---
+# Testing
 
-testing",
+testing"#,
         )
         .expect("could not write to guide");
 

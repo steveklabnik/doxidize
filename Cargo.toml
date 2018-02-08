@@ -24,6 +24,7 @@ structopt = "0.1.0"
 structopt-derive = "0.1.0"
 notify = "4.0.3"
 handlebars = "0.30.1"
+slugify = "0.1.0"
 
 [dev-dependencies]
 tempdir = "0.3"

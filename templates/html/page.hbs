@@ -151,29 +151,16 @@ a[aria-expanded="true"]::before {
             </div>
 
             <ul class="list-unstyled components">
+                {{#each menu}}
                 <li>
-                    <a href="#getting-started" data-toggle="collapse" aria-expanded="true">Getting Started</a>
-                    <ul class="list-unstyled show" id="getting-started">
-                        <li><a href="{{up-dir nest-count}}{{ base-url }}index.html">Overview</a></li>
-                        <li><a href="{{up-dir nest-count}}{{ base-url }}getting-started/installation.html">Installation</a></li>
-                        <li><a href="{{up-dir nest-count}}{{ base-url }}getting-started/basic-usage.html">Basic Usage</a></li>
+                    <a href="#{{this.slug}}" data-toggle="collapse" aria-expanded="{{#if @first }}true{{else}}false{{/if}}">{{this.title}}</a>
+                    <ul class="{{#if @first }}show{{else}}collapse{{/if}} list-unstyled" id="{{this.slug}}">
+                    {{#each this.contents}}
+                        <li><a href="{{up-dir ../../nest-count }}{{ base-url }}{{this.target}}">{{this.title}}</a></li>
+                    {{/each}}
                     </ul>
                 </li>
-                <li>
-                    <a href="#guides" data-toggle="collapse" aria-expanded="false">Guides</a>
-                    <ul class="collapse list-unstyled" id="guides">
-                        <li><a href="{{up-dir nest-count}}{{ base-url }}guides/doxidize.html"><code>doxidize</code></a></li>
-                        <li><a href="{{up-dir nest-count}}{{ base-url }}guides/doxidize-build.html"><code>doxidize build</code></a></li>
-                        <li><a href="{{up-dir nest-count}}{{ base-url }}guides/doxidize-serve.html"><code>doxidize serve</code></a></li>
-                        <li><a href="{{up-dir nest-count}}{{ base-url }}guides/doxidize-publish.html"><code>doxidize publish</code></a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#examples" data-toggle="collapse" aria-expanded="false">Examples</a>
-                    <ul class="collapse list-unstyled" id="examples">
-                        <li><a href="{{up-dir nest-count}}{{ base-url }}examples/simple-cli.html"><code>A simple CLI</code></a></li>
-                    </ul>
-                </li>
+                {{/each}}
                 <li>
                     <a href="#api" data-toggle="collapse" aria-expanded="false">API reference</a>
                     <ul class="collapse list-unstyled" id="api">

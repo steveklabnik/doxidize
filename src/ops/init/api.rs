@@ -133,11 +133,11 @@ pub fn create(config: &Config, log: &Logger) -> Result<()> {
             let containing_path = name_to_path(&def.qualname);
             let containing_path = api_dir.join(containing_path);
 
-            info!(log, "creating"; o!("containing_path" => containing_path.display()));
+            debug!(log, "creating"; o!("dir" => containing_path.display()));
             fs::create_dir_all(&containing_path)?;
 
             let markdown_path = containing_path.join(&format!("{}.md", def.name));
-            info!(log, "writing"; o!("markdown_path" => markdown_path.display()));
+            debug!(log, "writing"; o!("file" => markdown_path.display()));
 
             let mut file = File::create(markdown_path)?;
 
