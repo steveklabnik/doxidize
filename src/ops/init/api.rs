@@ -29,9 +29,10 @@ pub fn create(config: &Config, log: &Logger) -> Result<()> {
 
     let roots = host.def_roots()?;
 
-    // we want to keep track of all modules/structs for the module overview page
+    // we want to keep track of all modules/structs/traits for the module overview page
     let mut module_set = HashSet::new();
     let mut struct_set = HashSet::new();
+    let mut trait_set = HashSet::new();
 
     let id = roots.iter().find(|&&(_, ref name)| name == crate_name);
     let root_id = match id {
@@ -111,6 +112,9 @@ pub fn create(config: &Config, log: &Logger) -> Result<()> {
                 }
                 DefKind::Struct => {
                     struct_set.insert(id);
+                }
+                DefKind::Trait => {
+                    trait_set.insert(id);
                 }
                 _ => (),
             }
@@ -264,6 +268,41 @@ pub fn create(config: &Config, log: &Logger) -> Result<()> {
         file.write_all("# Struct overview\n\n".as_bytes())?;
 
         for id in struct_set {
+            let def = host.get_def(id).unwrap();
+
+            let name = if def.name.is_empty() {
+                "doxidize".to_string()
+            } else {
+                def.name
+            };
+
+            // skip the initial crate name
+            let mut path: Vec<_> = def.qualname.split("::").skip(1).collect();
+            // pop off the final bit of the path, as that's the name, not the path itself
+            path.pop();
+
+            // the web uses / for paths, not \ or /
+            let path = path.join("/");
+
+            let url = if path.is_empty() {
+                format!("/api/{}.html", name)
+            } else {
+                format!("/api/{}/{}.html", path, name)
+            };
+
+            file.write_all(format!("* [{}]({})\n", name, url).as_bytes())?
+
+        }
+
+        // trait overview
+
+        let markdown_path = config.api_trait_overview_path();
+
+        let mut file = File::create(markdown_path)?;
+
+        file.write_all("# Trait overview\n\n".as_bytes())?;
+
+        for id in trait_set {
             let def = host.get_def(id).unwrap();
 
             let name = if def.name.is_empty() {
