@@ -6,6 +6,7 @@ use std::fs::{self, File, OpenOptions};
 use std::io::prelude::*;
 
 use Config;
+use error;
 use Result;
 
 pub fn init(config: &Config, log: &Logger) -> Result<()> {
@@ -13,6 +14,8 @@ pub fn init(config: &Config, log: &Logger) -> Result<()> {
     info!(log, "starting");
 
     // this function is huge, so I'm splitting it up
+
+    check_for_existing_docs(config, &log)?;
 
     create_top_level_docs_dir(config, &log)?;
 
@@ -26,6 +29,32 @@ pub fn init(config: &Config, log: &Logger) -> Result<()> {
     api::create(config, &log)?;
 
     info!(log, "done");
+    Ok(())
+}
+
+fn check_for_existing_docs(config: &Config, log: &Logger) -> Result<()> {
+    debug!(log, "checking that this project isn't already initialized"; o!("dir" => config.root_path().display()));
+
+    let doxidize_config = config.config_path();
+
+    if doxidize_config.is_file() {
+        trace!(log, "doxidize config existed");
+        return Err(error::InitializedProject {
+            location: config.root_path().to_path_buf(),
+        }.into());
+    }
+
+    let docs_dir = config.markdown_path();
+
+    if docs_dir.is_dir() {
+        trace!(log, "doc dir existed");
+        return Err(error::InitializedProject {
+            location: config.root_path().to_path_buf(),
+        }.into());
+    }
+
+    debug!(log, "done");
+
     Ok(())
 }
 

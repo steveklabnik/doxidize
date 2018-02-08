@@ -43,3 +43,19 @@ impl fmt::Display for UninitializedProject {
         write!(f, "Package at {} doesn't look like it's ready for doxidize; consider `doxidize init` instead of `doxidize build`", self.location.display())
     }
 }
+
+/// An error for the init command; if the project was already initialized, don't do it again
+#[derive(Debug, Fail)]
+pub struct InitializedProject {
+    /// the path for the project that was initialized
+    pub location: PathBuf,
+}
+
+// we have to impl Display manually for InitializedProject because we want to
+// call .display() on the PathBuf, but that has a lifetime parameter, so the
+// attribute doesn't work.
+impl fmt::Display for InitializedProject {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Package at {} looks like it's already using doxidize; remove the docs directory and/or Doxidize.toml and try again", self.location.display())
+    }
+}
