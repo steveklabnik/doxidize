@@ -230,6 +230,10 @@ impl Config {
         self.api_markdown_path().join("module-overview.md")
     }
 
+    pub fn api_struct_overview_path(&self) -> PathBuf {
+        self.api_markdown_path().join("struct-overview.md")
+    }
+
     pub fn manifest_path(&self) -> &Path {
         &self.manifest_path
     }
