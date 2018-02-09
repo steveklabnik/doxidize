@@ -154,7 +154,7 @@ pub fn create(config: &Config, log: &Logger) -> Result<()> {
                     .handlebars()
                     .render(
                         template_name,
-                        &json!({"name": def.name, "docs": strip_leading_space(&def.docs)}),
+                        &json!({"name": def.name, "docs": strip_leading_space(&def.docs), "signature": def.value}),
                     )?
                     .as_bytes(),
             )?;
