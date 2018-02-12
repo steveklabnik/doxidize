@@ -237,15 +237,24 @@ blockquote p {
         </nav>
 
         <div id="content">
-            <h1>function <code>strip_leading_space</code></h1>
-<pre><code class="language-rust">fn (s: &amp;str) -&gt; String
+            <h1>Building your docs</h1>
+<p>The <code>doxidize build</code> command takes the markdown files you've written in
+<code>docs/</code> and produces web-based documentation inside of <code>target/docs</code>.</p>
+<p>To do so:</p>
+<pre><code class="language-shell">$ doxidize build
 </code></pre>
-<p>this removes the first space from each line of its input.</p>
-<p>this is useful because doc comments geneerally look like this:</p>
-<pre><code class="language-text">/// some words
-</code></pre>
-<p>see that space before <code>some</code>? it's technically part of the comment,
-so the RLS will give it to us in the docs.</p>
+<hr />
+<p>When you invoke <code>doxidize build</code>, here's what happens:</p>
+<p>First, it makes sure that you have a top-level <code>docs</code> directory at all! If you
+don't, it will produce an error.</p>
+<p>Next, it creates the output directory inside of <code>target/docs</code>. If you've configured
+Doxidize to have a base url, this will be taken into account and generate a
+subdirectory.</p>
+<p>After that, it will scan the <code>docs</code> directory, processing all of the metadata at
+the top of each file. It then uses this metadata plus the contents of your
+<code>Menu.toml</code> to generate the sidebar.</p>
+<p>Finally, it will go through each file, generating the appropriate <code>.html</code> file
+that it would correspond to.</p>
 
         </div>
     </div>

@@ -237,15 +237,17 @@ blockquote p {
         </nav>
 
         <div id="content">
-            <h1>function <code>strip_leading_space</code></h1>
-<pre><code class="language-rust">fn (s: &amp;str) -&gt; String
+            <h1>Cleaning up your generated documentation</h1>
+<p>The <code>doxidize clean</code> command removes all of the generated documentation
+from <code>target/docs</code>.</p>
+<p>To do so:</p>
+<pre><code class="language-shell">$ doxidize clean
 </code></pre>
-<p>this removes the first space from each line of its input.</p>
-<p>this is useful because doc comments geneerally look like this:</p>
-<pre><code class="language-text">/// some words
-</code></pre>
-<p>see that space before <code>some</code>? it's technically part of the comment,
-so the RLS will give it to us in the docs.</p>
+<hr />
+<p>When you invoke <code>doxidize clean</code>, here's what happens:</p>
+<p>It deletes the <code>target/docs</code> directory. While this seems straightforward,
+note that there's <a href="https://github.com/steveklabnik/doxidize/issues/61">at least one bug</a>
+in the current implementation.</p>
 
         </div>
     </div>

@@ -237,15 +237,22 @@ blockquote p {
         </nav>
 
         <div id="content">
-            <h1>function <code>strip_leading_space</code></h1>
-<pre><code class="language-rust">fn (s: &amp;str) -&gt; String
+            <h1>Previewing your docs</h1>
+<p>The <code>doxidize serve</code> command takes the markdown files you've generated
+with <code>doxidize build</code> and serve them with a local web server, so that
+you can see what they will look like once published.</p>
+<p>To do so:</p>
+<pre><code class="language-shell">$ doxidize serve
 </code></pre>
-<p>this removes the first space from each line of its input.</p>
-<p>this is useful because doc comments geneerally look like this:</p>
-<pre><code class="language-text">/// some words
-</code></pre>
-<p>see that space before <code>some</code>? it's technically part of the comment,
-so the RLS will give it to us in the docs.</p>
+<hr />
+<p>When you invoke <code>doxidize serve</code>, here's what happens:</p>
+<p>First, it will spin up a background thread to watch the contents of
+your <code>docs</code> directory. If anything changes, it will invoke <code>doxidize build</code>
+in the background, so a refresh will give you nice new docs!</p>
+<p>Second, it will start a web server, serving the contents of <code>target/docs</code>.
+If you have set a <code>base-url</code>, it will be respected.</p>
+<p>Then, it will print the URL it's serving to the terminal, so you can
+copy/paste it into a web browser and view your docs!</p>
 
         </div>
     </div>

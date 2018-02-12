@@ -237,15 +237,28 @@ blockquote p {
         </nav>
 
         <div id="content">
-            <h1>function <code>strip_leading_space</code></h1>
-<pre><code class="language-rust">fn (s: &amp;str) -&gt; String
+            <h1>Initializing a project</h1>
+<p>The <code>doxidize init</code> command sets up your project for use with Doxidize.</p>
+<p>To do so:</p>
+<pre><code class="language-shell">$ doxidize init
 </code></pre>
-<p>this removes the first space from each line of its input.</p>
-<p>this is useful because doc comments geneerally look like this:</p>
-<pre><code class="language-text">/// some words
-</code></pre>
-<p>see that space before <code>some</code>? it's technically part of the comment,
-so the RLS will give it to us in the docs.</p>
+<hr />
+<p>When you invoke <code>doxidize init</code>, here's what happens:</p>
+<p>First, it makes sure that you haven't already initialized a project;
+that would be an error!</p>
+<p>Next, it creates the top-level <code>docs/</code> directory, as well as a
+<code>docs/README.md</code> file.</p>
+<p>Then, it creates a <code>Doxidize.toml</code> at the root of your project.
+This will be empty.</p>
+<p>Next, it will copy each of your examples over into the <code>docs/examples/</code>
+directory.</p>
+<p>Once that's done, it knows enough info to build an initial <code>Menu.toml</code>,
+containing the files it's generated so far.</p>
+<p>Finally, it will analyze your source code. To do this, it invokes <code>cargo check</code>
+with some special flags. It will then load up the result of the compilation,
+and use that to generate API docs inside of the <code>docs/api</code> directory. It'll
+include any docs that you have previously written in documentation comments.</p>
+<p>Your project is ready to be documented!</p>
 
         </div>
     </div>

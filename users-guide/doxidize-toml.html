@@ -237,15 +237,21 @@ blockquote p {
         </nav>
 
         <div id="content">
-            <h1>function <code>strip_leading_space</code></h1>
-<pre><code class="language-rust">fn (s: &amp;str) -&gt; String
+            <h1>Doxidize.toml</h1>
+<p>This page describes the format of <code>Doxidize.toml</code>, a top-level configuration
+file for customozing how Doxidize generates your documentation.</p>
+<p>At the moment, there is only one setting, and it is optional. By default,
+your <code>Doxidize.toml</code> will be empty.</p>
+<h2><code>base-url</code></h2>
+<p>By default, links will be generated relative to the root, that is, <code>/</code>, in
+the web version of your documentation. By setting the <code>base-url</code>, you can
+instead have your documentation relative to whatever path you set.</p>
+<pre><code class="language-rust">[docs]
+base-url = &quot;foo&quot;
 </code></pre>
-<p>this removes the first space from each line of its input.</p>
-<p>this is useful because doc comments geneerally look like this:</p>
-<pre><code class="language-text">/// some words
-</code></pre>
-<p>see that space before <code>some</code>? it's technically part of the comment,
-so the RLS will give it to us in the docs.</p>
+<p>Now, all links will be rooted by <code>/foo</code> instead of <code>/</code>.</p>
+<p>This option is most useful when deploying to GitHub Pages with <code>doxidize publish</code>;
+their URLs are relative to a path that's the same name as your project.</p>
 
         </div>
     </div>

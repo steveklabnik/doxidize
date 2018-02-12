@@ -237,20 +237,109 @@ blockquote p {
         </nav>
 
         <div id="content">
-            <h1>Overview</h1>
-<p>Welcome to the documentation for Doxidize, a new tool for writing documentation
-for your Rust projects.</p>
-<p>Doxidize is a &quot;documentation compiler.&quot; It takes in your code, and produces
-documentation. It does this via a two step process: First, Doxidize compiles
-your code to Markdown files, and then compiles that Markdown to web-based
-documentation. This makes it different than <code>rustdoc</code>, the official Rust
-documentation tool, which takes your source code and produces documentation
-from it directly.</p>
-<p>This project is inspired heavily by Facebook's <a href="https://docusaurus.io/">Docusaurus</a> tool. In some ways,
-you can think of Doxidize as &quot;Docusaurus for Rust,&quot; with close integration with
-Rust as a language giving it the ability to have more features.</p>
-<p>To get started with Doxidize, check out the &quot;Quickstart&quot; or &quot;User's Guide&quot;
-sections in the sidebar.</p>
+            <h1>Quickstart</h1>
+<p>To get started with Doxidize, install it from <code>crates.io</code>:</p>
+<pre><code class="language-shell">$ cargo install doxidize
+</code></pre>
+<h2>Initialization</h2>
+<p>Then, run the <code>init</code> command inside of the project you'd like
+to document:</p>
+<pre><code class="language-shell">$ cd /path/to/my/project
+$ doxidize init
+</code></pre>
+<p>This will create two things at the top-level of your project:</p>
+<ul>
+<li><code>Doxidize.toml</code>, used for configuration</li>
+<li><code>docs/</code>, where your documentation lives.</li>
+</ul>
+<p>Let's look inside of <code>docs/</code>:</p>
+<pre><code class="language-shell">$ tree docs
+docs
+ └── api
+     └── ...
+ └── examples
+     └── ...
+ └── Menu.toml
+ └── README.md
+</code></pre>
+<p>First, the <code>api</code> directory. Doxidize generates these files from your source
+code, and even includes the documentation that you've written with documentation
+comments. It also generates a few overview pages. This directory is generally
+considered to be controlled by Doxidize itself, and so while you can edit these
+files to write documentation, if you rename or move files around, it may get
+confused. For more details here, consult the Users Guide.</p>
+<p>Second, the <code>examples</code> directory contains a copy of each example program
+you've included in <code>examples</code>. Feel free to annotate these examples however
+you'd like, including splitting up their source code to interleave comments.</p>
+<p>Next, we have <code>Menu.toml</code>. Let's take a look:</p>
+<pre><code class="language-toml">&quot;Getting Started&quot; = [
+    &quot;overview&quot;,
+]
+
+&quot;Examples&quot; = [
+    # ...
+]
+</code></pre>
+<p>This file allows you to control the sidebar of your documentation. Each section
+becomes a drop-down, with the contents you've listed here. By default, we generate
+two sections: named &quot;Getting Started,&quot; with an overview, and one named &quot;Examples&quot;,
+containing your examples. Note that &quot;API&quot; is not listed here, as Doxidize handles
+organizing that itself.</p>
+<p>What is <code>overview</code> here, anyway? To answer that, let's look at our last file:
+<code>README.md</code></p>
+<pre><code class="language-text">---
+id = &quot;overview&quot;
+title = &quot;Overview&quot;
+---
+# Overview
+</code></pre>
+<p>This markdown file has a TOML heading, written between the <code>---</code>s. This is
+the way you can communicate metadata about the file to Doxidize. The first
+bit we've got here is called <code>id</code>, and corresponds to the name we use to
+link to this page in <code>Menu.toml</code>. The second is the title, which controls how
+it's displayed in the menu. After that, comes the body itself, which has nothing
+but a header to start with.</p>
+<p>At this point, feel free to edit up some pages, create new ones and put them
+in <code>Menu.toml</code>, or whatever else! We're not going to get into those details in
+this Quickstart, see the User's Guide for more details here.</p>
+<h2>Building your docs</h2>
+<p>Now that we've looked at our Markdown, let's turn those into web docs!</p>
+<pre><code class="language-shell">$ doxidize build
+</code></pre>
+<p>This will write out the files inside of the <code>target/docs</code> directory. Let's
+take a look!</p>
+<h2>Previewing your docs in a browser</h2>
+<p>To view our docs, we could open them in a browser directly. Doxidize also
+includes a basic web server as well:</p>
+<pre><code class="language-shell">$ doxidize serve
+</code></pre>
+<p>It will print out the URL you need to open in your browser. Load that up,
+and you should see your docs!</p>
+<p>To quit the server, type <code>control-c</code>.</p>
+<h2>Publishing your docs to GitHub Pages</h2>
+<p>Doxidize provides an easy way to publish your docs to GitHub pages, but
+before that, let's talk about URLs. By default, your docs are located at
+the site's root, that is, <code>/</code>. But GitHub Pages is usually served in a
+subdirectory. Consider Doxidize's own documentation:</p>
+<pre><code>https://steveklabnik.github.io/doxidize/index.html
+</code></pre>
+<p>See that <code>doxidize</code>? We want any links in our docs to include this base.
+To do that, add this to your <code>Doxidize.toml</code>:</p>
+<pre><code class="language-toml">[docs]
+base-url = &quot;doxidize&quot;
+</code></pre>
+<p>Well, you'd want to name it the name of your project, not literally &quot;doxidize&quot;!</p>
+<p>After doing this, re-build your docs:</p>
+<pre><code class="language-shell">$ doxidize build
+</code></pre>
+<p>And then you can publish them:</p>
+<pre><code class="language-shell">$ doxidize publish
+</code></pre>
+<p>This will create a git repo inside your generated docs, commit them to a <code>gh-pages</code>
+branch, and push it up to GitHub.</p>
+<h2>Learning More</h2>
+<p>This is a very brief overview of Doxidize; to learn more about these steps in
+detail, please consult the User's Guide.</p>
 
         </div>
     </div>

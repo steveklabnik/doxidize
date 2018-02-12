@@ -237,15 +237,21 @@ blockquote p {
         </nav>
 
         <div id="content">
-            <h1>function <code>strip_leading_space</code></h1>
-<pre><code class="language-rust">fn (s: &amp;str) -&gt; String
+            <h1>Publishing your docs to GitHub Pages</h1>
+<p>The <code>doxidize publish</code> command takes the markdown files you've generated
+with <code>doxidize build</code> and publish them to GitHub pages.</p>
+<p>To do so:</p>
+<pre><code class="language-shell">$ doxidize publish
 </code></pre>
-<p>this removes the first space from each line of its input.</p>
-<p>this is useful because doc comments geneerally look like this:</p>
-<pre><code class="language-text">/// some words
-</code></pre>
-<p>see that space before <code>some</code>? it's technically part of the comment,
-so the RLS will give it to us in the docs.</p>
+<hr />
+<p>When you invoke <code>doxidize publish</code>, here's what happens:</p>
+<p>First, it will load up <code>Doxidize.toml</code> to see if you've set a <code>base-url</code>. It
+needs that to do its job properly! Especially with GitHub Pages.</p>
+<p>Then, it will create a new <code>git</code> repository inside of the generated docs,
+<code>git add</code> all of the files, then <code>git commit</code> them.</p>
+<p>Finally, it will push that commit to a <code>gh-pages</code> branch inside of your
+main git repository, and then finally <code>git push origin gh-pages</code>.</p>
+<p>Your docs should now be live!</p>
 
         </div>
     </div>
