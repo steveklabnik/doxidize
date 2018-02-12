@@ -16,6 +16,7 @@
     "clean",
     "doxidize-toml",
     "menu-toml",
+    "flags",
 ]
 
 "Examples" = [
