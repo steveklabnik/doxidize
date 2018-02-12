@@ -29,7 +29,7 @@ pub fn publish(config: &Config, log: &Logger) -> Result<()> {
         .unwrap_or_default()
         .to_string();
 
-    let mut target_dir = config.output_path();
+    let mut target_dir = config.output_path().join("public");
 
     if !base_url.is_empty() {
         target_dir.push(&base_url)
