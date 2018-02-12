@@ -4,6 +4,8 @@ title = "simple-cli.rs"
 ---
 # simple-cli.rs
 
+This is a simple example of building a command line on top of Doxidize.
+
 ```
 extern crate doxidize;
 

@@ -1,5 +1,12 @@
 "Getting Started" = [
     "overview",
+    "quickstart",
+    "for-contributors",
+    "design-guide",
+]
+
+"User's Guide" = [
+    "introduction"
 ]
 
 "Examples" = [
