@@ -1,12 +1,21 @@
 "Getting Started" = [
     "overview",
+    "status",
     "quickstart",
     "for-contributors",
     "design-guide",
 ]
 
 "User's Guide" = [
-    "introduction"
+    "introduction",
+    "workflow",
+    "init",
+    "build",
+    "serve",
+    "publish",
+    "clean",
+    "doxidize-toml",
+    "menu-toml",
 ]
 
 "Examples" = [
