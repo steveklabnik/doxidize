@@ -291,7 +291,6 @@ pub fn create(config: &Config, log: &Logger) -> Result<()> {
             };
 
             file.write_all(format!("* [{}]({})\n", name, url).as_bytes())?
-
         }
 
         // trait overview
@@ -326,7 +325,6 @@ pub fn create(config: &Config, log: &Logger) -> Result<()> {
             };
 
             file.write_all(format!("* [{}]({})\n", name, url).as_bytes())?
-
         }
 
         info!(log, "done");
