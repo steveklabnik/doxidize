@@ -246,7 +246,7 @@ fn collect_files_to_process(config: &Config, log: &Logger) -> Result<Vec<DocMark
 
         let title = doc["title"]
             .as_str()
-            .expect("id must be a string")
+            .expect("title must be a string")
             .to_string();
 
         // we certainly have a file name, since we're looping over real files
