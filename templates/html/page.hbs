@@ -156,7 +156,7 @@ a[aria-expanded="true"]::before {
                     <a href="#{{this.slug}}" data-toggle="collapse" aria-expanded="{{#if @first }}true{{else}}false{{/if}}">{{this.title}}</a>
                     <ul class="{{#if @first }}show{{else}}collapse{{/if}} list-unstyled" id="{{this.slug}}">
                     {{#each this.contents}}
-                        <li><a href="{{up-dir ../../nest-count }}{{ base-url }}{{this.target}}">{{this.title}}</a></li>
+                        <li><a href="{{up-dir ../../nest-count }}{{ ../../base-url }}{{this.target}}">{{this.title}}</a></li>
                     {{/each}}
                     </ul>
                 </li>
