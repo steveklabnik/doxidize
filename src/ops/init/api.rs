@@ -214,7 +214,13 @@ pub fn create(config: &Config, log: &Logger) -> Result<()> {
 
         file.write_all("# Module overview\n\n".as_bytes())?;
 
-        fn print_tree(node: &Module, depth: usize, host: &analysis::AnalysisHost, file: &mut File) {
+        fn print_tree(
+            node: &Module,
+            depth: usize,
+            host: &analysis::AnalysisHost,
+            file: &mut File,
+            config: &Config,
+        ) {
             let def = host.get_def(node.id).unwrap();
 
             let name = if def.name.is_empty() {
@@ -230,11 +236,16 @@ pub fn create(config: &Config, log: &Logger) -> Result<()> {
 
             // the web uses / for paths, not \ or /
             let path = path.join("/");
+            let base_url = if config.base_url().is_empty() {
+                String::new()
+            } else {
+                format!("/{}", config.base_url())
+            };
 
             let url = if path.is_empty() {
-                format!("/api/{}.html", name)
+                format!("{}/api/{}.html", base_url, name)
             } else {
-                format!("/api/{}/{}.html", path, name)
+                format!("{}/api/{}/{}.html", base_url, path, name)
             };
 
             let line = format!(
@@ -253,11 +264,11 @@ pub fn create(config: &Config, log: &Logger) -> Result<()> {
             }
 
             for child in &node.children {
-                print_tree(child, depth + 1, host, file);
+                print_tree(child, depth + 1, host, file, config);
             }
         }
 
-        print_tree(&krate, 0, &host, &mut file);
+        print_tree(&krate, 0, &host, &mut file, config);
 
         // struct overview
 
