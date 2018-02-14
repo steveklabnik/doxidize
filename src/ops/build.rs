@@ -8,6 +8,7 @@ use walkdir::{DirEntry, WalkDir};
 use std::fs::{self, File};
 use std::io::prelude::*;
 
+use cargo;
 use config::Config;
 use error;
 use Result;
@@ -46,6 +47,9 @@ pub fn build(config: &Config, log: &Logger) -> Result<()> {
         base_nesting_count += 1;
         target_dir.push(config.base_url());
     }
+
+    let metadata = cargo::retrieve_metadata(config.manifest_path())?;
+    let target = cargo::target_from_metadata(&log, &metadata)?;
 
     debug!(log, "creating target directory";
     "dir" => target_dir.display());
@@ -122,7 +126,14 @@ pub fn build(config: &Config, log: &Logger) -> Result<()> {
                 .handlebars()
                 .render(
                     "page",
-                    &json!({"contents": rendered_contents, "nest-count": nesting_count, "base-url": base_url, "menu": menu}),
+                    &json!({
+                        "contents": rendered_contents,
+                        "nest-count": nesting_count,
+                        "base-url": base_url,
+                        "menu": menu,
+                        "title": doc_markdown.title.clone(),
+                        "site-title": target.name.clone()
+                    }),
                 )?
                 .as_bytes(),
         )?;
