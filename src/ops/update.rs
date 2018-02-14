@@ -29,7 +29,9 @@ pub fn update(config: &Config, log: &Logger) -> Result<()> {
 
     let mut existing_files = HashSet::new();
 
-    for entry in WalkDir::new(api_dir).into_iter().filter_entry(|e| e.path().extension() == Some("md".as_ref())) {
+    for entry in WalkDir::new(api_dir).min_depth(1).into_iter()
+        .filter_entry(|e| e.path().extension() == Some("md".as_ref()) || e.file_type().is_dir())
+    {
         existing_files.insert(entry?.path().to_path_buf());
     }
 
