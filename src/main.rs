@@ -38,6 +38,8 @@ enum Command {
     Serve,
     #[structopt(name = "init")]
     Init,
+    #[structopt(name = "update")]
+    Update,
 }
 
 fn main() {
@@ -68,6 +70,7 @@ fn main() {
                 &Command::Publish => doxidize::ops::publish(&config, &log),
                 &Command::Serve => doxidize::ops::serve(config, &log),
                 &Command::Init => doxidize::ops::init(&config, &log),
+                &Command::Update => doxidize::ops::update(&config, &log),
             }
         }
         _ => {

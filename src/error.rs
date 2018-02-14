@@ -33,6 +33,8 @@ pub struct Json {
 pub struct UninitializedProject {
     /// the path for the project that wasn't initialized
     pub location: PathBuf,
+    /// The subcommand that failed; used in the error display
+    pub command: &'static str,
 }
 
 // we have to impl Display manually for UninitializedProject because we want to
@@ -40,7 +42,7 @@ pub struct UninitializedProject {
 // attribute doesn't work.
 impl fmt::Display for UninitializedProject {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Package at {} doesn't look like it's ready for doxidize; consider `doxidize init` instead of `doxidize build`", self.location.display())
+        write!(f, "Package at {} doesn't look like it's ready for doxidize; consider `doxidize init` instead of `doxidize {}`", self.location.display(), self.command)
     }
 }
 

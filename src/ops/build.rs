@@ -31,6 +31,7 @@ pub fn build(config: &Config, log: &Logger) -> Result<()> {
     if !docs_dir.is_dir() {
         return Err(error::UninitializedProject {
             location: config.root_path().to_path_buf(),
+            command: "build",
         }.into());
     }
 
