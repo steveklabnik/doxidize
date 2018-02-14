@@ -303,11 +303,16 @@ pub fn create(config: &Config, log: &Logger) -> Result<HashSet<PathBuf>> {
 
             // the web uses / for paths, not \ or /
             let path = path.join("/");
+            let base_url = if config.base_url().is_empty() {
+                String::from("")
+            } else {
+                format!("/{}", config.base_url())
+            };
 
             let url = if path.is_empty() {
-                format!("/api/{}.html", name)
+                format!("{}/api/{}.html", base_url, name)
             } else {
-                format!("/api/{}/{}.html", path, name)
+                format!("{}/api/{}/{}.html", base_url, path, name)
             };
 
             file.write_all(format!("* [{}]({})\n", name, url).as_bytes())?
@@ -338,11 +343,16 @@ pub fn create(config: &Config, log: &Logger) -> Result<HashSet<PathBuf>> {
 
             // the web uses / for paths, not \ or /
             let path = path.join("/");
+            let base_url = if config.base_url().is_empty() {
+                String::from("")
+            } else {
+                format!("/{}", config.base_url())
+            };
 
             let url = if path.is_empty() {
-                format!("/api/{}.html", name)
+                format!("{}/api/{}.html", base_url, name)
             } else {
-                format!("/api/{}/{}.html", path, name)
+                format!("{}/api/{}/{}.html", base_url, path, name)
             };
 
             file.write_all(format!("* [{}]({})\n", name, url).as_bytes())?
