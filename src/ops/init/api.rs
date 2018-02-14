@@ -12,7 +12,7 @@ use Config;
 use Result;
 use strip_leading_space;
 
-pub fn create(config: &Config, log: &Logger) -> Result<()> {
+pub fn create(config: &Config, log: &Logger) -> Result<HashSet<PathBuf>> {
     // ensure that the api dir exists
     let api_dir = config.api_markdown_path();
     debug!(log, "creating api dir";
@@ -34,6 +34,10 @@ pub fn create(config: &Config, log: &Logger) -> Result<()> {
     let mut struct_set = HashSet::new();
     let mut trait_set = HashSet::new();
 
+    // we also want to track the files/folders that we created so that `update` can clean up what
+    // was left
+    let mut file_set = HashSet::new();
+
     let id = roots.iter().find(|&&(_, ref name)| name == crate_name);
     let root_id = match id {
         Some(&(id, _)) => id,
@@ -50,6 +54,7 @@ pub fn create(config: &Config, log: &Logger) -> Result<()> {
 
     debug!(log, "creating README.md for api";
     o!("file" => markdown_path.display()));
+    file_set.insert(markdown_path.clone());
     let mut file = File::create(markdown_path)?;
 
     file.write_all(
@@ -143,8 +148,10 @@ pub fn create(config: &Config, log: &Logger) -> Result<()> {
 
             debug!(log, "creating"; o!("dir" => containing_path.display()));
             fs::create_dir_all(&containing_path)?;
+            file_set.insert(containing_path.clone());
 
             let markdown_path = containing_path.join(&format!("{}.md", def.name));
+            file_set.insert(markdown_path.clone());
             debug!(log, "writing"; o!("file" => markdown_path.display()));
 
             let mut file = File::create(markdown_path)?;
@@ -210,6 +217,7 @@ pub fn create(config: &Config, log: &Logger) -> Result<()> {
 
         let markdown_path = config.api_module_overview_path();
 
+        file_set.insert(markdown_path.clone());
         let mut file = File::create(markdown_path)?;
 
         file.write_all("# Module overview\n\n".as_bytes())?;
@@ -263,6 +271,7 @@ pub fn create(config: &Config, log: &Logger) -> Result<()> {
 
         let markdown_path = config.api_struct_overview_path();
 
+        file_set.insert(markdown_path.clone());
         let mut file = File::create(markdown_path)?;
 
         file.write_all("# Struct overview\n\n".as_bytes())?;
@@ -297,6 +306,7 @@ pub fn create(config: &Config, log: &Logger) -> Result<()> {
 
         let markdown_path = config.api_trait_overview_path();
 
+        file_set.insert(markdown_path.clone());
         let mut file = File::create(markdown_path)?;
 
         file.write_all("# Trait overview\n\n".as_bytes())?;
@@ -330,7 +340,7 @@ pub fn create(config: &Config, log: &Logger) -> Result<()> {
         info!(log, "done");
     }
 
-    Ok(())
+    Ok(file_set)
 }
 
 fn name_to_path(name: &str) -> PathBuf {
