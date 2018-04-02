@@ -36,4 +36,3 @@ version = "2.1.1"
 
 [dependencies.simple-server]
 git = "https://github.com/steveklabnik/simple-server"
-branch = "gh96"
