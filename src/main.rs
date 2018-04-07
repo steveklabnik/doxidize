@@ -64,13 +64,13 @@ fn main() {
     let result = match opts {
         Opt { ref command, .. } if command.is_some() => {
             // we just checked that it's Some
-            match command.as_ref().unwrap() {
-                &Command::Build => doxidize::ops::build(&config, &log),
-                &Command::Clean => doxidize::ops::clean(&config, &log),
-                &Command::Publish => doxidize::ops::publish(&config, &log),
-                &Command::Serve => doxidize::ops::serve(config, &log),
-                &Command::Init => doxidize::ops::init(&config, &log),
-                &Command::Update => doxidize::ops::update(&config, &log),
+            match *command.as_ref().unwrap() {
+                Command::Build => doxidize::ops::build(&config, &log),
+                Command::Clean => doxidize::ops::clean(&config, &log),
+                Command::Publish => doxidize::ops::publish(&config, &log),
+                Command::Serve => doxidize::ops::serve(config, &log),
+                Command::Init => doxidize::ops::init(&config, &log),
+                Command::Update => doxidize::ops::update(&config, &log),
             }
         }
         _ => {
