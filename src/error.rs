@@ -28,7 +28,7 @@ pub struct Json {
     pub location: String,
 }
 
-/// An error when a command is run on a project that wasn't initalized for use with Doxidize.
+/// An error when a command is run on a project that wasn't initialized for use with Doxidize.
 #[derive(Debug, Fail)]
 pub struct UninitializedProject {
     /// the path for the project that wasn't initialized

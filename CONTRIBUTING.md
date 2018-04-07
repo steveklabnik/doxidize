@@ -60,7 +60,7 @@ We have several tags for issues:
   **blocked on upstream** by the team.
 * **bug** issues track something Doxidize isn't doing correctly. A great
   **bug** report explains what the problem is, how to reproduce it, and any
-  relevant environemnt issues. If you're filing a **bug** and you're not
+  relevant environment issues. If you're filing a **bug** and you're not
   sure what to include, don't stress out! Include what you think is useful,
   and we may tag it as a **question** if we need more information from you.
 * **duplicate** issues are tagged and closed, with a message explaining what
@@ -75,7 +75,7 @@ We have several tags for issues:
   before, might be a good place to start. Working on one of these issues as
   your first issue is not required, but if you'd like to help out and don't
   know where to look, this might give you some ideas. Any issue with this
-  tag should contain resonably detailed instructions on how to complete
+  tag should contain reasonably detailed instructions on how to complete
   the issue.
 * **help wanted** are issues that the team would like help with. We'll help
   answer any questions you might have. If you've got your eyes on a ticket
@@ -232,4 +232,4 @@ join!
 
 If you're on the team, and you don't have time for Doxidize anymore, don't
 stress out: life happens! If you've been gone for quite a while, we may
-decide to remove you. You can alawys re-join when you have the time.
+decide to remove you. You can always re-join when you have the time.

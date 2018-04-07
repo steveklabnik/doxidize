@@ -16,7 +16,7 @@ use structopt::StructOpt;
 use doxidize::Config;
 
 #[derive(StructOpt, Debug)]
-#[structopt(name = "doxidize", about = "Execllent documentation tooling for Rust")]
+#[structopt(name = "doxidize", about = "Excellent documentation tooling for Rust")]
 struct Opt {
     #[structopt(subcommand)]
     command: Option<Command>,

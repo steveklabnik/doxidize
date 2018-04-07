@@ -1,5 +1,5 @@
 // the following feature flag is used for one tiny thing, and we can get rid of it if we need to
-// however i'm already on nightly, this is getting stabilized soonish, so let's just :shipit:
+// however I'm already on nightly, this is getting stabilized soonish, so let's just :shipit:
 #![feature(nll)]
 
 extern crate comrak;
@@ -40,7 +40,7 @@ type Result<T> = std::result::Result<T, Error>;
 
 /// this removes the first space from each line of its input.
 ///
-/// this is useful because doc comments geneerally look like this:
+/// this is useful because doc comments generally look like this:
 ///
 /// ```text
 /// /// some words

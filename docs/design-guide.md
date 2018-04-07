@@ -33,7 +33,7 @@ This meant keeping them vaguely consistent was very tough.
 
 [Docusaurus]: https://docusaurus.io/
 
-The bottom of their page contains these three testimonals. While reading them,
+The bottom of their page contains these three testimonials. While reading them,
 I couldn't help but think of Rust:
 
 > I've helped open source many projects at Facebook and every one needed a

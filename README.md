@@ -30,7 +30,7 @@ And then view the docs in your web browser.
 We'd love your help! To learn more about contributing to Doxidize, please
 check out `CONTRIBUTING.md`.
 
-Two more things woth calling out here: this project abides by Rust's Code of
+Two more things worth calling out here: this project abides by Rust's Code of
 Conduct (`CODE_OF_CONDUCT.md`), and is dual licensed under both the MIT
 (LICENSE-MIT) and Apache2 (LICENSE-APACHE) licenses. No CLA or copyright
 attribute is required, nor accepted.
