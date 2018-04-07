@@ -150,7 +150,7 @@ pub fn target_from_metadata(log: &Logger, metadata: &serde_json::Value) -> Resul
         .collect::<Result<Vec<_>>>()?;
 
     if targets.is_empty() {
-        return Err(failure::err_msg("no targets with supported kinds (`bin`, `lib`) found").into());
+        return Err(failure::err_msg("no targets with supported kinds (`bin`, `lib`) found"));
     } else if targets.len() == 1 {
         Ok(targets.remove(0))
     } else {
