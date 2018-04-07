@@ -132,7 +132,7 @@ dependencies = [
  "entities 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "lazy_static 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pest 1.0.3 (registry+https://github.com/rust-lang/crates.io-index)",
- "pest_derive 1.0.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "pest_derive 1.0.7 (registry+https://github.com/rust-lang/crates.io-index)",
  "regex 0.2.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "twoway 0.1.7 (registry+https://github.com/rust-lang/crates.io-index)",
  "typed-arena 1.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -295,7 +295,7 @@ dependencies = [
  "lazy_static 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "pest 1.0.3 (registry+https://github.com/rust-lang/crates.io-index)",
- "pest_derive 1.0.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "pest_derive 1.0.7 (registry+https://github.com/rust-lang/crates.io-index)",
  "quick-error 1.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "regex 0.2.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.27 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -522,7 +522,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "pest_derive"
-version = "1.0.3"
+version = "1.0.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "pest 1.0.3 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1045,7 +1045,7 @@ dependencies = [
 "checksum num-traits 0.1.42 (registry+https://github.com/rust-lang/crates.io-index)" = "9936036cc70fe4a8b2d338ab665900323290efb03983c86cbe235ae800ad8017"
 "checksum num_cpus 1.8.0 (registry+https://github.com/rust-lang/crates.io-index)" = "c51a3322e4bca9d212ad9a158a02abc6934d005490c054a2778df73a70aa0a30"
 "checksum pest 1.0.3 (registry+https://github.com/rust-lang/crates.io-index)" = "e1117ca38a751edc66a4cd9ca1b35644b7d00305971306e07e0d3befbc61e906"
-"checksum pest_derive 1.0.3 (registry+https://github.com/rust-lang/crates.io-index)" = "1debf85717cb8fa6bf2aad21fbbe888fda5797aae22d332cefec9ba79b6c7a33"
+"checksum pest_derive 1.0.7 (registry+https://github.com/rust-lang/crates.io-index)" = "ab94faafeb93f4c5e3ce81ca0e5a779529a602ad5d09ae6d21996bfb8b6a52bf"
 "checksum quick-error 1.2.1 (registry+https://github.com/rust-lang/crates.io-index)" = "eda5fe9b71976e62bc81b781206aaa076401769b2143379d3eb2118388babac4"
 "checksum quote 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)" = "7a6e920b65c65f10b2ae65c831a81a073a89edd28c7cce89475bff467ab4167a"
 "checksum radix_trie 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)" = "211c49b6a9995cac0fd1dd9ca60b42cf3a51e151a12eb954b3a9e75513426ee8"
