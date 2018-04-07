@@ -123,7 +123,7 @@ fn default_handlebars() -> Handlebars {
                 let count = h.param(0).map(|v| v.value().as_u64().unwrap()).unwrap();
 
                 for _ in 0..count {
-                    rc.writer.write(b"../")?;
+                    rc.writer.write_all(b"../")?;
                 }
 
                 Ok(())
