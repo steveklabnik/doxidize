@@ -220,7 +220,7 @@ pub fn create(config: &Config, log: &Logger) -> Result<HashSet<PathBuf>> {
         file_set.insert(markdown_path.clone());
         let mut file = File::create(markdown_path)?;
 
-        file.write_all("# Module overview\n\n".as_bytes())?;
+        file.write_all(b"# Module overview\n\n")?;
 
         fn print_tree(
             node: &Module,
@@ -285,7 +285,7 @@ pub fn create(config: &Config, log: &Logger) -> Result<HashSet<PathBuf>> {
         file_set.insert(markdown_path.clone());
         let mut file = File::create(markdown_path)?;
 
-        file.write_all("# Struct overview\n\n".as_bytes())?;
+        file.write_all(b"# Struct overview\n\n")?;
 
         for id in struct_set {
             let def = host.get_def(id).unwrap();
@@ -325,7 +325,7 @@ pub fn create(config: &Config, log: &Logger) -> Result<HashSet<PathBuf>> {
         file_set.insert(markdown_path.clone());
         let mut file = File::create(markdown_path)?;
 
-        file.write_all("# Trait overview\n\n".as_bytes())?;
+        file.write_all(b"# Trait overview\n\n")?;
 
         for id in trait_set {
             let def = host.get_def(id).unwrap();
