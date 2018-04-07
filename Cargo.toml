@@ -19,7 +19,7 @@ configure = "0.1.1"
 configure_derive = "0.1.1"
 toml_edit = "0.1.1"
 slog-term = "2.3.0"
-slog-async = "2.2.0"
+slog-async = "2.3.0"
 structopt = "0.1.0"
 structopt-derive = "0.1.0"
 notify = "4.0.3"
@@ -30,7 +30,7 @@ slugify = "0.1.0"
 tempdir = "0.3"
 
 [dependencies.slog]
-version = "2.1.1"
+version = "2.2"
 # uncomment this if you'd like to read trace-level messages
 # features = ["max_level_trace"]
 
