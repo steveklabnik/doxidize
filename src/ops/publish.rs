@@ -50,7 +50,7 @@ pub fn publish(config: &Config, log: &Logger) -> Result<()> {
     };
 
     // if this file doesn't exist, then we don't have the gh-pages remote set up
-    // to set it up we need to initialize the git repositry, add the remote, and sync the two
+    // to set it up we need to initialize the git repository, add the remote, and sync the two
     if !pages_head.is_file() {
         git::init(&target_dir)?;
         git::initialize_remote(&target_dir, remote_name, !base_url.is_empty())?;

@@ -13,7 +13,7 @@ The broad workflow look like this:
 5. Re-generate Markdown
 6. GOTO 2
 
-These steps corresond to these commands:
+These steps correspond to these commands:
 
 1. `doxidize init`
 2. ...

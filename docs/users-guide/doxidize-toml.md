@@ -5,7 +5,7 @@ title = "Doxidize.toml"
 # Doxidize.toml
 
 This page describes the format of `Doxidize.toml`, a top-level configuration
-file for customozing how Doxidize generates your documentation.
+file for customizing how Doxidize generates your documentation.
 
 At the moment, there is only one setting, and it is optional. By default,
 your `Doxidize.toml` will be empty.

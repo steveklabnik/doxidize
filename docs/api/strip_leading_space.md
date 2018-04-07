@@ -6,7 +6,7 @@ fn (s: &str) -> String
 
 this removes the first space from each line of its input.
 
-this is useful because doc comments geneerally look like this:
+this is useful because doc comments generally look like this:
 
 ```text
 /// some words
