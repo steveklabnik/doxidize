@@ -35,7 +35,7 @@ pub fn init(git_dir: &Path) -> Result<()> {
     if !output.status.success() {
         return Err(GitFailure {
             command_name: "git init",
-            output: output,
+            output,
         }.into());
     }
 
@@ -59,7 +59,7 @@ pub fn initialize_remote(git_dir: &Path, remote_name: &str, has_base_url: bool) 
     if !output.status.success() {
         return Err(GitFailure {
             command_name: "git remote add",
-            output: output,
+            output,
         }.into());
     }
 
@@ -77,7 +77,7 @@ pub fn reset_to_remote_head(git_dir: &Path, remote_name: &str) -> Result<()> {
     if !output.status.success() {
         return Err(GitFailure {
             command_name: "git fetch",
-            output: output,
+            output,
         }.into());
     }
 
@@ -95,7 +95,7 @@ pub fn head_revision(git_dir: &Path) -> Result<String> {
     if !output.status.success() {
         return Err(GitFailure {
             command_name: "git rev-parse",
-            output: output,
+            output,
         }.into());
     }
 
@@ -117,7 +117,7 @@ pub fn add_all(git_dir: &Path) -> Result<()> {
     if !output.status.success() {
         return Err(GitFailure {
             command_name: "git add",
-            output: output,
+            output,
         }.into());
     }
 
@@ -136,7 +136,7 @@ pub fn commit(git_dir: &Path, revision: &str) -> Result<()> {
     if !output.status.success() {
         return Err(GitFailure {
             command_name: "git commit",
-            output: output,
+            output,
         }.into());
     }
 
@@ -156,7 +156,7 @@ pub fn sync_pages_branch(git_dir: &Path, remote_name: &str) -> Result<()> {
     if !output.status.success() {
         return Err(GitFailure {
             command_name: "git push",
-            output: output,
+            output,
         }.into());
     }
 
@@ -174,7 +174,7 @@ pub fn push(git_dir: &Path) -> Result<()> {
     if !output.status.success() {
         return Err(GitFailure {
             command_name: "git push",
-            output: output,
+            output,
         }.into());
     }
 

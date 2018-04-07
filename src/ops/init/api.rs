@@ -20,9 +20,9 @@ pub fn create(config: &Config, log: &Logger) -> Result<HashSet<PathBuf>> {
     fs::create_dir_all(&api_dir)?;
 
     let metadata = cargo::retrieve_metadata(config.manifest_path())?;
-    let target = cargo::target_from_metadata(&log, &metadata)?;
+    let target = cargo::target_from_metadata(log, &metadata)?;
 
-    generate_and_load_analysis(&config, &target, &log)?;
+    generate_and_load_analysis(config, &target, log)?;
 
     let host = config.host();
     let crate_name = &target.crate_name();
@@ -211,7 +211,7 @@ pub fn create(config: &Config, log: &Logger) -> Result<HashSet<PathBuf>> {
             }
         }
 
-        add_children(&mut krate, &module_set, &host);
+        add_children(&mut krate, &module_set, host);
 
         // time to write out the markdown
 
@@ -220,7 +220,7 @@ pub fn create(config: &Config, log: &Logger) -> Result<HashSet<PathBuf>> {
         file_set.insert(markdown_path.clone());
         let mut file = File::create(markdown_path)?;
 
-        file.write_all("# Module overview\n\n".as_bytes())?;
+        file.write_all(b"# Module overview\n\n")?;
 
         fn print_tree(
             node: &Module,
@@ -276,7 +276,7 @@ pub fn create(config: &Config, log: &Logger) -> Result<HashSet<PathBuf>> {
             }
         }
 
-        print_tree(&krate, 0, &host, &mut file, config);
+        print_tree(&krate, 0, host, &mut file, config);
 
         // struct overview
 
@@ -285,7 +285,7 @@ pub fn create(config: &Config, log: &Logger) -> Result<HashSet<PathBuf>> {
         file_set.insert(markdown_path.clone());
         let mut file = File::create(markdown_path)?;
 
-        file.write_all("# Struct overview\n\n".as_bytes())?;
+        file.write_all(b"# Struct overview\n\n")?;
 
         for id in struct_set {
             let def = host.get_def(id).unwrap();
@@ -325,7 +325,7 @@ pub fn create(config: &Config, log: &Logger) -> Result<HashSet<PathBuf>> {
         file_set.insert(markdown_path.clone());
         let mut file = File::create(markdown_path)?;
 
-        file.write_all("# Trait overview\n\n".as_bytes())?;
+        file.write_all(b"# Trait overview\n\n")?;
 
         for id in trait_set {
             let def = host.get_def(id).unwrap();
