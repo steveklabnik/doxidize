@@ -47,9 +47,6 @@ pub fn serve(config: Config, log: &Logger) -> Result<()> {
     };
 
     server.listen(host, port);
-
-    info!(log, "done");
-    Ok(())
 }
 
 fn watch(config: Arc<Config>, log: &Logger) -> notify::Result<()> {
