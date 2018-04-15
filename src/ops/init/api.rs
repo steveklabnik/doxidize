@@ -382,7 +382,7 @@ fn name_to_path(name: &str) -> PathBuf {
 /// Generate save analysis data of a crate to be used later by the RLS library later and load it
 /// into the analysis host.
 fn generate_and_load_analysis(config: &Config, target: &Target, log: &Logger) -> Result<()> {
-    let log = log.new(o!("step" => "analysizing your source code"));
+    let log = log.new(o!("step" => "analyzing your source code"));
     info!(log, "starting");
 
     cargo::generate_analysis(config, target)?;
