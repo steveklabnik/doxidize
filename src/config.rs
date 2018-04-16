@@ -79,39 +79,25 @@ where
 fn default_handlebars() -> Handlebars {
     let mut handlebars = Handlebars::new();
 
-    handlebars
-        .register_template_file("example", "templates/markdown/example.hbs")
-        .unwrap();
-    handlebars
-        .register_template_file("page", "templates/html/page.hbs")
-        .unwrap();
-    handlebars
-        .register_template_file("api", "templates/markdown/api.hbs")
-        .unwrap();
-    handlebars
-        .register_template_file("mod", "templates/markdown/mod.hbs")
-        .unwrap();
-    handlebars
-        .register_template_file("struct", "templates/markdown/struct.hbs")
-        .unwrap();
-    handlebars
-        .register_template_file("enum", "templates/markdown/enum.hbs")
-        .unwrap();
-    handlebars
-        .register_template_file("trait", "templates/markdown/trait.hbs")
-        .unwrap();
-    handlebars
-        .register_template_file("function", "templates/markdown/function.hbs")
-        .unwrap();
-    handlebars
-        .register_template_file("type", "templates/markdown/type.hbs")
-        .unwrap();
-    handlebars
-        .register_template_file("static", "templates/markdown/static.hbs")
-        .unwrap();
-    handlebars
-        .register_template_file("const", "templates/markdown/const.hbs")
-        .unwrap();
+    macro_rules! template {
+        ($handlebars:ident, $name:expr, $path:expr) => {
+            $handlebars
+                .register_template_file($name, concat!(env!("CARGO_MANIFEST_DIR"), "/", $path))
+                .expect(concat!("Failed to register template ", $name, " (", $path, ")"));
+        };
+    }
+
+    template!(handlebars, "example", "templates/markdown/example.hbs");
+    template!(handlebars, "page", "templates/html/page.hbs");
+    template!(handlebars, "api", "templates/markdown/api.hbs");
+    template!(handlebars, "mod", "templates/markdown/mod.hbs");
+    template!(handlebars, "struct", "templates/markdown/struct.hbs");
+    template!(handlebars, "enum", "templates/markdown/enum.hbs");
+    template!(handlebars, "trait", "templates/markdown/trait.hbs");
+    template!(handlebars, "function", "templates/markdown/function.hbs");
+    template!(handlebars, "type", "templates/markdown/type.hbs");
+    template!(handlebars, "static", "templates/markdown/static.hbs");
+    template!(handlebars, "const", "templates/markdown/const.hbs");
 
     handlebars.register_helper(
         "up-dir",
