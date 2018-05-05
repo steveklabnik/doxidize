@@ -24,7 +24,7 @@ fn build_renders_readme() {
 
     util::cargo_init(dir_path).expect("Could not create sample crate");
 
-    let config = Config::with_manifest_path(dir_path.join("Cargo.toml"));
+    let config = Config::new(dir_path.join("Cargo.toml")).unwrap();
 
     doxidize::ops::init(&config, &log).expect("init failed");
 
@@ -81,7 +81,7 @@ fn build_renders_additional_markdown_files() {
 
     util::cargo_init(dir_path).expect("Could not create sample crate");
 
-    let config = Config::with_manifest_path(dir_path.join("Cargo.toml"));
+    let config = Config::new(dir_path.join("Cargo.toml")).unwrap();
 
     doxidize::ops::init(&config, &log).expect("init failed");
 
@@ -138,7 +138,7 @@ fn build_renders_nested_directories() {
 
     util::cargo_init(dir_path).expect("Could not create sample crate");
 
-    let config = Config::with_manifest_path(dir_path.join("Cargo.toml"));
+    let config = Config::new(dir_path.join("Cargo.toml")).unwrap();
 
     doxidize::ops::init(&config, &log).expect("init failed");
 

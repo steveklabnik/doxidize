@@ -30,10 +30,7 @@ pub fn build(config: &Config, log: &Logger) -> Result<()> {
     let docs_dir = config.markdown_path();
 
     if !docs_dir.is_dir() {
-        return Err(error::UninitializedProject {
-            location: config.root_path().to_path_buf(),
-            command: "build",
-        }.into());
+        bail!(error::UninitializedProject);
     }
 
     // ensure that the docs dir exists in target

@@ -5,6 +5,7 @@
 extern crate comrak;
 #[macro_use]
 extern crate configure;
+#[macro_use]
 extern crate failure;
 #[macro_use]
 extern crate failure_derive;

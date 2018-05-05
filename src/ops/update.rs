@@ -19,10 +19,7 @@ pub fn update(config: &Config, log: &Logger) -> Result<()> {
 
     if !api_dir.is_dir() {
         // this folder is unilaterally created during init, even if there's no api to document
-        return Err(error::UninitializedProject {
-            location: config.root_path().to_path_buf(),
-            command: "update",
-        }.into());
+        bail!(error::UninitializedProject);
     }
 
     debug!(log, "walking the api docs folder for existing markdown files"; o!("dir" => api_dir.display()));

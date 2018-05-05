@@ -21,7 +21,7 @@ fn clean_deletes_directory_in_target() {
 
     util::cargo_init(dir_path).expect("Could not create sample crate");
 
-    let config = Config::with_manifest_path(dir_path.join("Cargo.toml"));
+    let config = Config::new(dir_path.join("Cargo.toml")).unwrap();
 
     doxidize::ops::init(&config, &log).expect("init failed");
     doxidize::ops::build(&config, &log).expect("build failed");

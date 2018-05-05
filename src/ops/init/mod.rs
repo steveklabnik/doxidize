@@ -6,8 +6,14 @@ use std::fs::{self, File, OpenOptions};
 use std::io::prelude::*;
 
 use Config;
-use error;
 use Result;
+
+/// An error indicating the project was already initialized.
+#[derive(Debug, Fail)]
+#[fail(
+    display = "`doxidize init` cannot be run on existing Doxidize projects. Try removing `Doxidize.toml` and/or the `docs` folder"
+)]
+pub struct InitializationError;
 
 pub fn init(config: &Config, log: &Logger) -> Result<()> {
     let log = log.new(o!("command" => "init"));
@@ -32,25 +38,24 @@ pub fn init(config: &Config, log: &Logger) -> Result<()> {
     Ok(())
 }
 
-fn check_for_existing_docs(config: &Config, log: &Logger) -> Result<()> {
+fn check_for_existing_docs(
+    config: &Config,
+    log: &Logger,
+) -> ::std::result::Result<(), InitializationError> {
     debug!(log, "checking that this project isn't already initialized"; o!("dir" => config.root_path().display()));
 
     let doxidize_config = config.config_path();
 
     if doxidize_config.is_file() {
         trace!(log, "doxidize config existed");
-        return Err(error::InitializedProject {
-            location: config.root_path().to_path_buf(),
-        }.into());
+        return Err(InitializationError);
     }
 
     let docs_dir = config.markdown_path();
 
     if docs_dir.is_dir() {
         trace!(log, "doc dir existed");
-        return Err(error::InitializedProject {
-            location: config.root_path().to_path_buf(),
-        }.into());
+        return Err(InitializationError);
     }
 
     debug!(log, "done");
