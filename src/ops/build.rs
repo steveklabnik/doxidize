@@ -37,7 +37,7 @@ pub fn build(config: &Config, log: &Logger) -> Result<()> {
     }
 
     // ensure that the docs dir exists in target
-    let mut target_dir = config.public_path();
+    let mut target_dir = config.output_path();
 
     // keep track of how far we're nested
     let mut base_nesting_count = 0;

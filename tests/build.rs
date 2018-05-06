@@ -51,9 +51,7 @@ testing"#,
 
     doxidize::ops::build(&config, &log).expect("build failed");
 
-    let mut output_dir = dir_path.join("target");
-    output_dir.push("docs");
-    output_dir.push("public");
+    let output_dir = dir_path.join("target").join("docs");
 
     let rendered_readme_path = output_dir.join("index.html");
 
@@ -108,9 +106,7 @@ testing"#,
 
     doxidize::ops::build(&config, &log).expect("generate failed");
 
-    let mut output_dir = dir_path.join("target");
-    output_dir.push("docs");
-    output_dir.push("public");
+    let output_dir = dir_path.join("target").join("docs");
 
     let rendered_guide_path = output_dir.join("guide.html");
 
@@ -169,9 +165,7 @@ testing"#,
 
     doxidize::ops::build(&config, &log).expect("build failed");
 
-    let mut output_dir = dir_path.join("target");
-    output_dir.push("docs");
-    output_dir.push("public");
+    let output_dir = dir_path.join("target").join("docs");
 
     let mut rendered_guide_path = output_dir.join("nested");
     rendered_guide_path.push("guide.html");
