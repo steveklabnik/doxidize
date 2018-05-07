@@ -4,9 +4,12 @@ use serde::Deserializer;
 use toml_edit;
 
 use std::default::Default;
-use std::fs::File;
+use std::env;
+use std::fs::{self, File};
 use std::path::{Path, PathBuf};
 use std::io::prelude::*;
+
+use Result;
 
 /// A structure that contains various fields that hold data in order to generate doc output.
 #[derive(Debug, Deserialize, Configure)]
@@ -121,8 +124,19 @@ fn default_handlebars() -> Handlebars {
 }
 
 impl Config {
-    pub fn with_manifest_path<P: Into<PathBuf>>(manifest_path: P) -> Config {
-        let manifest_path = manifest_path.into();
+    pub fn new(manifest_path: PathBuf) -> Result<Config> {
+        if !manifest_path.exists() {
+            bail!("manifest-path `{}` does not exist", manifest_path.display());
+        }
+
+        let manifest_path = fs::canonicalize(manifest_path)?;
+
+        let manifest_path = if manifest_path.is_relative() {
+            env::current_dir()?.join(manifest_path)
+        } else {
+            manifest_path
+        };
+
         let host = analysis::AnalysisHost::new(analysis::Target::Debug);
 
         let config_path = manifest_path.parent().unwrap().join("Doxidize.toml");
@@ -144,13 +158,15 @@ impl Config {
 
         let handlebars = default_handlebars();
 
-        Config {
+        let config = Config {
             manifest_path,
             host,
             output_path: None,
             base_url,
             handlebars,
-        }
+        };
+
+        Ok(config)
     }
 
     /// Returns the directory containing the `Cargo.toml` of the crate being documented.

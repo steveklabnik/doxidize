@@ -1,5 +1,6 @@
 extern crate doxidize;
 
+extern crate failure;
 #[macro_use]
 extern crate configure;
 #[macro_use]
@@ -10,6 +11,9 @@ extern crate structopt;
 #[macro_use]
 extern crate structopt_derive;
 
+use std::path::PathBuf;
+
+use failure::Error;
 use slog::Drain;
 use structopt::StructOpt;
 
@@ -22,8 +26,10 @@ struct Opt {
     command: Option<Command>,
 
     #[structopt(long = "manifest-path",
-                help = "The path to a Cargo.toml, defaults to `./Cargo.toml`")]
-    manifest_path: Option<String>,
+                help = "The path to Cargo.toml",
+                default_value = "./Cargo.toml",
+                parse(from_os_str))]
+    manifest_path: PathBuf,
 }
 
 #[derive(StructOpt, Debug)]
@@ -42,6 +48,25 @@ enum Command {
     Update,
 }
 
+fn run(opts: Opt, log: &slog::Logger) -> Result<(), Error> {
+    let config = Config::new(opts.manifest_path)?;
+
+    info!(log, "doxidizing `{}`", config.root_path().display());
+
+    if let Some(command) = opts.command {
+        match command {
+            Command::Build => doxidize::ops::build(&config, &log),
+            Command::Clean => doxidize::ops::clean(&config, &log),
+            Command::Publish => doxidize::ops::publish(&config, &log),
+            Command::Serve => doxidize::ops::serve(config, &log),
+            Command::Init => doxidize::ops::init(&config, &log),
+            Command::Update => doxidize::ops::update(&config, &log),
+        }
+    } else {
+        doxidize::ops::init(&config, &log)
+    }
+}
+
 fn main() {
     use_default_config!();
 
@@ -55,32 +80,12 @@ fn main() {
 
     let opts = Opt::from_args();
 
-    let config = if let Some(ref manifest_path) = opts.manifest_path {
-        Config::with_manifest_path(manifest_path)
-    } else {
-        Config::default()
-    };
+    if let Err(err) = run(opts, &log) {
+        error!(log, "{}", err);
 
-    let result = match opts {
-        Opt { ref command, .. } if command.is_some() => {
-            // we just checked that it's Some
-            match *command.as_ref().unwrap() {
-                Command::Build => doxidize::ops::build(&config, &log),
-                Command::Clean => doxidize::ops::clean(&config, &log),
-                Command::Publish => doxidize::ops::publish(&config, &log),
-                Command::Serve => doxidize::ops::serve(config, &log),
-                Command::Init => doxidize::ops::init(&config, &log),
-                Command::Update => doxidize::ops::update(&config, &log),
-            }
-        }
-        _ => {
-            // default with no command
-            doxidize::ops::init(&config, &log)
-        }
-    };
+        // Ensure the log is flushed before exiting.
+        drop(log);
 
-    if let Err(err) = result {
-        eprintln!("error! {}", err);
         std::process::exit(1);
     }
 }
