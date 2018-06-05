@@ -1,3 +1,3 @@
 # Trait overview
 
-* [Speak](/api/examples/Speak.html)
+* [Speak](/doxidize/api/examples/Speak.html)

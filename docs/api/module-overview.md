@@ -1,10 +1,10 @@
 # Module overview
 
-* [doxidize](/api/doxidize.html)
-  * [ops](/api/ops.html)
-  * [examples](/api/examples.html)
-    * [nested_module](/api/examples/nested_module.html)
-      * [next_level1](/api/examples/nested_module/next_level1.html)
-        * [next_level2](/api/examples/nested_module/next_level1/next_level2.html)
-          * [next_level3](/api/examples/nested_module/next_level1/next_level2/next_level3.html)
-      * [empty](/api/examples/nested_module/empty.html)
+* [doxidize](/doxidize/api/index.html)
+  * [examples](/doxidize/api/examples.html)
+    * [nested_module](/doxidize/api/examples/nested_module.html)
+      * [empty](/doxidize/api/examples/nested_module/empty.html)
+      * [next_level1](/doxidize/api/examples/nested_module/next_level1.html)
+        * [next_level2](/doxidize/api/examples/nested_module/next_level1/next_level2.html)
+          * [next_level3](/doxidize/api/examples/nested_module/next_level1/next_level2/next_level3.html)
+  * [ops](/doxidize/api/ops.html)
