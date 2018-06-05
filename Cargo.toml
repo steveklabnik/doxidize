@@ -25,9 +25,7 @@ structopt-derive = "0.1.0"
 notify = "4.0.3"
 handlebars = "0.32"
 slugify = "0.1.0"
-
-[dev-dependencies]
-tempdir = "0.3"
+ctrlc = "3.1.0"
 
 [dependencies.slog]
 version = "2.2"
@@ -36,3 +34,6 @@ version = "2.2"
 
 [dependencies.simple-server]
 git = "https://github.com/steveklabnik/simple-server"
+
+[dev-dependencies]
+tempdir = "0.3"

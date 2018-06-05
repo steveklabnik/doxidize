@@ -40,7 +40,7 @@ enum Command {
     Clean,
     #[structopt(name = "publish")]
     Publish,
-    #[structopt(name = "serve")]
+    #[structopt(name = "serve", about = "Serve documentation on a local HTTP server")]
     Serve,
     #[structopt(name = "init")]
     Init,
@@ -58,7 +58,7 @@ fn run(opts: Opt, log: &slog::Logger) -> Result<(), Error> {
             Command::Build => doxidize::ops::build(&config, &log),
             Command::Clean => doxidize::ops::clean(&config, &log),
             Command::Publish => doxidize::ops::publish(&config, &log),
-            Command::Serve => doxidize::ops::serve(config, &log),
+            Command::Serve => doxidize::ops::serve(&config, &log),
             Command::Init => doxidize::ops::init(&config, &log),
             Command::Update => doxidize::ops::update(&config, &log),
         }
