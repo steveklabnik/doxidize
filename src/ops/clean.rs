@@ -1,6 +1,6 @@
 use slog::Logger;
 
-use std::fs;
+use remove_dir_all as fs;
 
 use Config;
 use Result;
