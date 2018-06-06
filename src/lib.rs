@@ -24,6 +24,7 @@ extern crate simple_server;
 extern crate slog;
 #[macro_use]
 extern crate slugify;
+extern crate remove_dir_all;
 extern crate toml_edit;
 extern crate walkdir;
 
