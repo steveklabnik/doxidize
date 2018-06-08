@@ -178,8 +178,8 @@ blockquote p {
             <ul class="list-unstyled components">
                 {{#each menu}}
                 <li>
-                    <a href="#{{this.slug}}" data-toggle="collapse" aria-expanded="{{#if @first }}true{{else}}false{{/if}}">{{this.title}}</a>
-                    <ul class="{{#if @first }}show{{else}}collapse{{/if}} list-unstyled" id="{{this.slug}}">
+                    <a href="#{{this.slug}}" data-toggle="collapse" aria-expanded="false">{{this.title}}</a>
+                    <ul class="sidebarItem collapse list-unstyled" id="{{this.slug}}">
                     {{#each this.contents}}
                         <li><a href="{{up-dir ../../nest-count }}{{ ../../base-url }}{{this.target}}">{{this.title}}</a></li>
                     {{/each}}
@@ -188,7 +188,7 @@ blockquote p {
                 {{/each}}
                 <li>
                     <a href="#api" data-toggle="collapse" aria-expanded="false">API reference</a>
-                    <ul class="collapse list-unstyled" id="api">
+                    <ul class="sidebarItem collapse list-unstyled" id="api">
                         <li><a href="{{up-dir nest-count}}{{ base-url }}api/index.html">Overview</a></li>
                         <li><a href="{{up-dir nest-count}}{{ base-url }}api/module-overview.html">All Modules</a></li>
                         <li><a href="{{up-dir nest-count}}{{ base-url }}api/struct-overview.html">All Structs</a></li>
@@ -210,6 +210,40 @@ blockquote p {
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/rust.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
     <script>
+        $(".sidebarItem").on("hide.bs.collapse", function() {
+            var id = $(this).attr("id");
+            var openItems = JSON.parse(localStorage.getItem("doxidize.openSidebarItems")) || [];
+            var index = openItems.indexOf(id);
+            if (index !== -1) {
+                openItems.splice(index, 1);
+                localStorage.setItem("doxidize.openSidebarItems", JSON.stringify(openItems));
+            }
+        });
+
+        $(".sidebarItem").on("show.bs.collapse", function() {
+            var id = $(this).attr("id");
+            var openItems = JSON.parse(localStorage.getItem("doxidize.openSidebarItems")) || [];
+            if (openItems.indexOf(id) === -1) {
+                openItems.push(id);
+                localStorage.setItem("doxidize.openSidebarItems", JSON.stringify(openItems));
+            }
+        });
+
+        var openItems = JSON.parse(localStorage.getItem("doxidize.openSidebarItems"));
+        if (!openItems) {
+            var item = $(".sidebarItem").first();
+            item.collapse("show");
+        } else {
+            for (var i = 0; i < openItems.length; i++) {
+                var item = $("#" + openItems[i]);
+                if (item.hasClass("sidebarItem")) {
+                    // Apply the class and attribute manually so it doesn't animate.
+                    item.addClass("show")
+                    item.attr("aria-expanded", true);
+                }
+            }
+        }
+
         var hiding_character = "#";
         Array.from(document.querySelectorAll("code.language-rust")).forEach(function (block) {
             var code_block = block;
