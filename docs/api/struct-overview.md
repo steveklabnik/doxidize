@@ -1,4 +1,4 @@
 # Struct overview
 
-* [NestedStruct](/api/examples/nested_module/NestedStruct.html)
-* [Point](/api/examples/Point.html)
+* [NestedStruct](/doxidize/api/examples/nested_module/NestedStruct.html)
+* [Point](/doxidize/api/examples/Point.html)
