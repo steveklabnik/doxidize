@@ -56,13 +56,24 @@ pub fn strip_leading_space(s: &str) -> String {
         return String::new();
     }
 
+    // count the leading indent on the doc comment, in case it's not actually spaced over
+    let mut lead = usize::max_value();
+
+    for l in s.lines() {
+        if !l.is_empty() {
+            // count the number of spaces or tabs at the beginning, ignoring whether they're mixed
+            lead = std::cmp::min(lead, l.chars().take_while(|&c| c == ' ' || c == '\t').count());
+        }
+    }
+
     // s.len() is going to be long enough, as we're only dropping some characters,
     // so let's preallocate even though it's going to be slightly bigger
     let mut s = s.lines()
         .fold(String::with_capacity(s.len()), |mut s, line| {
             // some lines don't have any content, and so we should handle that.
             if !line.is_empty() {
-                s += &line[1..];
+                // the characters that `lead` was counting were one byte each, so this is valid
+                s += &line[lead..];
             }
 
             // we still want to retain the newlines in the output, but `lines` strips them
